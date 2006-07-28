@@ -1,0 +1,37 @@
+[%# render a tree. You should overload render_tree_start, render_tree_stop and render_tree_node %]
+[%# as you see fit. %]
+[% MACRO tree(root, class) BLOCK %]
+<ul[% " class=\"$class\"" IF class %]>
+    [% render_tree_start() %]
+    [% WHILE (root_node = root.next) %]
+    [% tree_node(root_node) %]
+    [% END %]
+    [% render_tree_stop() %]
+</ul>
+[% END %]
+[%# recursive function, called on each node in the tree. Will recurse on each element in "children" %]
+[%# so your treeable objects should implement that method somehow. %]
+[% MACRO tree_node(node) BLOCK %]
+    [% render_tree_node(node) %]
+    [% IF node.children %]
+    <ul>
+        [% render_tree_start(node) %]
+        [% FOREACH sub_node IN node.children %]
+        [% tree_node(sub_node) %]
+        [% END %]
+        [% render_tree_stop(node) %]
+    </ul>
+    [% END %]
+[% END %]
+[% MACRO render_tree_node(node) BLOCK %]
+[% node.name %]
+[% END %]
+[% MACRO render_tree_start(parent) BLOCK %][% END %]
+[% MACRO render_tree_stop(parent) BLOCK %][% END %]
+[% MACRO icon(name, alt, title, id, size) BLOCK ; 
+    UNLESS size == 'big' ;
+        imgpath = '/static/images/icons'; 
+    ELSE ;
+        imgpath = '/static/images/icons/22x22' ;
+    END ;
+    name = name _ '.png' %]<img src="[% c.uri_for(imgpath, name ) %]" alt="[[% alt %]]" title="[% title %]"[% IF id %] id="[% id %][% END %]">[% END %]

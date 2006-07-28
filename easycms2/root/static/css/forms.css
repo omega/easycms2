@@ -1,0 +1,77 @@
+fieldset legend {
+    font-weight: bold;
+    text-align: left;
+
+}
+label { 
+    width : 100%; 
+    display : block; 
+    margin : .5em 0em; 
+}
+label input, label select { 
+    position : absolute; 
+    left : 175px; 
+    width : 300px;
+} 
+label input[type="checkbox"] {
+    width: auto;
+}
+label span button {
+    position: absolute;
+    left: 485px;
+}
+textarea {
+    width: 100%;
+}
+input, textarea {
+    border: 1px solid silver;
+}
+input.submit { 
+    margin-left : 175px;
+    font-weight: bold;
+}
+
+.labels_with_errors {
+    border-top: 1px solid red;
+    padding-top: 4px;
+}
+.error_messages {
+    color: red;
+    font-style: italic;
+    display: block;
+    left: 100%;
+    padding-left: 160px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid red;
+}
+.label_comments {
+    font-style: italic;
+    color: #444;
+    right: 50px;
+    position: absolute;
+    border: 1px solid red;
+    width: 120px;
+}
+
+.help_icon {
+    float: right;
+}
+.help_text {
+    display: none;
+    border: 1px solid silver;
+    background-color: white;
+    position: absolute;
+    width: 250px;
+    height: 50px;
+    z-index: 20;
+    background-color: #CBE5E9;
+    padding: 3px;
+    padding-left: 32px;
+    
+}
+.help_text .popup_image {
+    margin: 2px;
+    position: absolute;
+    left: 2px;
+    top: 10px;
+}

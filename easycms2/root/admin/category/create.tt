@@ -1,0 +1,3 @@
+[% PROCESS header.tt %]
+[% result.as_xml %]
+[% PROCESS footer.tt %]

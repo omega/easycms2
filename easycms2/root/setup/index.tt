@@ -1,0 +1,14 @@
+<div id="setup">
+    <h1>Welcome!</h1>
+    <ul id="steps">
+        <li>Step 1: Initial configuration</li>
+        <li>Step 2: Configure startup page</li>
+    </ul>
+    
+    <div id="navbar">
+        <a href="[% next_step %]" id="next">Next step</a>
+        <a href="[% prev_step %]" id="prev">Previous step</a>
+    </div>
+    
+</div>
+

@@ -1,0 +1,19 @@
+@import "forms.css";
+@import "admin.css";
+
+ul.tree {
+    width: 400px;
+}
+ul.tree li.new {
+    font-weight: bold;
+}
+ul.tree li {
+    clear: both;
+}
+ul.tree li span.buttons {
+    float: right;
+}
+
+a img {
+    border: none;
+}

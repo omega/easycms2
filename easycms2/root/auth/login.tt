@@ -1,0 +1,7 @@
+[% INCLUDE header.tt %]
+<h1>Login required</h1>
+<p> The page you are trying to access is restricted to logged in users.
+    Pleas provide your username and password to continue</p>
+
+[% result.as_xml %]
+[% INCLUDE footer.tt %]

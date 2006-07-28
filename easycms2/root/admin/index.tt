@@ -1,0 +1,3 @@
+[% INCLUDE header.tt %]
+<p>Administrating your pages are done from the subpages of this page.
+[% INCLUDE footer.tt %]

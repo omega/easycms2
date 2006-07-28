@@ -1,0 +1,17 @@
+@import "legend.css";
+
+div#helpbrowser_window {
+    border: 1px solid silver;
+    width: 300px;
+    height: 500px;
+    position: absolute;
+    left: 800px;
+    top: 0px;
+}
+
+div#helpbrowser_window div#helpbrowser_menubar {
+    border-bottom: 1px solid silver;
+    background-color: #3c3c3c;
+    color: #eeeeee;
+    padding: 2px;
+}

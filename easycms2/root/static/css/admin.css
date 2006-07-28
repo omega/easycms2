@@ -1,0 +1,46 @@
+@import "online_help.css";
+@import "admin_pages.css";
+
+
+div#admin {
+    position: relative;
+    width: 800px;
+}
+
+div#admin a {
+    text-decoration: none;
+}
+div#admin div#menu {
+}
+
+div#admin div#menu li {
+    display: inline;
+    margin-right: 20px;
+    padding-right: 5px;
+    padding-left: 5px;
+    border: 1px solid silver;
+    border-width: 1px 0px 0px 0px;
+    height: 24px;
+}
+
+div#admin div#menu li.menuitem_right {
+    position: absolute;
+    right: 0px;
+    border: 0px;
+}
+
+
+li.page {
+    color: black;
+    list-style-image: url(../images/icons/x-office-document.png);
+}
+li.category {
+    list-style-image: url(../images/icons/folder.png);
+    color: #666666;
+}
+li.template {
+    list-style-image: url(../images/icons/text-x-generic-template.png);
+}
+li.default_page {
+    list-style-image: url(../images/icons/go-home.png);
+}

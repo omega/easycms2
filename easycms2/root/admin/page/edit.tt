@@ -1,0 +1,8 @@
+[% PROCESS header.tt %]
+<h2>Read only information</h2>
+<ul>
+    <li>[% object.url_title %]</li>
+    <li><a href="[% object.uri_for(c) %]">[% object.uri_for(c) %]</a>
+</ul>
+[% result.as_xml %]
+[% PROCESS footer.tt %]

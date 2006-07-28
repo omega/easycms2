@@ -1,0 +1,12 @@
+[% PROCESS inc/macros.tt %]
+<ul>
+<li><a href="[% c.uri_for('/admin/template') %]">[% icon('text-x-generic-template', '', 'templates', '', 'big') %] Templates</a></li>
+<li><a href="[% c.uri_for('/admin/category') %]">[% icon('folder', '', 'categories', '', 'big') %] Categories</a></li>
+<li><a href="[% c.uri_for('/admin/page') %]">[% icon('x-office-document', '', 'documents', '', 'big') %] Pages</a></li>
+<!-- 
+<li><a href="[% c.uri_for('/admin/setting') %]">Settings</a></li>
+<li><a href="[% c.uri_for('/admin/author') %]">Authors</a></li>
+-->
+<li class="menuitem_right">[% icon('help-browser', 'online help', 'open online help browser', 'open_help_button', 'big') %]</li>
+
+</ul>

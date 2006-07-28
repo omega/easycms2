@@ -1,0 +1,29 @@
+<div id="legend">
+    <h2>Legend</h2>
+<ul>
+    <li>[% icon('user-home', 'home', 'set as homepage') %]
+    Set as homepage</li>
+
+    <li>[% icon('accessories-text-editor', 'edit', 'edit page') %]
+    Edit</li>
+    
+    <li>[% icon('user-trash-full', 'delete', 'delete page') %]
+    Delete</li>
+    
+    <li>[% icon('go-jump', 'go', 'go to page') %]
+    Go to page</li>
+
+    <li>[% icon('go-home', 'home', 'homepage') %]
+    Marks the default page / homepage</li>
+
+    <li>[% icon('folder', 'category', 'category') %]
+    Marks a category</li>
+
+    <li>[% icon('x-office-document', 'page', 'page') %]
+    Marks a page</li>
+
+    <li>[% icon('document-new', 'page', 'create page') %]
+    Create new page</li>
+    
+</dl>
+</div>

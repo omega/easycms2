@@ -1,0 +1,20 @@
+---
+name: EasyCMS2
+db:
+    dsn: 'dbi:SQLite:__HOME__/db/sqlite.db'
+    upgrade: '__HOME__/db/upgrade/'
+'View::Default':
+    TEMPLATE_EXTENSION: '.tt'
+    DEBUG: 1
+authentication:
+    dbic:
+        user_class: "EasyCMS2::Model::Base::Author"
+        user_field: "login"
+        password_field: "password"
+        password_type: "hashed"
+        password_hash_type: "SHA-1"
+session:
+    flash_to_stash: 1
+stacktrace:
+    verbose: 2
+default_view: 'Default'
