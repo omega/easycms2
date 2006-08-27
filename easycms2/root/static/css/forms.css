@@ -3,6 +3,9 @@ fieldset legend {
     text-align: left;
 
 }
+fieldset {
+    border: 0px;
+}
 label { 
     width : 100%; 
     display : block; 
@@ -23,7 +26,7 @@ label span button {
 textarea {
     width: 100%;
 }
-input, textarea {
+input, textarea, button {
     border: 1px solid silver;
 }
 input.submit { 

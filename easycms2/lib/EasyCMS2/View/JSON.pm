@@ -3,7 +3,7 @@ package EasyCMS2::View::JSON;
 use strict;
 use base 'Catalyst::View::JSON';
 
-__PACKAGE__->config(expose_stash => qr/^help_/);
+__PACKAGE__->config(expose_stash => qr/^(help|api)_/);
 
 =head1 NAME
 

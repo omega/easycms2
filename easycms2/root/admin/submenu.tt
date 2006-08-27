@@ -3,6 +3,7 @@
 <li><a href="[% c.uri_for('/admin/template') %]">[% icon('text-x-generic-template', '', 'templates', '', 'big') %] Templates</a></li>
 <li><a href="[% c.uri_for('/admin/category') %]">[% icon('folder', '', 'categories', '', 'big') %] Categories</a></li>
 <li><a href="[% c.uri_for('/admin/page') %]">[% icon('x-office-document', '', 'documents', '', 'big') %] Pages</a></li>
+<li><a href="[% c.uri_for('/admin/media') %]">[% icon('image-x-generic', '', 'media', '', 'big') %] Media</a></li>
 <!-- 
 <li><a href="[% c.uri_for('/admin/setting') %]">Settings</a></li>
 <li><a href="[% c.uri_for('/admin/author') %]">Authors</a></li>

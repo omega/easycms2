@@ -84,6 +84,7 @@ sub edit : Local {
     }
     
     $c->widget('edit_category')->element('Submit','save')->label('Save');
+    $c->widget('edit_category')->element('Submit','save')->label('Save and Close');
     
     
     my $result : Stashed = $c->widget_result($c->widget('edit_category'));
@@ -96,7 +97,11 @@ sub edit : Local {
         
         $object->populate_from_widget($result);
         $object->update();
-        $c->res->redirect($c->uri_for(''));
+        if ($c->req->param('save') ne 'Save') {
+            $c->res->redirect($c->uri_for(''));
+        } else {
+            $c->res->redirect($c->uri_for('edit', $object->id));
+        }
     }
     if (!$object->template and $object->parent and $object->parent->template) {
         $object->template($object->parent->template);

@@ -20,6 +20,13 @@ Catalyst Controller.
 
 =cut
 
+sub auto : Private {
+    my ( $self, $c ) = @_;
+    
+    return 1;
+}
+
+
 sub index : Private {
     my ($self, $c) = @_;
     
@@ -43,11 +50,17 @@ sub create : Local {
 
 sub edit : Local {
     my ($self, $c, $id) = @_;
+    my $onload : Stashed;
+
+    if (ref($onload)) {
+        push @$onload, 'page_onload()';
+    } else {
+        $onload = ['page_onload()'];
+    }
     
     my $object : Stashed;
     $object = $c->model('Base::Page')->find($id) unless $object;
     die "no page" unless $object;
-    
     $c->widget('edit_page')->method('post')->action($c->uri_for($c->action->name(), $object->id ));
     $c->widget('edit_page')->indicator(sub { $c->req->method eq 'POST' } );
 
@@ -83,6 +96,7 @@ sub edit : Local {
     
     
     $c->widget('edit_page')->element('Submit','save')->label('Save');
+    $c->widget('edit_page')->element('Submit','save')->label('Save and Close');
     my $result : Stashed = $c->widget_result($c->widget('edit_page'));
     
     if (! $result->has_errors and $c->req->method() eq 'POST') {
@@ -93,7 +107,11 @@ sub edit : Local {
         
         $object->populate_from_widget($result);
         $object->update();
-        $c->res->redirect($c->uri_for(''));
+        if ($c->req->param('save') ne 'Save') {
+            $c->res->redirect($c->uri_for(''));
+        } else {
+            $c->res->redirect($c->uri_for('edit', $object->id));
+        }
     }
     $object->fill_widget($c->widget('edit_page'));
     $c->log->debug('uri_for:' . $object->uri_for($c));

@@ -72,7 +72,8 @@ sub edit : Local {
         map { $_->{id} => $_->{name} } @templates
     );
     
-    $c->widget('edit_template')->element('Submit','submit')->value('Store');
+    $c->widget('edit_template')->element('Submit','save')->value('Save');
+    $c->widget('edit_template')->element('Submit','save')->label('Save and Close');
     
     my $result : Stashed = $c->widget_result($c->widget('edit_template'));
     
@@ -80,7 +81,11 @@ sub edit : Local {
     if (! $result->has_errors and $c->req->method() eq 'POST') {
         $object->populate_from_widget($result);
         $object->update();
-        $c->res->redirect($c->uri_for(''));
+        if ($c->req->param('save') ne 'Save') {
+            $c->res->redirect($c->uri_for(''));
+        } else {
+            $c->res->redirect($c->uri_for('edit', $object->id));
+        }
     }
     $object->fill_widget($c->widget('edit_template'));
     

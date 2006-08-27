@@ -1,5 +1,6 @@
 @import "forms.css";
 @import "admin.css";
+@import "texteditor.css";
 
 ul.tree {
     width: 400px;

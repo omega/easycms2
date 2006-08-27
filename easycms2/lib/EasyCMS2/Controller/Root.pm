@@ -58,6 +58,7 @@ sub default : Private {
     return $c->detach('/error/no_category') unless $category;
     
     $page = $c->model('Base::Page')->find({url_title => $page, category => $category->id});
+    $c->stash->{title} = $page->title;
     $c->forward('page/render', [$page]);
    
 }

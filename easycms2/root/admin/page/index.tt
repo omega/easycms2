@@ -8,7 +8,7 @@
     <ul>
         [% FOREACH page IN node.pages %]
             <li class="page[% IF c.setting('default-page') == page.id %] default_page[% END %]"><span class="buttons">
-                <a href="[% c.uri_for('homepage', page.id) %]">[% icon('user-home', 'home', 'set as homepage') %]</a>
+                [% UNLESS c.setting('default-page') == page.id %]<a href="[% c.uri_for('homepage', page.id) %]">[% icon('user-home', 'home', 'set as homepage') %]</a>[% END %]
                 <a href="[% c.uri_for('edit', page.id) %]">[% icon('accessories-text-editor', 'edit', 'edit page') %]</a>
                 <a href="[% c.uri_for('delete', page.id) %]">[% icon('user-trash-full', 'delete', 'delete page') %]</a>
                 <a href="[% page.uri_for(c) %]">[% icon('go-jump', 'go', 'go to page') %]</a>

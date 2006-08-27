@@ -18,3 +18,5 @@ session:
 stacktrace:
     verbose: 2
 default_view: 'Default'
+file_store: '__HOME__/root/static/upload'
+file_base: '/static/upload'

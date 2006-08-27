@@ -3,8 +3,6 @@
 
 if (typeof(HelpBrowser) == 'undefined') {
     HelpBrowser = {};
-    HelpBrowser.Date = {};
-    HelpBrowser.Util = {};
 }
 
 HelpBrowser.VERSION = "0.1";

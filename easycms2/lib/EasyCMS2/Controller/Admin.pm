@@ -29,7 +29,12 @@ sub auto : Private {
         return 0 unless $c->user_exists;
     }
     my $submenu : Stashed = 'admin/submenu.tt';
-    my $onload : Stashed = 'admin_onload()';
+    my $onload : Stashed;
+    if (ref($onload)) {
+        push @$onload, 'admin_onload()';
+    } else {
+        $onload = ['admin_onload()'];
+    }
     return 1;
 }
 

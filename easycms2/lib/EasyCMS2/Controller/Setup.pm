@@ -39,8 +39,61 @@ sub index : Private {
 sub step1 : Local {
     my ( $self, $c ) = @_;
 
+    my $file_store = $c->config()->{'file_store'};
+    unless (-w $file_store) {
+        die "cannot write to file_store: $file_store";
+    }
     # Create an default author, that is admin
     # FIXME: Should autogenerate perhaps?
+    
+    $c->log->debug('Creating or updating mime-type-table');
+    
+    my $mime_type_file = $c->path_to('/db/mime.types');
+    open MIME, $mime_type_file or die "cannot read $mime_type_file: $!";
+    my $mime_content;
+    { local $/; $mime_content = <MIME>;}
+    close MIME;
+    
+    my @mimetypes = grep { $_ !~ /^\#/ } split(/\n/, $mime_content);
+    
+    $c->log->debug(' found ' . scalar(@mimetypes) . " mimetypes in file");
+    
+    foreach my $line (@mimetypes) {
+        next if ($line =~ /^\s*$/);
+        my ($type, $extensions) = split(/\s/, $line);
+        my $mt;
+        unless ( $mt = $c->model('Base::MimeType')->find({'type' => $type,}) ) {
+            $mt = $c->model('Base::MimeType')->create({
+                'type' => $type,
+                'name' => $type,
+                'extensions' => $extensions,
+            });
+        }
+        if ($mt) {
+            my $icon;
+            my $icon_guess = $type . ".png";
+            $icon_guess =~ s|/|-|;
+            if (-f $c->path_to('/root/static/images/icons/mimetypes', $icon_guess)) {
+                $icon = $icon_guess;
+            } else {
+                # We need to be clever!
+                my $clever_searches = {
+                    'image-x-generic.png' => qr/^image/,
+                    'audio-x-generic.png' => qr/^audio/,
+                    'text-x-generic.png' => qr/^text/,
+                    'video-x-generic.png' => qr/^video/,
+                };
+
+                foreach $icon_guess (keys %$clever_searches) {
+                    my $re = $clever_searches->{$icon_guess};
+                    $icon = $icon_guess if ($type =~ $re);
+                }
+            }
+            $mt->icon($icon) if $icon;
+            $mt->insert_or_update;
+
+        }
+    }
     
     $c->log->debug('creating admin-author');
     
@@ -67,9 +120,13 @@ sub step1 : Local {
     <head>
         <title>[% title %]</title>
         <link rel="stylesheet" href="[% c.uri_for('/static/css/main.css') %]" />
+        <script lang="javascript" src="[% c.uri_for('/javascript/setup') %]"></script>
         <script lang="javascript" src="[% c.uri_for('/static/js/MochiKit.js') %]"></script>
+        <script lang="javascript" src="[% c.uri_for('/static/js/HelpBrowser.js') %]"></script>
+        <script lang="javascript" src="[% c.uri_for('/static/js/TextEditor.js') %]"></script>
+        <script lang="javascript" src="[% c.uri_for('/static/js/admin.js') %]"></script>
     </head>
-    <body>
+    <body[% IF onload %] onload="[% FOREACH onl IN onload %][% onl %];[% END %]"[% END %]>
 __END__
         ,
         'after' => <<__END__
@@ -91,10 +148,10 @@ __END__
             'parent' => $def_template->id,
             'before' => << "END"
         <h1>Administration</h1>
-        <div id="menu">
-            [% INCLUDE \$submenu %]
-        </div>
         <div id="admin">
+            <div id="menu">
+                [% INCLUDE \$submenu %]
+            </div>
 END
             ,
             'after' => << "END"
