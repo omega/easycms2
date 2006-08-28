@@ -2,6 +2,8 @@
 name: EasyCMS2
 db:
     dsn: 'dbi:SQLite:__HOME__/db/sqlite.db'
+    user:
+    password:
     upgrade: '__HOME__/db/upgrade/'
 'View::Default':
     TEMPLATE_EXTENSION: '.tt'

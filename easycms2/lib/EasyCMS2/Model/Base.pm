@@ -10,8 +10,8 @@ __PACKAGE__->config(
     schema_class => 'EasyCMS2::Schema::Base',
     connect_info => [
     $cfg->{'dsn'},
-    '',
-    '',
+    $cfg->{'user'},
+    $cfg->{'password'},
     {AutoCommit => 1}
     ],
 
