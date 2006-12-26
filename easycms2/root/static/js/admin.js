@@ -15,7 +15,23 @@ function showPage(e) {
 }
 
 
+function unescapeHTML(s) {
+    return s.replace(/\&amp;/g, "&"
+        ).replace(/\&quot;/g, "\""
+        ).replace(/\&lt;/g, "<"
+        ).replace(/\&gt;/g, ">");
+}
 
+/** Category editing function **/
+
+function setDefault() {
+    var def = MochiKit.DOM.getElement('edit_category_index_page_default');
+    var textarea = MochiKit.DOM.getElement('edit_category_index_page');
+    var newValue = def.innerHTML;
+
+    newValue = unescapeHTML(newValue);
+    textarea.value += newValue;
+}
 
 
 /** PAGE EDITOR STUFF **/

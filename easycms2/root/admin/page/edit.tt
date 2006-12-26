@@ -1,8 +1,11 @@
 [% PROCESS header.tt %]
 <h2>Read only information</h2>
 <ul>
-    <li>[% object.url_title %]</li>
-    <li><a href="[% object.uri_for(c) %]">[% object.uri_for(c) %]</a>
+    <li>url_title: [% object.url_title %]</li>
+    <li>static link: <a href="[% object.uri_for(c) %]">[% object.uri_for(c) %]</a></li>
+    <li>Page created: [% object.created %]</li>
+    <li>Page last updated: [% object.updated  %]</li>
+    
 </ul>
 [% result.as_xml %]
 [% PROCESS footer.tt %]

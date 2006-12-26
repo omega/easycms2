@@ -12,8 +12,7 @@ use Getopt::Long;
 use Pod::Usage;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use lib "$FindBin::Bin/../../Other/SQL-Translator-0.08_01/lib";
-use lib "$FindBin::Bin/../../Other/dbic-versioning/lib";
+use lib "$FindBin::Bin/../../Other/dbic-current/lib";
 
 my $debug             = 0;
 my $fork              = 0;

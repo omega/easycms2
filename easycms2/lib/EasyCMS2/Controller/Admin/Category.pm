@@ -38,7 +38,7 @@ sub create : Local {
     my ($self, $c) = @_;
     my $parent = $c->req->param('parent');
         
-    my $object : Stashed = $c->model('Base::Category')->new({parent => $parent || undef });
+    my $object : Stashed = $c->model('Base::Category')->new({parent => $parent || undef, type => 'article' });
     
     $c->forward('edit');
 }
@@ -82,6 +82,18 @@ sub edit : Local {
             map { $_->{id} => $_->{name} } @templates
         );
     }
+    
+    $c->widget('edit_category')->element('Select','type')->label('Type')->options(
+        ( 'article' => 'Article', 'blog' => 'Blog', 'gallery' => 'Gallery' )
+    );
+    
+    $c->widget('edit_category')->element('Textarea','index_page')->label('Index_page');
+
+    $c->widget('edit_category')->element('Button','insert_default')->label('Insert_default')
+        ->attributes({ onclick => 'setDefault();', type => 'button'});
+    
+    $c->widget('edit_category')->element('Span', 'index_page_default')
+        ->content($object->type->default_template())->class("hidden");
     
     $c->widget('edit_category')->element('Submit','save')->label('Save');
     $c->widget('edit_category')->element('Submit','save')->label('Save and Close');

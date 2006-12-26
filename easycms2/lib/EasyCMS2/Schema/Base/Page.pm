@@ -22,18 +22,21 @@ __PACKAGE__->add_columns(
     'author' => { data_type => 'INTEGER' },
     'template' => { data_type => 'INTEGER', is_nullable => 1 },
     'category' => { data_type => 'INTEGER' },
-    
+        
     'created' => {data_type => 'TIMESTAMP', default_value => 'now()'},
     'updated' => {data_type => 'TIMESTAMP', default_value => 'now()'},
 );
+__PACKAGE__->set_primary_key('id');
+
 
 __PACKAGE__->belongs_to(author => EasyCMS2::Schema::Base::Author);
 __PACKAGE__->belongs_to(template => EasyCMS2::Schema::Base::Template);
 __PACKAGE__->belongs_to(category => EasyCMS2::Schema::Base::Category);
 
+
 __PACKAGE__->add_unique_constraint('unique_url' => ['category', 'url_title']);
 
-__PACKAGE__->set_primary_key('id');
+__PACKAGE__->has_many('comments' => 'EasyCMS2::Schema::Base::Comment', 'page', {order_by => 'created'});
 
 sub links : ResultSet {
     my $self = shift;

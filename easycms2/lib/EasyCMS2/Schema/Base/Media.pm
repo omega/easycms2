@@ -15,10 +15,12 @@ __PACKAGE__->add_columns(
     'filename'      => { data_type => 'TEXT', is_nullable => 1 },
     'description'   => { data_type => 'TEXT', is_nullable => 1 },
     'type'          => { data_type => 'INTEGER', is_nullable => 1 },
+    'category'      => { data_type => 'INTEGER', is_nullable => 1 },
     
 );
 __PACKAGE__->set_primary_key('id');
 
+__PACKAGE__->belongs_to('category' => 'EasyCMS2::Schema::Base::Category');
 __PACKAGE__->belongs_to('type' => 'EasyCMS2::Schema::Base::MimeType');
 
 sub images : ResultSet {

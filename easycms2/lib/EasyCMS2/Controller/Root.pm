@@ -46,6 +46,28 @@ sub end : ActionClass('RenderView') {
 sub default : Private {
     my ( $self, $c , @args) = @_;
     
+    # each entry in @args is a part of the path. It should either point at a 
+    # page or a category. In case of a category, we try to render the index 
+    # method of that category.
+
+    my $parent_category;
+    my $page;
+    my $category;
+    while (my $path_part = shift @args) {
+        $category = $c->model('Base::Category')->search({ url_name => $path_part,
+            parent => ($parent_category ? $parent_category->id : undef ) })->first;
+        if ($category) {
+            # we found a category for this path_part, so we try the next
+            $parent_category = $category;
+            next;
+        } else {
+            # we found no category. We should try to find a page perhaps?
+            $page = $c->model('Base::Page')->find({url_title => $path_part, category => $parent_category->id});
+            last;
+        }
+    }
+    
+=pod
     my $page = pop @args;
     
     my $parent_category;
@@ -59,10 +81,16 @@ sub default : Private {
     return $c->detach('/error/no_category') unless $category;
     
     $page = $c->model('Base::Page')->find({url_title => $page, category => $category->id});
-    return $c->detach('/error/no_page') unless $page;
+=cut
     
-    $c->stash->{title} = $page->title;
-    $c->forward('page/render', [$page]);
+    return $c->detach('/error/no_page') unless ($category || $page);
+    if ($page) {
+        $c->stash->{title} = $page->title;
+        $c->forward('page/render', [$page]);
+    } elsif ($category) {
+        $c->stash->{title} = $category->name;
+        $c->forward('category/render', [$category]);
+    }
    
 }
 

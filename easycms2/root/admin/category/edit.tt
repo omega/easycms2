@@ -1,3 +1,11 @@
 [% PROCESS header.tt %]
+
+<ul>
+    <li>Type: [% object.type.toString %]</li>
+    <li>Url name: [% object.url_name %]</li>
+    <li># of pictures: [% object.pictures.size %]</li>
+    <li># of pages: [% object.pages.size %]</li>
+</ul>
+
 [% result.as_xml %]
 [% PROCESS footer.tt %]

@@ -8,6 +8,7 @@ use Data::Dumper::Simple;
 sub process {
     my ($self, $c) = @_;
     my $template = $c->stash->{templ};
+    my $category = $c->stash->{category};
     if ($template) {
         my $tmpl_in_header = $template->get_header;
         my $templ_header = $c->view('Default')->render($c, \($template->get_header));
@@ -28,6 +29,16 @@ sub process {
         }
         $c->stash->{template_footer} = $templ_footer;
         
+    }
+    if ($category) {
+        my $category_index = $c->view('Default')->render($c, \($category->index_page));
+        if (UNIVERSAL::isa($category_index, 'Template::Exception')) {
+            my $error = qq/Couldn't render template: "$category_index"/;
+            $c->log->error($error);
+            $c->error($error);
+            return 0;
+        }
+        $c->stash->{category_index} = $category_index;
     }
 #    $self->pre_process('INCLUDE header.tt');
 #    $self->post_process(qw/footer.tt/);

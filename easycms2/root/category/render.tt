@@ -1,0 +1,3 @@
+[% INCLUDE header.tt %]
+[% category_index %]
+[% INCLUDE footer.tt %]

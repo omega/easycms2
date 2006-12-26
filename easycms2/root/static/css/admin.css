@@ -34,6 +34,11 @@ li.page {
     color: black;
     list-style-image: url(../images/icons/x-office-document.png);
 }
+
+li.media {
+    color: black;
+    list-style-image: url(../images/icons/image-x-generic.png);
+}
 li.category {
     list-style-image: url(../images/icons/folder.png);
     color: #666666;
@@ -43,4 +48,10 @@ li.template {
 }
 li.default_page {
     list-style-image: url(../images/icons/go-home.png);
+}
+
+span.hidden {
+    visibility: hidden;
+    display: block;
+    
 }
