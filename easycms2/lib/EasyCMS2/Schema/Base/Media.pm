@@ -89,7 +89,7 @@ sub uri_for {
     my $store = EasyCMS2->config()->{'file_base'};
     
     if ($self->id) {
-        return $c->uri_for($store, $self->id . "_" . $self->filename);
+        return $c->uri_for($store, $self->id . "_" . $self->filename)->path_query;
     } else {
         return "";
     }

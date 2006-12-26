@@ -36,6 +36,44 @@ TextEditor.TextEditor.prototype._position_buttons = function() {
     }
     
 };
+
+TextEditor.TextEditor.prototype.create_a = function() {
+    this._create_btn("a_btn_click", 'internet-web-browser.png');
+};
+TextEditor.TextEditor.prototype.a_btn_click= function(e) {
+    if (this.a_list) {
+        this.toggle(this.a_list);
+    }
+    if (!this.a_list || this.a_list_shown) {
+        var alist = MochiKit.Async.loadJSONDoc(this.options.apibase + "page/links");
+        alist.addCallback(this.a_list_return_callback, this);
+    }
+};
+TextEditor.TextEditor.prototype.a_insert = function(e) {
+    var val = '"' + MochiKit.DOM.getNodeAttribute(e.src(), 'title') + '":' + 
+        MochiKit.DOM.getNodeAttribute(e.src(), 'url');
+    this.insertAtCaret(val);
+    e.stop();
+};
+TextEditor.TextEditor.prototype.create_img = function() {
+    this._create_btn("img_btn_click", 'image-x-generic.png');
+};
+TextEditor.TextEditor.prototype.img_btn_click = function(e) {
+    if (this.img_list) {
+        this.toggle(this.img_list);
+    }
+    if (!this.img_list || this.img_list_shown) {
+        var imglist = MochiKit.Async.loadJSONDoc(this.options.apibase + "media/images");
+        imglist.addCallback(this.img_list_return_callback, this);
+    }
+};
+TextEditor.TextEditor.prototype.img_insert = function(e) {
+    var val = '!' + this.options.staticbase + MochiKit.DOM.getNodeAttribute(e.src(), 'filename') + '!';
+    
+    this.insertAtCaret(val);
+    e.stop();
+};
+
 TextEditor.TextEditor.prototype.img_list_return_callback = function (obj, json) {
     var list = json.api_list;
     var ul = MochiKit.DOM.getElement('img_list') || MochiKit.DOM.UL({'id': 'img_list', 'class': 'TextEditor_list'}, null);
@@ -77,7 +115,7 @@ TextEditor.TextEditor.prototype.a_list_return_callback = function (obj, json) {
 function page_onload() {
     /* Init the TextEditor for the body-field */
     var TE = new TextEditor.TextEditor('edit_page_body', { 
-        enabled: ['img', 'a'], 
+        enabled: ['img', 'a', 'format'], 
         iconbase: imgbase + '/icons/',
         apibase: urlbase + 'api/json/',
         staticbase: urlbase + 'static/upload/'

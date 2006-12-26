@@ -7,7 +7,7 @@ button.TextEditor_button {
     width:  36px;
     background: #eeeeee;
 }
-ul.TextEditor_list {
+ul.TextEditor_list, div.TextEditor_panel {
     position:  absolute;
     top: 200px;
     left: 822px;

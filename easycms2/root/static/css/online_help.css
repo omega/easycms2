@@ -7,6 +7,7 @@ div#helpbrowser_window {
     position: absolute;
     left: 800px;
     top: 0px;
+    background-color: #fff;
 }
 
 div#helpbrowser_window div#helpbrowser_menubar {

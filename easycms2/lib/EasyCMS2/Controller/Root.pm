@@ -52,12 +52,15 @@ sub default : Private {
     my $category;
     while (my $category_url_name = shift @args) {
         
-        $category = $c->model('Base::Category')->search({url_name => $category_url_name, parent => ($parent_category ? $parent_category->id : undef)})->first;
+        $category = $c->model('Base::Category')->search({url_name => $category_url_name, 
+            parent => ($parent_category ? $parent_category->id : undef)})->first;
         $parent_category = $category;
     }
     return $c->detach('/error/no_category') unless $category;
     
     $page = $c->model('Base::Page')->find({url_title => $page, category => $category->id});
+    return $c->detach('/error/no_page') unless $page;
+    
     $c->stash->{title} = $page->title;
     $c->forward('page/render', [$page]);
    

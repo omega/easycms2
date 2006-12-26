@@ -27,8 +27,8 @@ sub setup : Local {
     # Hello World
     $c->response->content_type('text/javascript');
     my $body = 
-        "var imgbase = '" . $c->uri_for('/static/images') . "';\n" . 
-        "var urlbase = '" . $c->uri_for('/') . "';"
+        "var imgbase = '" . $c->uri_for('/static/images')->path_query . "';\n" . 
+        "var urlbase = '" . $c->uri_for('/')->path_query . "';"
     ;
     
     $c->response->body($body);

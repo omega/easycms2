@@ -82,7 +82,7 @@ sub uri_for {
     }
     push @parents, $self->url_title;
     
-    return ($c ? $c->uri_for('/', @parents) : join ('/', @parents));
+    return ($c ? $c->uri_for('/', @parents)->path_query : join ('/', @parents));
 }
 
 
