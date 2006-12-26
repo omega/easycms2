@@ -29,7 +29,7 @@ use Catalyst qw/
         Static::Simple 
 /;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 #
 # Start the application

@@ -45,6 +45,20 @@ sub toHash {
     return $hash;
 }
 
+sub thumb_name {
+    my $self = shift;
+    return $self->id . "_thumb_" . $self->filename
+    if ($self->type->type eq 'image/png' or $self->type->type eq 'image/jpeg');
+    
+    return "";
+    
+}
+sub file_name {
+    my $self = shift;
+    
+    return $self->id . "_" . $self->filename;
+}
+
 sub file {
     my $self = shift;
     my $file = shift;
@@ -86,12 +100,13 @@ sub file {
 sub uri_for {
     my $self = shift;
     my $c = shift;
+    my $thumb = shift;
     
     
     my $store = EasyCMS2->config()->{'file_base'};
-    
+    my $filename = ( $thumb ? $self->thumb_name : $self->file_name );
     if ($self->id) {
-        return $c->uri_for($store, $self->id . "_" . $self->filename)->path_query;
+        return $c->uri_for($store, $filename)->path_query;
     } else {
         return "";
     }
