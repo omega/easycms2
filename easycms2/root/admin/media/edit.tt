@@ -1,3 +1,7 @@
 [% PROCESS header.tt %]
+<ul>
+    <li>Mime-type: [% object.type.type %]</li>
+    <li>Imager-support: [% object.type.check_imager %]</li>
+</ul>
 [% result.as_xml %]
 [% PROCESS footer.tt %]
