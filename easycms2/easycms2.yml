@@ -22,3 +22,23 @@ stacktrace:
 default_view: 'Default'
 file_store: '__HOME__/root/static/upload'
 file_base: '/static/upload'
+media:
+    resizes:
+        - 
+            name: Thumb
+            filename: thumb
+            scale: 
+                xpixels: 75
+                ypixels: 56
+                type: max
+            crop:
+                width: 75
+                height: 56
+        -
+            name: Gallery
+            filename: gallery
+            scale:
+                xpixels: 640
+                ypixels: 480
+                type: min
+            

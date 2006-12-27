@@ -5,8 +5,7 @@ use warnings;
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use lib "$FindBin::Bin/../../Other/SQL-Translator-0.08_01/lib";
-use lib "$FindBin::Bin/../../Other/dbic-versioning/lib";
+use lib "$FindBin::Bin/../../Other/dbic-current/lib";
 
 use EasyCMS2::Schema::Base;
 use EasyCMS2;

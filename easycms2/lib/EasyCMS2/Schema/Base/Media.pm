@@ -45,6 +45,27 @@ sub toHash {
     return $hash;
 }
 
+{
+    my $class = __PACKAGE__;
+    no strict 'refs';
+    my $sizes = EasyCMS2->config()->{'media'};
+    foreach my $size (@{$sizes->{resizes}}) {
+        my $filename = $size->{filename};
+        my $accessor = sub {
+            my $self = shift;
+            if ($self->type->type eq 'image/png' or $self->type->type eq 'image/jpeg') {
+                return $self->id . "_" . $filename . "_" . $self->filename;
+            } else {
+                return "";
+            }
+        };
+        
+        my $accessorname = $filename . "_filename";
+        unless (defined(&{"${class}::$accessorname"})) {
+            *{ "${class}::$accessorname"} = $accessor;
+        }
+    }
+}
 sub thumb_name {
     my $self = shift;
     return $self->id . "_thumb_" . $self->filename
@@ -81,11 +102,27 @@ sub file {
             warn "db_type: " . $db_type->type;
             
             if ($db_type->type eq 'image/png' or $db_type->type eq 'image/jpeg') {
-                # create a thumb
+
                 my $img = Imager->new();
-                $img->read(file => $file->tempname);
-                my $thumb = $img->scale(xpixels => 75);
-                $thumb->write(file => $store ."/" . $self->id . "_thumb_" . $file->basename );
+                $img->read(file => $file->tempname);                
+
+                my $sizes = EasyCMS2->config()->{'media'};
+                foreach my $size (@{$sizes->{resizes}}) {
+                    my $thumb;
+                    if ($size->{scale} && $size->{crop}) {
+                        $thumb = $img->scale(%{$size->{scale}})->crop(%{$size->{crop}});
+                    } elsif ($size->{scale}) {
+                        $thumb = $img->scale(%{$size->{scale}});
+                    } elsif ($size->{crop}) {
+                        $thumb = $img->crop(%{$size->{crop}});
+                    } else {
+                        die "No valid crop or scale given in format " . $size->{name};
+                    }
+                    
+                    $thumb->write(file => $store . "/" . $self->id . "_" . $size->{filename} . "_" . $file->basename);
+                    
+                }
+                # create a thumb
             }
             $file->copy_to($locname);
             $self->filename($file->basename);
@@ -100,11 +137,18 @@ sub file {
 sub uri_for {
     my $self = shift;
     my $c = shift;
-    my $thumb = shift;
+    my $size = shift;
     
     
     my $store = EasyCMS2->config()->{'file_base'};
-    my $filename = ( $thumb ? $self->thumb_name : $self->file_name );
+    
+    my $filename;
+    if ($size) {
+        my $met = $size . "_filename";
+        $filename = $self->$met();
+    } else {
+        $filename = $self->file_name();
+    }
     if ($self->id) {
         return $c->uri_for($store, $filename)->path_query;
     } else {
@@ -115,6 +159,14 @@ sub uri_for {
 sub remove {
     my $self = shift;
     if ($self->can_remove) {
+        my $sizes = EasyCMS2->config()->{'media'};
+        my $store = EasyCMS2->config()->{'file_base'};
+        foreach my $size (@{$sizes->{resizes}}) {
+            
+            my $file = $store . "/" . $self->id . "_" . $size->{filename} . "_" . $self->filename;
+            unlink $file if (-f $file);
+        }
+        unlink $store . "/" . $self->id . "_" . $self->filename;
         $self->delete();
     }
 }
