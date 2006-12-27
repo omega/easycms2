@@ -1,1 +1,0 @@
-/Users/andremar/Projects/Other/mochikit/packed/MochiKit/MochiKit.js
