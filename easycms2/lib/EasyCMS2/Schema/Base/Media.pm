@@ -69,7 +69,7 @@ sub toHash {
 sub thumb_name {
     my $self = shift;
     return $self->id . "_thumb_" . $self->filename
-    if ($self->type->type eq 'image/png' or $self->type->type eq 'image/jpeg');
+    if ($self->type->check_imager());
     
     return "";
     
@@ -101,7 +101,9 @@ sub file {
         if ($db_type) {
             warn "db_type: " . $db_type->type;
             
-            if ($db_type->type eq 'image/png' or $db_type->type eq 'image/jpeg') {
+            $db_type->check_imager();
+            
+            if ($db_type->check_imager()) {
 
                 my $img = Imager->new();
                 $img->read(file => $file->tempname);                

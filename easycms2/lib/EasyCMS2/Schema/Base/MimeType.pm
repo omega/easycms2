@@ -5,6 +5,9 @@ use strict;
 
 use base qw/DBIx::Class/;
 
+use Imager;
+use Data::Dumper::Simple;
+
 __PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('mimetype');
 
@@ -19,4 +22,13 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key('id');
 __PACKAGE__->add_unique_constraint('unique_name' => ['type']);
 
+
+sub check_imager {
+    my $self = shift;
+    
+    my $type = $self->type;
+    $type =~ s|image/||;
+    
+    return $Imager::formats{$type};
+}
 1;
