@@ -2,6 +2,7 @@
 <ul>
     <li>Mime-type: [% object.type.type %]</li>
     <li>Imager-support: [% object.type.check_imager %]</li>
+    <li>"[% object.uri_for(c, "thumb") %]"</li>
 </ul>
 [% result.as_xml %]
 [% PROCESS footer.tt %]

@@ -53,7 +53,7 @@ sub toHash {
         my $filename = $size->{filename};
         my $accessor = sub {
             my $self = shift;
-            if ($self->check_imager()) {
+            if ($self->type->check_imager()) {
                 return $self->id . "_" . $filename . "_" . $self->filename;
             } else {
                 return "";
