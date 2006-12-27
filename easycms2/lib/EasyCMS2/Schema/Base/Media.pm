@@ -53,7 +53,7 @@ sub toHash {
         my $filename = $size->{filename};
         my $accessor = sub {
             my $self = shift;
-            if ($self->type->type eq 'image/png' or $self->type->type eq 'image/jpeg') {
+            if ($self->check_imager()) {
                 return $self->id . "_" . $filename . "_" . $self->filename;
             } else {
                 return "";
@@ -65,14 +65,6 @@ sub toHash {
             *{ "${class}::$accessorname"} = $accessor;
         }
     }
-}
-sub thumb_name {
-    my $self = shift;
-    return $self->id . "_thumb_" . $self->filename
-    if ($self->type->check_imager());
-    
-    return "";
-    
 }
 sub file_name {
     my $self = shift;
@@ -147,7 +139,11 @@ sub uri_for {
     my $filename;
     if ($size) {
         my $met = $size . "_filename";
-        $filename = $self->$met();
+        if (UNIVERSAL::can($self, $met)) {
+            $filename = $self->$met();
+        } else {
+            $filename = "";
+        }
     } else {
         $filename = $self->file_name();
     }
