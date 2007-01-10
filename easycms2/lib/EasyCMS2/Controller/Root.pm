@@ -59,6 +59,10 @@ sub default : Private {
         if ($category) {
             # we found a category for this path_part, so we try the next
             $parent_category = $category;
+            # The category has signaled that it wants to catch everything!
+            if ($category->catch_all)
+                last;
+                
             next;
         } else {
             # we found no category. We should try to find a page perhaps?
@@ -67,28 +71,13 @@ sub default : Private {
         }
     }
     
-=pod
-    my $page = pop @args;
-    
-    my $parent_category;
-    my $category;
-    while (my $category_url_name = shift @args) {
-        
-        $category = $c->model('Base::Category')->search({url_name => $category_url_name, 
-            parent => ($parent_category ? $parent_category->id : undef)})->first;
-        $parent_category = $category;
-    }
-    return $c->detach('/error/no_category') unless $category;
-    
-    $page = $c->model('Base::Page')->find({url_title => $page, category => $category->id});
-=cut
-    
     return $c->detach('/error/no_page') unless ($category || $page);
     if ($page) {
         $c->stash->{title} = $page->title;
         $c->forward('page/render', [$page]);
     } elsif ($category) {
         $c->stash->{title} = $category->name;
+        $c->stash->{rest_path} = join('/', @args);
         $c->forward('category/render', [$category]);
     }
    

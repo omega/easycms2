@@ -15,6 +15,7 @@ require EasyCMS2::CategoryType::Article;
 require EasyCMS2::CategoryType::Blog;
 require EasyCMS2::CategoryType::Gallery;
 require EasyCMS2::CategoryType::Test;
+require EasyCMS2::CategoryType::TestCatchAll;
 
 
 sub BUILD {
@@ -22,7 +23,7 @@ sub BUILD {
     my $args = shift;
     
     
-    my $new_class = "EasyCMS2::CategoryType::" . ucfirst(lc($args->{id}));
+    my $new_class = "EasyCMS2::CategoryType::" . join("", map { ucfirst(lc($_)) } split("_", $args->{id}));
     
     $self = bless $self, $new_class;
     return $self;
@@ -44,6 +45,10 @@ sub default_template {
     $template = eval "package " . ref($self) . "; <DATA>";
     $default_cache->{ref($self)} = $template;
     return $template;
+    
+}
+sub catch_all {
+    return 0;
     
 }
 1;

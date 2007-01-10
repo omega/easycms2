@@ -21,6 +21,7 @@ __PACKAGE__->add_columns(
     
     'name' => { data_type => 'TEXT' },
     'url_name' => { data_type => 'TEXT' },
+    
 );
 __PACKAGE__->set_primary_key('id');
 
@@ -79,6 +80,13 @@ sub remove {
     if ($self->can_remove) {
         $self->delete();
     }
+}
+
+sub catch_all {
+    my $self = shift;
+    
+    return $self->type->catch_all;
+        
 }
 
 1;
