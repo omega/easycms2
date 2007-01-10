@@ -8,6 +8,13 @@ requires Catalyst::Plugin::HTML::Widget => 0;
 requires Catalyst::Model::DBIC::Schema => '0.18';
 requires Catalyst::Controller::BindLex => 0;
 requires Catalyst::Action::RenderView => 0;
+requires Moose => 0;
+requires MIME::Types => 0;
+requires Imager => 0;
+requires Text::Textile => 0;
+requires Digest::SHA1 => 0;
+requires Catalyst::View::TT => 0;
+
 
 catalyst;
 

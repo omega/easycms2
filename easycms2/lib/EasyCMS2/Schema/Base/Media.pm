@@ -40,7 +40,7 @@ sub toHash {
         'uri_basename' => $self->id . "_" . $self->filename,
     };
     $hash->{'uri_basename_thumb'} = $self->id ."_thumb_" . $self->filename 
-    if ($self->type->type eq 'image/png' or $self->type->type eq 'image/jpeg');
+    if ($self->type->check_imager());
     
     return $hash;
 }
