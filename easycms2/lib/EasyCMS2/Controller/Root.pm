@@ -60,13 +60,15 @@ sub default : Private {
             # we found a category for this path_part, so we try the next
             $parent_category = $category;
             # The category has signaled that it wants to catch everything!
-            if ($category->catch_all)
+            if ($category->catch_all) {
                 last;
+            }
                 
             next;
         } else {
             # we found no category. We should try to find a page perhaps?
-            $page = $c->model('Base::Page')->find({url_title => $path_part, category => $parent_category->id});
+            $page = $c->model('Base::Page')->find({url_title => $path_part, 
+                category => ( $parent_category ? $parent_category->id : undef)});
             last;
         }
     }

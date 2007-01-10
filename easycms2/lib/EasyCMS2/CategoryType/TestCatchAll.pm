@@ -17,4 +17,8 @@ override 'catch_all' => sub {
     return 1;
 };
 
+override 'public' => sub {
+    return 0;
+};
+
 1;

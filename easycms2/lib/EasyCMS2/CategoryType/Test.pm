@@ -13,4 +13,7 @@ override  'index' => sub {
     return $hashref;
 };
 
+override 'public' => sub {
+    return 0;
+};
 1;

@@ -11,11 +11,11 @@ has 'row' => (is => 'rw', isa => 'Ref');
 #has 'default_cache' => (is => 'rw', isa => 'HashRef', default => sub { {} });
 our $default_cache = {};
 
-require EasyCMS2::CategoryType::Article;
-require EasyCMS2::CategoryType::Blog;
-require EasyCMS2::CategoryType::Gallery;
-require EasyCMS2::CategoryType::Test;
-require EasyCMS2::CategoryType::TestCatchAll;
+#require EasyCMS2::CategoryType::Article;
+#require EasyCMS2::CategoryType::Blog;
+#require EasyCMS2::CategoryType::Gallery;
+#require EasyCMS2::CategoryType::Test;
+#require EasyCMS2::CategoryType::TestCatchAll;
 
 
 sub BUILD {
@@ -36,7 +36,16 @@ sub toString {
 sub index {
     
 }
-
+sub ID {
+    my $self = shift;
+    if (ref($self)) {
+        return $self->id;
+    }
+    my @class = split("::", $self);
+    my $class = $class[2];
+    return join("_", map { lc($_) } split(/ [A-Z]/, $class) );
+    
+}
 sub default_template {
     my $self = shift;
     return $default_cache->{ref($self)} if ($default_cache->{ref($self)});
@@ -50,5 +59,8 @@ sub default_template {
 sub catch_all {
     return 0;
     
+}
+sub public {
+    return 1;
 }
 1;

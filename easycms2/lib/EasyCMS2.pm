@@ -31,6 +31,15 @@ use Catalyst qw/
 
 our $VERSION = '0.02';
 
+__PACKAGE__->config(setup_components => { search_extra => [ qw/::CategoryType/ ] });
+
+sub category_types { 
+    my $self = shift;
+    my @names = $self->_comp_names(qw/CategoryType/);
+    
+    return grep { ("EasyCMS2::CategoryType::" . $_)->public } @names;
+}
+
 #
 # Start the application
 #

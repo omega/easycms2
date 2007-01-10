@@ -84,7 +84,7 @@ sub edit : Local {
     }
     
     $c->widget('edit_category')->element('Select','type')->label('Type')->options(
-        ( 'article' => 'Article', 'blog' => 'Blog', 'gallery' => 'Gallery' )
+        map { ("EasyCMS2::CategoryType::" . $_)->ID => $_ } EasyCMS2->category_types  
     );
     
     $c->widget('edit_category')->element('Textarea','index_page')->label('Index_page');

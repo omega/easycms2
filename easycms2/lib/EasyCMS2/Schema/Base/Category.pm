@@ -2,7 +2,7 @@ package EasyCMS2::Schema::Base::Category;
 
 use base qw/DBIx::Class/;
 
-use EasyCMS2::CategoryType;
+#use EasyCMS2::CategoryType;
 
 __PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('category');
