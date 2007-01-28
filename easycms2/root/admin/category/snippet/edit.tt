@@ -1,0 +1,4 @@
+[% PROCESS header.tt %]
+<p>uri: [% snippet.uri_for(c) %]</p>
+[% result.as_xml %]
+[% PROCESS footer.tt %]

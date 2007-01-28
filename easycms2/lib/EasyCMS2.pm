@@ -57,6 +57,29 @@ sub setting {
     return $setting->value();
 }
 
+sub get_snippet {
+    my $self = shift;
+    
+    my $url = shift;
+    
+    $self->log->debug('getting snippet with url: ' . $url);
+    my $snip = $self->model('Base::Snippet')->find_by_path($url);
+    my $args;
+    unless (ref($self)) {
+        $args = {'test' => 'test2'};
+    } else {
+        $args = $self->stash();
+        $args->{c} = $self;
+    }
+    
+    my $stash_add = $snip->category->prepare_index($self);
+    foreach my $key (keys %$stash_add) {
+        $args->{category}->{$key} = $stash_add->{$key};
+    }
+    $snip = $self->view('Default')->render_snippet(\($snip->text), $args);
+    return $snip;
+    
+}
 #
 # IMPORTANT: Please look into EasyCMS2::Controller::Root for more
 #

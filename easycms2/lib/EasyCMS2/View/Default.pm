@@ -45,6 +45,26 @@ sub process {
     
     $self->SUPER::process($c);
 }
+
+
+sub render_snippet {
+    my ($self, $template, $args) = @_;
+
+    my $output;
+    my $vars = { 
+        (ref $args eq 'HASH' ? %$args : { })
+    };
+
+    local $self->{include_path} = 
+        [ @{ $vars->{additional_template_paths} }, @{ $self->{include_path} } ]
+        if ref $vars->{additional_template_paths};
+
+    unless ($self->template->process( $template, $vars, \$output ) ) {
+        return $self->template->error;  
+    } else {
+        return $output;
+    }
+}
 =head1 NAME
 
 EasyCMS2::View::Default - Catalyst TT View

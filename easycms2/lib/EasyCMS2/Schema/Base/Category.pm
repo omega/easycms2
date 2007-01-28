@@ -18,6 +18,7 @@ __PACKAGE__->add_columns(
     
     # holds the index-page text
     'index_page' => { data_type => 'TEXT', is_nullable => 1 },
+    'allow_comments' => {data_type => 'INTEGER', is_nullable => 1},
     
     'name' => { data_type => 'TEXT' },
     'url_name' => { data_type => 'TEXT' },
@@ -25,14 +26,17 @@ __PACKAGE__->add_columns(
 );
 __PACKAGE__->set_primary_key('id');
 
-__PACKAGE__->belongs_to(template => EasyCMS2::Schema::Base::Template);
-__PACKAGE__->belongs_to(parent => EasyCMS2::Schema::Base::Category);
+__PACKAGE__->belongs_to('template' => 'EasyCMS2::Schema::Base::Template');
+__PACKAGE__->belongs_to('parent' => 'EasyCMS2::Schema::Base::Category');
 __PACKAGE__->has_many('children' => 'EasyCMS2::Schema::Base::Category', 'parent', { order_by => 'name'});
 __PACKAGE__->has_many('pages' => 'EasyCMS2::Schema::Base::Page', 'category', { order_by => 'title'});
 __PACKAGE__->has_many('medias' => 'EasyCMS2::Schema::Base::Media', 'category', { order_by => 'description'} ); 
 
 __PACKAGE__->has_many('pictures' => 'EasyCMS2::Schema::Base::Media', 'category', { order_by => 'description' });
 # We only allow one category within a parent to have the same name.
+
+__PACKAGE__->has_many('snippets' => 'EasyCMS2::Schema::Base::Snippet', 'category', { order_by => 'name' });
+
 __PACKAGE__->add_unique_constraint('url_name_parent' => ['url_name', 'parent']);
 
 # We dont want to handle the type stuff ourselfs, it would just be too much work!
@@ -40,6 +44,7 @@ __PACKAGE__->add_unique_constraint('url_name_parent' => ['url_name', 'parent']);
 __PACKAGE__->inflate_column('type' => {
     'inflate' => sub { return EasyCMS2::CategoryType->new({id => shift, row => shift}); },
     'deflate' => sub { return shift->toString(); } }
+
 );
 
 
@@ -69,16 +74,35 @@ sub prepare_index {
     return shift->type->index(@_);
 }
 
+sub uri_for {
+    my $self = shift;
+    my $c = shift;
+    my @additions = @_;
+    
+    my @parents;
+        
+    my $cat = $self;
+    while ($cat) {
+        unshift @parents, $cat->url_name;
+        $cat = $cat->parent || undef;
+    }
+   
+    return ($c ? $c->uri_for('/', @parents, @additions)->path_query : join ('/', @parents, @additions));
+}
+
 sub can_remove {
     my $self = shift;
     
-    return ($self->children->count == 0 and $self->pages->count == 0);
+    return ($self->children->count == 0 and $self->pages->count == 0 and $self->pictures->count == 0);
     
 }
 sub remove {
     my $self = shift;
     if ($self->can_remove) {
-        $self->delete();
+        #$self->delete();
+        return 1;
+    } else {
+        return 0;
     }
 }
 

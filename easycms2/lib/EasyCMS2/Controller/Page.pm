@@ -25,7 +25,6 @@ sub render : Local {
     
     my $page : Stashed = $c->req->args->[0];
     
-    $c->log->debug('rendering page ' . $page->id);
     if ($page) {
         $c->stash->{templ} = $page->template || $page->category->template;
         $c->stash->{template} = 'page/render.tt';    

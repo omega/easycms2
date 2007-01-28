@@ -53,6 +53,8 @@ sub default : Private {
     my $parent_category;
     my $page;
     my $category;
+    my $catch_all;
+    my @catch_all_args;
     while (my $path_part = shift @args) {
         $category = $c->model('Base::Category')->search({ url_name => $path_part,
             parent => ($parent_category ? $parent_category->id : undef ) })->first;
@@ -61,9 +63,9 @@ sub default : Private {
             $parent_category = $category;
             # The category has signaled that it wants to catch everything!
             if ($category->catch_all) {
-                last;
+                $catch_all = $category;
+                @catch_all_args = @args;
             }
-                
             next;
         } else {
             # we found no category. We should try to find a page perhaps?
@@ -71,6 +73,10 @@ sub default : Private {
                 category => ( $parent_category ? $parent_category->id : undef)});
             last;
         }
+    }
+    if ($catch_all) {
+        $category = $catch_all;
+        @args = @catch_all_args;
     }
     
     return $c->detach('/error/no_page') unless ($category || $page);
@@ -80,6 +86,7 @@ sub default : Private {
     } elsif ($category) {
         $c->stash->{title} = $category->name;
         $c->stash->{rest_path} = join('/', @args);
+        $c->log->debug('restpath: ' . $c->stash->{rest_path});
         $c->forward('category/render', [$category]);
     }
    

@@ -30,8 +30,12 @@ sub list : Private {
     my ($self, $c) = @_;
     
     my $root : Stashed = $c->model('Base::Category')->search({parent => undef});
-    $c->log->debug('roots: ' . $root->count);
     
+}
+
+sub category : Chained('/admin/admin') PathPart('category') CaptureArgs(1) {
+    my ($self, $c, $cat_id) = @_;
+    my $object : Stashed = $c->model('Base::Category')->find($cat_id);
 }
 
 sub create : Local {
@@ -43,18 +47,15 @@ sub create : Local {
     $c->forward('edit');
 }
 
-sub edit : Local {
-    my ($self, $c, $id) = @_;
+sub edit : Chained('category') Args(0) {
+    my ($self, $c) = @_;
     
     my $object : Stashed;
     if ($object) {
         $c->log->debug('we have object: ' . $object->id);
     }
-    
-    $object = $c->model('Base::Category')->find($id) unless $object;
-    die "no category" unless $object;
-    
-    $c->widget('edit_category')->method('post')->action($c->uri_for($c->action->name(), $object->id ));
+        
+    $c->widget('edit_category')->method('post')->action($c->uri_for($object->id, $c->action->name()));
     $c->widget('edit_category')->element('Textfield','name')->label('Name');
     $c->widget('edit_category')->indicator(sub { $c->req->method eq 'POST' } );
     
@@ -86,6 +87,7 @@ sub edit : Local {
     $c->widget('edit_category')->element('Select','type')->label('Type')->options(
         map { ("EasyCMS2::CategoryType::" . $_)->ID => $_ } EasyCMS2->category_types  
     );
+    $c->widget('edit_category')->element('Checkbox','allow_comments')->label('Allow comments');
     
     $c->widget('edit_category')->element('Textarea','index_page')->label('Index_page');
 
@@ -112,7 +114,7 @@ sub edit : Local {
         if ($c->req->param('save') ne 'Save') {
             $c->res->redirect($c->uri_for(''));
         } else {
-            $c->res->redirect($c->uri_for('edit', $object->id));
+            $c->res->redirect($c->uri_for($object->id , 'edit'));
         }
     }
     if (!$object->template and $object->parent and $object->parent->template) {
@@ -122,23 +124,22 @@ sub edit : Local {
 
 }
 
-sub delete : Local {
-    my ( $self, $c, $id) = @_;
+sub delete : Chained('category') Args(0) {
+    my ( $self, $c) = @_;
     
-    my $object : Stashed = $c->model('Base::Category')->find($id) if $id;
+    my $object : Stashed;
     
-    die "no such page" unless $object;
+    die "no such category" unless $object;
     my $msg : Flashed = 'Category removed';
     
-    if ($object->can_remove()) {
-        $object->remove;
-    } else {
-        $msg = 'Cannot remove non-empty category (has children or pages)';
-    }
     $c->res->redirect($c->uri_for(''));
+    if ($object->remove()) {
+        $object->delete();
+    } else {
+        $msg = 'Cannot remove non-empty category (has children, pictures or pages)';
+    }
     
 }
-
 
 =head1 AUTHOR
 

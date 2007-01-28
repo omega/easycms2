@@ -8,15 +8,7 @@ use Moose;
 has 'id' => (is => 'rw', isa => 'Str');
 has 'row' => (is => 'rw', isa => 'Ref');
 
-#has 'default_cache' => (is => 'rw', isa => 'HashRef', default => sub { {} });
 our $default_cache = {};
-
-#require EasyCMS2::CategoryType::Article;
-#require EasyCMS2::CategoryType::Blog;
-#require EasyCMS2::CategoryType::Gallery;
-#require EasyCMS2::CategoryType::Test;
-#require EasyCMS2::CategoryType::TestCatchAll;
-
 
 sub BUILD {
     my $self = shift;
@@ -54,6 +46,10 @@ sub default_template {
     $template = eval "package " . ref($self) . "; <DATA>";
     $default_cache->{ref($self)} = $template;
     return $template;
+    
+}
+sub default_snippets {
+    my $self = shift;
     
 }
 sub catch_all {

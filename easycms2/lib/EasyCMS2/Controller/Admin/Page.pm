@@ -94,6 +94,7 @@ sub edit : Local {
         );
     }
     
+    $c->widget('edit_page')->element('Checkbox','allow_comments')->label('Allow comments');
     
     $c->widget('edit_page')->element('Submit','save')->label('Save');
     $c->widget('edit_page')->element('Submit','save')->label('Save and Close');

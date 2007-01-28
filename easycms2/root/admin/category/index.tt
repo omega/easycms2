@@ -1,9 +1,9 @@
 [% PROCESS header.tt %]
 [% MACRO render_tree_node(node) BLOCK %]
 <li class="category"><span class="buttons">
-    <a href="[% c.uri_for('edit', node.id) %]">[% icon('accessories-text-editor', 'edit', 'edit category') %]</a>
+    <a href="[% c.uri_for(node.id, 'edit') %]">[% icon('accessories-text-editor', 'edit', 'edit category') %]</a>
     <a href="[% c.uri_for('create', {parent => node.id }) %]">[% icon('document-new', 'new', 'new child category') %]</a>
-    [% IF node.can_remove %]<a href="[% c.uri_for('delete', node.id) %]">[% icon('user-trash-full', 'delete', 'delete category') %]</a>[% ELSE %][% icon('edit-delete', 'delete', 'Cannot delete category') %][% END %]
+    [% IF node.can_remove %]<a href="[% c.uri_for(node.id, 'delete') %]">[% icon('user-trash-full', 'delete', 'delete category') %]</a>[% ELSE %][% icon('edit-delete', 'delete', 'Cannot delete category') %][% END %]
 </span>[% node.name %] </li>
 [% END %]
 <p>Categories allow you to structure your pages. A page belongs in a category, which in turn can be part of a category etc</p>

@@ -52,6 +52,6 @@ li.default_page {
 
 span.hidden {
     visibility: hidden;
-    display: block;
+    display: none;
     
 }

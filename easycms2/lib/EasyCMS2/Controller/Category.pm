@@ -26,7 +26,7 @@ sub render : Local {
     
     my $category : Stashed = $c->req->args->[0];
     
-    my $stash_add = $category->prepare_index();
+    my $stash_add = $category->prepare_index($c, $c->stash->{rest_path});
     foreach my $key (keys %$stash_add) {
         $c->log->debug('adding ' . $key . ' : ' . $stash_add->{$key});
         $c->stash->{category}->{$key} = $stash_add->{$key};

@@ -2,6 +2,10 @@ var HB = null;
 function admin_onload() {
     connect('open_help_button', 'onclick', toggleHelp);
     HB = new HelpBrowser.HelpBrowser();
+    var labels = document.getElementsByTagName('label');
+    for (var i = 0; i < labels.length; i++) {
+        connect(labels[i], 'onclick', toggleField);
+    }
 }
 
 
@@ -33,6 +37,20 @@ function setDefault() {
     textarea.value += newValue;
 }
 
+/** ToggleFunction for HTML::Widget's general layout **/
+
+function toggleField(e) {
+    var label = e.src();
+    if (e.src() != e.target()) {
+        return;
+    }
+    var field = getElement(label.getAttribute("for"));
+    logDebug('nodeName: ' + field.nodeName + " field: " + field)
+    if (field.nodeName == 'TEXTAREA') {
+        toggle(field, 'blind');
+        
+    }
+}
 
 /** PAGE EDITOR STUFF **/
 /* Example of overloading */

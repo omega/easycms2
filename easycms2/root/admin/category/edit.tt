@@ -1,11 +1,11 @@
 [% PROCESS header.tt %]
 
 <ul>
+    <li><a href="[% c.uri_for(object.id, 'snippets') %]">Edit snippets</a></li>
     <li>Type: [% object.type.toString %]</li>
-    <li>Url name: [% object.url_name %]</li>
+    <li>Url name: <a href="[% object.uri_for(c) %]">[% object.url_name %]</a></li>
     <li># of pictures: [% object.pictures.size %]</li>
     <li># of pages: [% object.pages.size %]</li>
 </ul>
-
 [% result.as_xml %]
 [% PROCESS footer.tt %]

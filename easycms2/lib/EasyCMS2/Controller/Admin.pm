@@ -46,6 +46,10 @@ sub index : Private {
     my ($self, $c) = @_;    
 }
 
+sub admin : Chained('/') PathPart('admin') CaptureArgs(0) {
+    my ($self, $c) = @_;
+    
+}
 =head1 AUTHOR
 
 Andreas Marienborg

@@ -8,6 +8,7 @@ my $textile=Text::Textile->new();
 $textile->charset('utf-8');
 
 
+use DateTime::Format::MySQL;
 
 __PACKAGE__->load_components(qw/ResultSetManager PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('page');
@@ -22,6 +23,7 @@ __PACKAGE__->add_columns(
     'author' => { data_type => 'INTEGER' },
     'template' => { data_type => 'INTEGER', is_nullable => 1 },
     'category' => { data_type => 'INTEGER' },
+    'allow_comments' => {data_type => 'INTEGER', is_nullable => 1},
         
     'created' => {data_type => 'TIMESTAMP', default_value => 'now()'},
     'updated' => {data_type => 'TIMESTAMP', default_value => 'now()'},
@@ -37,6 +39,13 @@ __PACKAGE__->belongs_to(category => EasyCMS2::Schema::Base::Category);
 __PACKAGE__->add_unique_constraint('unique_url' => ['category', 'url_title']);
 
 __PACKAGE__->has_many('comments' => 'EasyCMS2::Schema::Base::Comment', 'page', {order_by => 'created'});
+
+
+__PACKAGE__->inflate_column('created' => {
+    'inflate' => sub { DateTime::Format::MySQL->parse_datetime(shift); },
+    'deflate' => sub { DateTime::Format::MySQL->format_datetime(shift); } }
+);
+
 
 sub links : ResultSet {
     my $self = shift;
@@ -88,5 +97,17 @@ sub uri_for {
     return ($c ? $c->uri_for('/', @parents)->path_query : join ('/', @parents));
 }
 
+sub allow_comment {
+    my $self = shift;
+    
+    return 1 if $self->allow_comments;
+    
+    my $cat = $self->category;
+    while ($cat) {
+        return 1 if $cat->allow_comments;
+        $cat = $cat->parent || undef;
+    }
+    return 0;
+}
 
 1;

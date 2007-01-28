@@ -1,0 +1,13 @@
+[% PROCESS header.tt %]
+
+[% MACRO render_tree_node(node) BLOCK %]
+<li class="category"><span class="buttons">
+    <a href="[% c.uri_for('/admin/category', object.id, 'snippets', node.id, 'edit') %]">[% icon('accessories-text-editor', 'edit', 'edit category') %]</a>
+    <a href="[% c.uri_for('/admin/category', object.id, 'snippets', node.id, 'delete') %]">[% icon('user-trash-full', 'delete', 'delete category') %]</a>
+</span>[% node.name %] </li>
+[% END %]
+<p>Snippets are small pieces of templates you can include in templates and category-indexes.</p>
+[% tree(root, "tree") %]
+<a href="[% c.uri_for('/admin/category', object.id, 'snippets', 'create') %]">[% icon('document-new', 'new', 'new category') %] New snippet</a>
+
+[% PROCESS footer.tt %]
