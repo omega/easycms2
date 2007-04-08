@@ -25,6 +25,7 @@ __PACKAGE__->add_columns(
     
     'name' => { data_type => 'TEXT' },
     'url_name' => { data_type => 'TEXT' },
+    'config' => { data_type => 'TEXT', is_nullable => 1 },
     
 );
 __PACKAGE__->set_primary_key('id');
@@ -50,6 +51,34 @@ __PACKAGE__->inflate_column('type' => {
 
 );
 
+__PACKAGE__->inflate_column('config' => {
+    'inflate' => sub { return thaw(shift); },
+    'deflate' => sub { return freeze(shift); }
+});
+
+sub get_config {
+    my $self = shift;
+    my $config = shift;
+    my $h = $self->get_inflated_column('config');
+    
+    return $h->{$config};
+}
+
+sub set_config {
+    my $self = shift;
+    my $config = shift;
+    my $value = shift;
+    my $h = $self->get_inflated_column('config');
+    
+    unless (ref($h)) {
+        $h = {} ;
+    }
+    
+    $h->{$config} = $value;
+    $self->set_inflated_column('config', $h);
+    
+    return $self->get_config($config);
+}
 
 
 sub get_template {

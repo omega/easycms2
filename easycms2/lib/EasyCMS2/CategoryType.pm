@@ -77,12 +77,16 @@ sub public {
 sub order_by {
     return "title";
 }
-
+sub extend_category_widget {
+    my $self = shift;
+    my $widget = shift;
+    my $page = shift;
+    
+}
 sub extend_page_widget {
     my $self = shift;
     my $widget = shift;
     my $page = shift;
-    return $widget;
 }
 
 sub extend_page_save {
