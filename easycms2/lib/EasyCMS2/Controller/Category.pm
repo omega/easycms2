@@ -40,6 +40,33 @@ sub render : Local {
     }
     
 }
+sub cat : Chained('/') PathPart('category') CaptureArgs(1) {
+    my ( $self, $c, $id ) = @_;
+    
+    my $cat : Stashed = $c->model('Base::Category')->find($id); 
+}
+sub css : Chained('cat') Args(0) {
+    my ( $self, $c ) = @_;
+    
+    my $cat : Stashed;
+
+    my $css = ($cat and $cat->css ? $cat->css : ' ');
+    
+    $c->res->body($css);
+    $c->res->status(200);
+    $c->res->content_type('text/css');
+}
+sub js : Chained('cat') Args(0) {
+    my ( $self, $c ) = @_;
+    
+    my $cat : Stashed;
+
+    my $js = ($cat and $cat->js ? $cat->js : ' ');
+    
+    $c->res->body($js);
+    $c->res->status(200);
+    $c->res->content_type('text/javascript');
+}
 =head1 AUTHOR
 
 Andreas Marienborg

@@ -20,6 +20,9 @@ __PACKAGE__->add_columns(
     'index_page' => { data_type => 'TEXT', is_nullable => 1 },
     'allow_comments' => {data_type => 'INTEGER', is_nullable => 1},
     
+    'css' => { data_type => 'TEXT', is_nullable => 1 },
+    'js' => { data_type => 'TEXT', is_nullable => 1 },
+    
     'name' => { data_type => 'TEXT' },
     'url_name' => { data_type => 'TEXT' },
     

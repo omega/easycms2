@@ -90,6 +90,8 @@ sub edit : Chained('category') Args(0) {
     $c->widget('edit_category')->element('Checkbox','allow_comments')->label('Allow comments');
     
     $c->widget('edit_category')->element('Textarea','index_page')->label('Index_page');
+    $c->widget('edit_category')->element('Textarea','js')->label('Javascript');
+    $c->widget('edit_category')->element('Textarea','css')->label('CSS');
 
     $c->widget('edit_category')->element('Button','insert_default')->label('Insert_default')
         ->attributes({ onclick => 'setDefault();', type => 'button'});

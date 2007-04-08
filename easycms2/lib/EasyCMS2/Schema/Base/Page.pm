@@ -9,6 +9,8 @@ $textile->charset('utf-8');
 
 
 use DateTime::Format::MySQL;
+use Storable qw(freeze thaw);
+use Data::Dumper::Simple;
 
 __PACKAGE__->load_components(qw/ResultSetManager PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('page');
@@ -27,6 +29,12 @@ __PACKAGE__->add_columns(
         
     'created' => {data_type => 'TIMESTAMP', default_value => 'now()'},
     'updated' => {data_type => 'TIMESTAMP', default_value => 'now()'},
+    
+    'extra' => { data_type => 'TEXT', is_nullable => 1 },
+    'extra_search1' => { data_type => 'TEXT', is_nullable => 1 },
+    'extra_search2' => { data_type => 'TEXT', is_nullable => 1 },
+    'from_date' => { data_type => 'TIMESTAMP', is_nullable => 1 },
+    'to_date' => { data_type => 'TIMESTAMP', is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key('id');
 
@@ -43,9 +51,45 @@ __PACKAGE__->has_many('comments' => 'EasyCMS2::Schema::Base::Comment', 'page', {
 
 __PACKAGE__->inflate_column('created' => {
     'inflate' => sub { DateTime::Format::MySQL->parse_datetime(shift); },
-    'deflate' => sub { DateTime::Format::MySQL->format_datetime(shift); } }
-);
+    'deflate' => sub { DateTime::Format::MySQL->format_datetime(shift); } 
+});
+__PACKAGE__->inflate_column('from_date' => {
+    'inflate' => sub { DateTime::Format::MySQL->parse_datetime(shift); },
+    'deflate' => sub { DateTime::Format::MySQL->format_datetime(shift); } 
+});
+__PACKAGE__->inflate_column('to_date' => {
+    'inflate' => sub { DateTime::Format::MySQL->parse_datetime(shift); },
+    'deflate' => sub { DateTime::Format::MySQL->format_datetime(shift); } 
+});
 
+__PACKAGE__->inflate_column('extra' => {
+    'inflate' => sub { return thaw(shift); },
+    'deflate' => sub { return freeze(shift); }
+});
+
+sub get_extra {
+    my $self = shift;
+    my $extra = shift;
+    my $h = $self->get_inflated_column('extra');
+    
+    return $h->{$extra};
+}
+
+sub set_extra {
+    my $self = shift;
+    my $extra = shift;
+    my $value = shift;
+    my $h = $self->get_inflated_column('extra');
+    
+    unless (ref($h)) {
+        $h = {} ;
+    }
+    
+    $h->{$extra} = $value;
+    $self->set_inflated_column('extra', $h);
+    
+    return $self->get_extra($extra);
+}
 
 sub links : ResultSet {
     my $self = shift;
@@ -110,4 +154,8 @@ sub allow_comment {
     return 0;
 }
 
+sub comment_form {
+    my $self = shift;
+    
+}
 1;

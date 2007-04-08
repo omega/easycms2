@@ -40,7 +40,12 @@ sub default : Private {
     }
     
 }
-
+sub categorytype_defaults : Local {
+    my ( $self, $c ) = @_;
+    my $ct = EasyCMS2::CategoryType->new(id => $c->req->param('type'));
+    my $api_obj : Stashed = $ct->get_defaults;
+    
+}
 sub end : Private {
     my ( $self, $c ) = @_;
     $c->forward($c->view('JSON'));

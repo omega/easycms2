@@ -40,13 +40,28 @@ sub ID {
 }
 sub default_template {
     my $self = shift;
-    return $default_cache->{ref($self)} if ($default_cache->{ref($self)});
-    my $template;
-    local $/;
-    $template = eval "package " . ref($self) . "; <DATA>";
-    $default_cache->{ref($self)} = $template;
-    return $template;
+    return $self->get_default('template');
+}
+sub get_default {
+    my $self = shift;
+    my $what = shift;
+    my $defs = $self->get_defaults() || {};
     
+    return $defs->{$what};
+}
+sub get_defaults {
+    my $self = shift;
+    
+    $self->read_defaults() unless $default_cache->{ref($self)};
+    
+    return $default_cache->{ref($self)};    
+}
+sub read_defaults {
+    my $self = shift;
+    local $/;
+    my $defs = 
+    my $defaults = eval "package " . ref($self) . "; <DATA>";
+    $default_cache->{ref($self)} = eval $defaults;    
 }
 sub default_snippets {
     my $self = shift;
@@ -58,5 +73,22 @@ sub catch_all {
 }
 sub public {
     return 1;
+}
+sub order_by {
+    return "title";
+}
+
+sub extend_page_widget {
+    my $self = shift;
+    my $widget = shift;
+    my $page = shift;
+    return $widget;
+}
+
+sub extend_page_save {
+    my $self = shift;
+    my $result = shift;
+    my $page = shift;
+    
 }
 1;

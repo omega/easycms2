@@ -30,7 +30,7 @@ sub default : Private {
 sub index : Local {
     my ( $self, $c ) = @_;
     my $help_doc : Stashed = {'title' => 'EasyCMS2 Help index', 
-        'body' => 'EasyCMS2 should be quite easy to use. '
+        'body' => 'EasyCMS2 should be quite easy to use. <a id="legend">Legend</a>'
     };
     
 }

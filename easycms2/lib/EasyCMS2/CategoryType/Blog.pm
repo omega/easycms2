@@ -60,14 +60,20 @@ override  'index' => sub {
 override 'catch_all' => sub {
     return 1;
 };
-
+override 'order_by' => sub {
+    return "created DESC";
+};
 1;
-
 __DATA__
+
+{
+    'template' => qq{
 [% SET posts = category.posts %]
 [% WHILE (post = posts.next) %]
  <h2>[% post.title %]</h2>
 <p>[% post.formated_body %]</p>
 <p>Posted: [% post.created %]</p>
 <hr />
-[% END %]
+[% END %]        
+    }
+}

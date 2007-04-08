@@ -78,7 +78,7 @@ HelpBrowser.HelpBrowser.prototype = {
         /* connect signals */
         
         var links = browserElement.getElementsByTagName('a');
-        logDebug('found links: ' + links.length)
+//        logDebug('found links: ' + links.length)
         for (var i = 0; i < links.length; i++) {
             var link = links[i];
             if (link.id) {
@@ -89,7 +89,12 @@ HelpBrowser.HelpBrowser.prototype = {
         return browserElement;
      },
      renderPage: function(page) {
-         return DIV({'class': 'help_page'}, [H1({}, page.title), P({}, page.body)]);
+//         logDebug("rendering", page.title);
+         var p = P({'id': 'helpbrowser_content_p'} );
+         p.innerHTML = page.body;
+         var help_content = DIV({'class': 'help_page'}, [H1({}, page.title), p]);
+//         logDebug("returning", help_content);
+         return help_content;
      },
      showPage: function(pageId) {
          /* show throbber */
@@ -125,7 +130,7 @@ HelpBrowser.HelpBrowser.prototype = {
      getPageCallback: function(callback, obj, page) {
          /* store the page in the cache */
 //         HelpBrowser.__cache[pageId] = page.help_doc;
-         logDebug('cache updated, calling callback');
+//         logDebug('cache updated, calling callback');
          callback(obj, page.help_doc);
      },
      show: function() {

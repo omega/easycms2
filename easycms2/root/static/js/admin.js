@@ -29,12 +29,31 @@ function unescapeHTML(s) {
 /** Category editing function **/
 
 function setDefault() {
-    var def = MochiKit.DOM.getElement('edit_category_index_page_default');
-    var textarea = MochiKit.DOM.getElement('edit_category_index_page');
-    var newValue = def.innerHTML;
-
-    newValue = unescapeHTML(newValue);
-    textarea.value += newValue;
+    var select = getElement('edit_category_type');
+    var type = select.options[select.selectedIndex].value;
+    logDebug("Getting default for", type);
+    var def = loadJSONDoc(urlbase + "api/json/categorytype_defaults", {'type': type});
+    def.addCallbacks(function(res){
+        if (res.api_obj) {
+            if (res.api_obj.template) {
+                getElement("edit_category_index_page").value = res.api_obj.template;
+            }
+            if (res.api_obj.js) {
+                getElement("edit_category_js").value = res.api_obj.js;
+            }
+            if (res.api_obj.css) {
+                getElement("edit_category_css").value = res.api_obj.css;
+            }
+        } else {
+            getElement("edit_category_index_page").value = '';
+            getElement("edit_category_js").value = '';
+            getElement("edit_category_css").value = '';
+        }
+        
+    },
+    function(res){
+        logError(res);
+    });
 }
 
 /** ToggleFunction for HTML::Widget's general layout **/

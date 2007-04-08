@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use base 'Catalyst::Controller::BindLex';
 
+use Data::Dumper::Simple;
+
 =head1 NAME
 
 EasyCMS2::Controller::Admin::Page - Catalyst Controller
@@ -96,8 +98,12 @@ sub edit : Local {
     
     $c->widget('edit_page')->element('Checkbox','allow_comments')->label('Allow comments');
     
+    $object->category->type->extend_page_widget($c->widget('edit_page'), $object);
+        
     $c->widget('edit_page')->element('Submit','save')->label('Save');
     $c->widget('edit_page')->element('Submit','save')->label('Save and Close');
+    # We extend the widget with the categorytypes extensions, if any
+    
     my $result : Stashed = $c->widget_result($c->widget('edit_page'));
     
     if (! $result->has_errors and $c->req->method() eq 'POST') {
@@ -107,7 +113,10 @@ sub edit : Local {
         $object->url_title($title);
         
         $object->populate_from_widget($result);
+        # we also allow the category type to save its extensions.
+        $object->category->type->extend_page_save($result, $object);
         $object->update();
+        
         if ($c->req->param('save') ne 'Save') {
             $c->res->redirect($c->uri_for(''));
         } else {

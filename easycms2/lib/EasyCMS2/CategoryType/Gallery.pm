@@ -14,8 +14,28 @@ override  'index' => sub {
 1;
 
 __DATA__
-
-<style>
+{
+    'template' => qq{
+[% SET pictures = category.pictures %]
+<div id="gallery">
+<div class="picturestrip">
+<ul class="picturestrip">
+[% FOREACH pic  IN pictures %]
+ <li><img src="[% pic.uri_for(c, "thumb") %]" onclick="showPicture('[% pic.uri_for(c, "gallery") %]')"/></li>
+[% END %]
+</ul>
+</div>
+<div id="bigPicture_box"><img id="bigPicture" src="[% pictures.first.uri_for(c, "gallery") %]" /></div>
+</div>
+    },
+    'js' => qq{
+function showPicture(newSrc) {
+  var img = getElement('bigPicture');
+  var newImg = IMG({'src': newSrc, 'id': 'bigPicture' });
+  replaceChildNodes(img.parentNode, newImg);
+}
+    },
+    'css' => qq{
 div#gallery {
   width: 700px;
   border: 1px solid silver;
@@ -57,23 +77,5 @@ text-align: center;
 img#bigPicture {
 
 }
-</style>
-[% SET pictures = category.pictures %]
-<div id="gallery">
-<div class="picturestrip">
-<ul class="picturestrip">
-[% FOREACH pic  IN pictures %]
- <li><img src="[% pic.uri_for(c, "thumb") %]" onclick="showPicture('[% pic.uri_for(c, "gallery") %]')"/></li>
-[% END %]
-</ul>
-</div>
-<div id="bigPicture_box"><img id="bigPicture" src="[% pictures.first.uri_for(c, "gallery") %]" /></div>
-</div>
-
-<script>
-function showPicture(newSrc) {
-  var img = getElement('bigPicture');
-  var newImg = IMG({'src': newSrc, 'id': 'bigPicture' });
-  replaceChildNodes(img.parentNode, newImg);
+    }
 }
-</script>

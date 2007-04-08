@@ -6,7 +6,7 @@
     </span>
     [% node.name %]
     <ul>
-        [% FOREACH page IN node.pages %]
+        [% FOREACH page IN node.pages({},{order_by => node.type.order_by}) %]
             <li class="page[% IF c.setting('default-page') == page.id %] default_page[% END %]"><span class="buttons">
                 [% UNLESS c.setting('default-page') == page.id %]<a href="[% c.uri_for('homepage', page.id) %]">[% icon('user-home', 'home', 'set as homepage') %]</a>[% END %]
                 <a href="[% c.uri_for('edit', page.id) %]">[% icon('accessories-text-editor', 'edit', 'edit page') %]</a>
