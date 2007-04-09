@@ -64,7 +64,7 @@ __PACKAGE__->inflate_column('to_date' => {
 });
 
 __PACKAGE__->inflate_column('extra' => {
-    'inflate' => sub { return thaw(shift); },
+    'inflate' => sub { my $s = shift; return $t ? thaw($s) : {}; },
     'deflate' => sub { return freeze(shift); }
 });
 
