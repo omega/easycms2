@@ -12,7 +12,7 @@ sub BUILD {
     my $self = shift;
     my $args = shift;
     
-    $self->data(thaw($args->{'stored'}));
+    $self->data(thaw($args->{'stored'})) if $args->{'stored'};
 }
 
 

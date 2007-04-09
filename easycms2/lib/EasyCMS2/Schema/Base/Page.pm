@@ -81,7 +81,7 @@ sub set_extra {
     my $self = shift;
     my $extra = shift;
     my $value = shift;
-    my $h = $self->extra;
+    my $h = $self->extra || EasyCMS2::Extra->new();
     
     $h->set($extra => $value);
     $self->extra($h);
