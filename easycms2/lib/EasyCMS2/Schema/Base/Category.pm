@@ -3,6 +3,7 @@ package EasyCMS2::Schema::Base::Category;
 use base qw/DBIx::Class/;
 
 #use EasyCMS2::CategoryType;
+use EasyCMS2::Extra;
 
 __PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('category');
@@ -52,32 +53,28 @@ __PACKAGE__->inflate_column('type' => {
 );
 
 __PACKAGE__->inflate_column('config' => {
-    'inflate' => sub { return thaw(shift); },
-    'deflate' => sub { return freeze(shift); }
+    'inflate' => sub { return EasyCMS2::Extra->new({'stored' => shift})},
+    'deflate' => sub { return shift->store(); }
 });
 
 sub get_config {
     my $self = shift;
     my $config = shift;
-    my $h = $self->get_inflated_column('config');
+    my $h = $self->config;
     
-    return $h->{$config};
+    return $h->get($config);
 }
 
 sub set_config {
     my $self = shift;
     my $config = shift;
     my $value = shift;
-    my $h = $self->get_inflated_column('config');
+    my $h = $self->config;
     
-    unless (ref($h)) {
-        $h = {} ;
-    }
+    $h->set($config => $value);
+    $self->config($h);
     
-    $h->{$config} = $value;
-    $self->set_inflated_column('config', $h);
-    
-    return $self->get_config($config);
+    return $value;
 }
 
 

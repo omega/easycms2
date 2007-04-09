@@ -9,8 +9,9 @@ $textile->charset('utf-8');
 
 
 use DateTime::Format::DBI;
-use Storable qw(nfreeze thaw);
 use Data::Dumper::Simple;
+
+use EasyCMS2::Extra;
 
 __PACKAGE__->load_components(qw/ResultSetManager PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('page');
@@ -64,32 +65,28 @@ __PACKAGE__->inflate_column('to_date' => {
 });
 
 __PACKAGE__->inflate_column('extra' => {
-    'inflate' => sub { my $s = shift; return $s ? thaw($s) : {}; },
-    'deflate' => sub { return nfreeze(shift); }
+    'inflate' => sub { return EasyCMS2::Extra->new({'stored' => shift})},
+    'deflate' => sub { return shift->store(); }
 });
 
 sub get_extra {
     my $self = shift;
     my $extra = shift;
-    my $h = $self->get_inflated_column('extra');
+    my $h = $self->extra;
     
-    return $h->{$extra};
+    return $h->get($extra);
 }
 
 sub set_extra {
     my $self = shift;
     my $extra = shift;
     my $value = shift;
-    my $h = $self->get_inflated_column('extra');
+    my $h = $self->extra;
     
-    unless (ref($h)) {
-        $h = {} ;
-    }
+    $h->set($extra => $value);
+    $self->extra($h);
     
-    $h->{$extra} = $value;
-    $self->set_inflated_column('extra', $h);
-    
-    return $self->get_extra($extra);
+    return $value;
 }
 
 sub links : ResultSet {
