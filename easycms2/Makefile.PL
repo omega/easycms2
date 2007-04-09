@@ -14,6 +14,7 @@ requires Imager => 0;
 requires Text::Textile => 0;
 requires Digest::SHA1 => 0;
 requires Catalyst::View::TT => 0;
+requires DateTime::Format::DBI => 0.031;
 
 
 catalyst;

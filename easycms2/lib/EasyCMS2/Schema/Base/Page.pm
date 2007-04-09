@@ -8,7 +8,7 @@ my $textile=Text::Textile->new();
 $textile->charset('utf-8');
 
 
-use DateTime::Format::MySQL;
+use DateTime::Format::DBI;
 use Storable qw(freeze thaw);
 use Data::Dumper::Simple;
 
@@ -50,16 +50,17 @@ __PACKAGE__->has_many('comments' => 'EasyCMS2::Schema::Base::Comment', 'page', {
 
 
 __PACKAGE__->inflate_column('created' => {
-    'inflate' => sub { DateTime::Format::MySQL->parse_datetime(shift); },
-    'deflate' => sub { DateTime::Format::MySQL->format_datetime(shift); } 
+    
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_datetime($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_datetime($val); } 
 });
 __PACKAGE__->inflate_column('from_date' => {
-    'inflate' => sub { DateTime::Format::MySQL->parse_datetime(shift); },
-    'deflate' => sub { DateTime::Format::MySQL->format_datetime(shift); } 
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_datetime($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_datetime($val); } 
 });
 __PACKAGE__->inflate_column('to_date' => {
-    'inflate' => sub { DateTime::Format::MySQL->parse_datetime(shift); },
-    'deflate' => sub { DateTime::Format::MySQL->format_datetime(shift); } 
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_datetime($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_datetime($val); } 
 });
 
 __PACKAGE__->inflate_column('extra' => {
