@@ -45,13 +45,13 @@ ALTER TABLE "snippet" ADD FOREIGN KEY ("category")
 ALTER TABLE "comment" ADD FOREIGN KEY ("page")
   REFERENCES "page" ("id") ON DELETE cascade ON UPDATE cascade;
 
-ALTER TABLE page ADD allow_comments integer(10);
+ALTER TABLE page ADD allow_comments integer;
 ALTER TABLE page ADD extra text;
 ALTER TABLE page ADD extra_search1 text;
 ALTER TABLE page ADD extra_search2 text;
 ALTER TABLE page ADD from_date timestamp;
 ALTER TABLE page ADD to_date timestamp;
-ALTER TABLE category ADD allow_comments integer(10);
+ALTER TABLE category ADD allow_comments integer;
 ALTER TABLE category ADD css text;
 ALTER TABLE category ADD js text;
 ALTER TABLE category ADD config text;

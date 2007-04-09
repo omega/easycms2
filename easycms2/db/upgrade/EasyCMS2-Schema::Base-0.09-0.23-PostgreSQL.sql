@@ -45,26 +45,26 @@ ALTER TABLE "snippet" ADD FOREIGN KEY ("category")
 ALTER TABLE "comment" ADD FOREIGN KEY ("page")
   REFERENCES "page" ("id") ON DELETE cascade ON UPDATE cascade;
 
-ALTER TABLE template CHANGE parent integer(10);
-ALTER TABLE page ADD allow_comments integer(10);
+ALTER TABLE template CHANGE parent integer;
+ALTER TABLE page ADD allow_comments integer;
 ALTER TABLE page ADD extra text;
 ALTER TABLE page ADD extra_search1 text;
 ALTER TABLE page ADD extra_search2 text;
 ALTER TABLE page ADD from_date timestamp;
 ALTER TABLE page ADD to_date timestamp;
-ALTER TABLE page CHANGE author integer(10) NOT NULL;
-ALTER TABLE page CHANGE template integer(10);
-ALTER TABLE page CHANGE category integer(10) NOT NULL;
-ALTER TABLE media ADD category integer(10);
-ALTER TABLE media CHANGE type integer(10);
+ALTER TABLE page CHANGE author integer NOT NULL;
+ALTER TABLE page CHANGE template integer;
+ALTER TABLE page CHANGE category integer NOT NULL;
+ALTER TABLE media ADD category integer;
+ALTER TABLE media CHANGE type integer;
 ALTER TABLE category ADD type text DEFAULT 'article' NOT NULL;
 ALTER TABLE category ADD index_page text;
-ALTER TABLE category ADD allow_comments integer(10);
+ALTER TABLE category ADD allow_comments integer;
 ALTER TABLE category ADD css text;
 ALTER TABLE category ADD js text;
 ALTER TABLE category ADD config text;
-ALTER TABLE category CHANGE parent integer(10);
-ALTER TABLE category CHANGE template integer(10) NOT NULL;
+ALTER TABLE category CHANGE parent integer;
+ALTER TABLE category CHANGE template integer NOT NULL;
 ALTER TABLE media ADD CONSTRAINT FOREIGN KEY (category) REFERENCES category (id) ON DELETE cascade ON UPDATE cascade;
 ALTER TABLE category ADD ;
 

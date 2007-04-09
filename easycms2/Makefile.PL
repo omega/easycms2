@@ -15,6 +15,10 @@ requires Text::Textile => 0;
 requires Digest::SHA1 => 0;
 requires Catalyst::View::TT => 0;
 requires DateTime::Format::DBI => 0.031;
+requires Calendar::Calendar => 0;
+requires DBIx::Class => 0.07999_02;
+requires DBIx::Class::HTMLWidget => 0.09;
+requires HTML::Widget => 0;
 
 
 catalyst;
