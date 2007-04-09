@@ -9,7 +9,7 @@ $textile->charset('utf-8');
 
 
 use DateTime::Format::DBI;
-use Storable qw(freeze thaw);
+use Storable qw(nfreeze thaw);
 use Data::Dumper::Simple;
 
 __PACKAGE__->load_components(qw/ResultSetManager PK::Auto Core HTMLWidget/);
@@ -65,7 +65,7 @@ __PACKAGE__->inflate_column('to_date' => {
 
 __PACKAGE__->inflate_column('extra' => {
     'inflate' => sub { my $s = shift; return $s ? thaw($s) : {}; },
-    'deflate' => sub { return freeze(shift); }
+    'deflate' => sub { return nfreeze(shift); }
 });
 
 sub get_extra {
