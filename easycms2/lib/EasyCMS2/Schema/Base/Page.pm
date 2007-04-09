@@ -141,6 +141,21 @@ sub uri_for {
     
     return ($c ? $c->uri_for('/', @parents)->path_query : join ('/', @parents));
 }
+sub can_remove {
+    my $self = shift;
+    
+    return 1;
+    
+}
+sub remove {
+    my $self = shift;
+    if ($self->can_remove) {
+        $self->delete();
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
 sub allow_comment {
     my $self = shift;
