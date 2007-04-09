@@ -74,7 +74,7 @@ sub get_extra {
     my $extra = shift;
     my $h = $self->extra;
     
-    return $h->get($extra);
+    return ($h ? $h->get($extra) : undef);
 }
 
 sub set_extra {

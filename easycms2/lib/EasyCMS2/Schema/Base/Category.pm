@@ -62,7 +62,7 @@ sub get_config {
     my $config = shift;
     my $h = $self->config;
     
-    return $h->get($config);
+    return ($h ? $h->get($config) : undef);
 }
 
 sub set_config {
