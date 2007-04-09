@@ -135,12 +135,13 @@ sub delete : Local {
     my $object : Stashed = $c->model('Base::Page')->find($id) if $id;
     
     die "no such page" unless $object;
+    my $msg : Stashed;
     
     if ($object->can_remove()) {
         $object->remove;
-        my $msg : Flashed = 'Page removed';
+        $msg = 'Page removed';
     } else {
-        my $msg : Flashed = 'Cannot remove non-empty template (has children, categories or pages)';
+        $msg = 'Cannot remove non-empty template (has children, categories or pages)';
     }
     $c->res->redirect($c->uri_for(''));
     
