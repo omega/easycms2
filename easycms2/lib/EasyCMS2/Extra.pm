@@ -6,13 +6,14 @@ use warnings;
 use Moose;
 use Storable qw(nfreeze thaw);
 
-has 'data' => (is => 'rw', isa => 'Ref', default => sub { return {} });
+has 'data' => (is => 'rw', isa => 'Ref', default => sub { {} });
 
 sub BUILD {
     my $self = shift;
     my $args = shift;
     
     $self->data(thaw($args->{'stored'})) if $args->{'stored'};
+    $self->data({}) unless ref($self->data);
 }
 
 
