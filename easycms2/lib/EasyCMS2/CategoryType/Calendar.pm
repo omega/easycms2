@@ -22,7 +22,7 @@ override 'index' => sub {
     if (defined($rest_path) and $rest_path ne '' and $rest_path =~ m|^(\d{4})/(\d{2})$|) {
         $date = DateTime->new(year => $1, month=> $2);
     } else {
-        $date = DateTime->now()->truncate(to => month);
+        $date = DateTime->now()->truncate(to => 'month');
     }
     
     my $stash_add = {};
