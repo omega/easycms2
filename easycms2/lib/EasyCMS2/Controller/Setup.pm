@@ -160,7 +160,7 @@ END
             ,
         });
     }
-        
+    
     my $def_cat;
     unless ($def_cat = $c->model('Base::Category')->find({name => 'Default Category', parent => undef}) ) {
         $def_cat = $c->model('Base::Category')->create({

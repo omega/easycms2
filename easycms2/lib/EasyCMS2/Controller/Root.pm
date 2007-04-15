@@ -84,8 +84,6 @@ sub default : Private {
         $c->stash->{title} = $page->title;
         $c->forward('page/render', [$page]);
     } elsif ($category) {
-        $c->stash->{cat} = $category;
-        $c->stash->{title} = $category->name;
         $c->stash->{rest_path} = join('/', @args);
         $c->log->debug('restpath: ' . $c->stash->{rest_path});
         $c->forward('category/render', [$category]);

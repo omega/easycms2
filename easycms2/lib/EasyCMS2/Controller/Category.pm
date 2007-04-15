@@ -35,6 +35,8 @@ sub render : Local {
     if ($category) {
         $c->stash->{templ} = $category->template;
         $c->stash->{template} = 'category/render.tt';    
+        $c->stash->{cat} = $category;
+        $c->stash->{title} = $category->name;
     } else {
         return $c->detach('/error/no_page');
     }
