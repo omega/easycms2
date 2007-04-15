@@ -5,14 +5,16 @@ use warnings;
 
 use Moose;
 use Storable qw(nfreeze thaw);
+use JSON;
 
 has 'data' => (is => 'rw', isa => 'Ref', default => sub { {} });
+has 'serializer' => (is => 'ro', isa => 'Ref', default => sub { return JSON->new() });
 
 sub BUILD {
     my $self = shift;
     my $args = shift;
     
-    $self->data(thaw($args->{'stored'})) if $args->{'stored'};
+    $self->data($self->serializer->jsonToObj($args->{'stored'})) if $args->{'stored'};
     $self->data({}) unless ref($self->data);
 }
 
@@ -34,7 +36,7 @@ sub get {
 sub store {
     my ( $self ) = @_;
     
-    return nfreeze($self->data);
+    return $self->serializer->objToJson($self->data);
 }
 
 1;

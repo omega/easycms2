@@ -61,7 +61,7 @@ sub read_defaults {
     local $/;
     my $defs = 
     my $defaults = eval "package " . ref($self) . "; <DATA>";
-    $default_cache->{ref($self)} = eval $defaults;    
+    $default_cache->{ref($self)} = eval $defaults if $defaults;    
 }
 sub default_snippets {
     my $self = shift;
