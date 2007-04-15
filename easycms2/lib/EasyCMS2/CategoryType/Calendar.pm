@@ -5,6 +5,7 @@ use warnings;
 use Moose;
 use Calendar::Calendar qw(calendar);
 use Data::Dumper::Simple;
+use DateTime;
 
 $Calendar::Calendar::week_start_day = 1;
 extends 'EasyCMS2::CategoryType';
