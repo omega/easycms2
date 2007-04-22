@@ -13,7 +13,10 @@ __PACKAGE__->add_columns(
     'name' => { data_type => 'TEXT' },
     
     'before' => { data_type => 'TEXT' },
-    'after' => { data_type => 'TEXT' },    
+    'after' => { data_type => 'TEXT' },
+    
+    'css' => { data_type => 'TEXT', is_nullable => 1 },
+    'js' => { data_type => 'TEXT', is_nullable => 1 },
     
     'parent' => { data_type => 'INTEGER', is_nullable => 1 },
 );
@@ -42,6 +45,23 @@ sub node {
     return @templates;
 }
 
+sub get_css {
+    my $self = shift;
+    my $css = '';
+    if ($self->parent) {
+        $css = $self->parent->get_css();
+    }
+    return $css . ($self->css ? $self->css : '');
+}
+
+sub get_js {
+    my $self = shift;
+    my $js = '';
+    if ($self->parent) {
+        $js = $self->parent->get_js();
+    }
+    return $js . $self->js;
+}
 
 sub get_header {
     my $self = shift;

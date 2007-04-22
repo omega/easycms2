@@ -56,6 +56,9 @@ sub edit : Local {
     $c->widget('edit_template')->element('Textfield','name')->label('Name');
     $c->widget('edit_template')->element('Textarea','before')->label('Before');
     $c->widget('edit_template')->element('Textarea','after')->label('After');
+
+    $c->widget('edit_template')->element('Textarea','js')->label('Javascript');
+    $c->widget('edit_template')->element('Textarea','css')->label('CSS');
     
     $c->widget('edit_template')->indicator(sub { $c->req->method eq 'POST' } );
     
