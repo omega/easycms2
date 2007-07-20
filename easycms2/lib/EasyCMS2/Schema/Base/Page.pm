@@ -57,16 +57,16 @@ __PACKAGE__->has_many('comments' => 'EasyCMS2::Schema::Base::Comment', 'page', {
 
 __PACKAGE__->inflate_column('created' => {
     
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_datetime($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_datetime($val); } 
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
 });
 __PACKAGE__->inflate_column('from_date' => {
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_datetime($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_datetime($val); } 
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
 });
 __PACKAGE__->inflate_column('to_date' => {
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_datetime($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_datetime($val); } 
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
 });
 
 __PACKAGE__->inflate_column('extra' => {
