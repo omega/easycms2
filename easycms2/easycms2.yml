@@ -4,6 +4,8 @@ db:
     dsn: 'dbi:SQLite:__HOME__/db/sqlite.db'
     user:
     password:
+    options:
+        AutoCommit: 1
     upgrade: '__HOME__/db/upgrade/'
 'View::Default':
     TEMPLATE_EXTENSION: '.tt'

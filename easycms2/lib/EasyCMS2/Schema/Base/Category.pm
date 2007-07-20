@@ -15,7 +15,7 @@ __PACKAGE__->add_columns(
     'template' => { data_type => 'INTEGER' },
     
     # Type can be: article, blog, gallery
-    'type' => { data_type => 'TEXT', default_value => 'article'},
+    'type' => { data_type => 'varchar', size => 64, default_value => 'article'},
     
     # holds the index-page text
     'index_page' => { data_type => 'TEXT', is_nullable => 1 },

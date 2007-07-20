@@ -12,7 +12,7 @@ __PACKAGE__->config(
     $cfg->{'dsn'},
     $cfg->{'user'},
     $cfg->{'password'},
-    {AutoCommit => 1}
+    $cfg->{'options'},
     ],
 
 );
