@@ -44,11 +44,11 @@ sub render : Local {
 }
 sub cat : Chained('/') PathPart('category') CaptureArgs(1) {
     my ( $self, $c, $id ) = @_;
-    
     my $cat : Stashed = $c->model('Base::Category')->find($id); 
 }
 sub css : Chained('cat') Args(0) {
     my ( $self, $c ) = @_;
+    $c->log->abort(1) if $c->log->can('abort');
     
     my $cat : Stashed;
 
@@ -60,6 +60,7 @@ sub css : Chained('cat') Args(0) {
 }
 sub js : Chained('cat') Args(0) {
     my ( $self, $c ) = @_;
+    $c->log->abort(1) if $c->log->can('abort');
     
     my $cat : Stashed;
 

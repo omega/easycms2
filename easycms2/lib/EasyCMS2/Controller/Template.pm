@@ -23,6 +23,7 @@ Catalyst Controller.
 
 sub template : Chained('/') PathPart('template') CaptureArgs(1) {
     my ( $self, $c, $id ) = @_;
+    $c->log->abort(1) if $c->log->can('abort');
     
     my $template : Stashed = $c->model('Base::Template')->find($id); 
 }
@@ -45,6 +46,7 @@ sub css : Chained('template') Args(0) {
 
 sub js : Chained('template') Args(0) {
     my ( $self, $c ) = @_;
+    $c->log->abort(1) if $c->log->can('abort');
     
     my $template : Stashed;
 

@@ -9,6 +9,11 @@ $textile->charset('utf-8');
 
 
 use DateTime::Format::DBI;
+%DateTime::Format::DBI::db_to_parser = (
+    'mysql'	=> 'DateTime::Format::MySQL',
+    'pg'		=> 'DateTime::Format::Pg',
+    'sqlite'  => 'DateTime::Format::MySQL',
+);
 use Data::Dumper::Simple;
 
 use EasyCMS2::Extra;
@@ -19,7 +24,7 @@ __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
     
     'title' => { data_type => 'TEXT' },
-    'url_title' => { data_type => 'TEXT' },
+    'url_title' => { data_type => 'varchar', size => 255 },
     
     'body'  => { data_type => 'TEXT' },
     

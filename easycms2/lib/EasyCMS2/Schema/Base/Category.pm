@@ -25,7 +25,7 @@ __PACKAGE__->add_columns(
     'js' => { data_type => 'TEXT', is_nullable => 1 },
     
     'name' => { data_type => 'TEXT' },
-    'url_name' => { data_type => 'TEXT' },
+    'url_name' => { data_type => 'varchar', size => 255 },
     'config' => { data_type => 'TEXT', is_nullable => 1 },
     
 );

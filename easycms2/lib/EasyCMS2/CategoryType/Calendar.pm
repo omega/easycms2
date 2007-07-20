@@ -18,6 +18,8 @@ override 'index' => sub {
     my $self = shift;
     my $c = shift;
     my $rest_path = shift;
+    my $stash_add = {};
+    
     my $date;
     if (defined($rest_path) and $rest_path ne '' and $rest_path =~ m|^(\d{4})/(\d{2})$|) {
         $date = DateTime->new(year => $1, month=> $2);
@@ -25,7 +27,45 @@ override 'index' => sub {
         $date = DateTime->now()->truncate(to => 'month');
     }
     
-    my $stash_add = {};
+    if ($c->req->param('from')) {
+        # Present a form
+        my $w = $c->widget('booking');
+
+        my $a = $c->model('Base::Author')->find_or_create({name => 'Bookings', 
+            login => 'booking', password => 'apejens'});
+        my $page = $c->model('Base::Page')->new({author => $a->id, category => $self->row->id,
+            from_date => $c->req->param('from') });
+        
+        $w = $self->extend_page_widget($w, $page, 0);
+        $w->element('Submit','save')->label('Save');
+        
+        my $r = $c->widget_result($w);
+        $stash_add->{'book_form'} = $r;
+        
+        $c->log->debug($w);
+        
+        if ($c->req->method eq 'POST' and ! $r->has_errors ) {
+            $c->log->debug("SHOULD SAVE PAGE");
+            
+            my $title = "Booking: " . $page->from_date->ymd("-");
+            $page->title($title);
+            $page->body($title);
+            
+            $title = lc($title);
+            $title =~ s/[^a-z0-9_-]+/_/g;
+            $page->url_title($title);
+            $page->populate_from_widget($r);
+
+
+            # we also allow the category type to save its extensions.
+            $page->category->type->extend_page_save($r, $page);
+            $page->update();
+
+            $c->res->redirect($page->category->uri_for($c, {confirm => 1}));
+            
+            # process the form
+        }
+    }
     $stash_add->{'title'} = $date->month_name.", ".$date->year;
     
     my $prev = $date->clone->subtract(months => 1);
@@ -37,6 +77,8 @@ override 'index' => sub {
     my @cal = Calendar::Calendar::generic_calendar($date->month, $date->year);
     $stash_add->{'month'} = $date->month;
     $stash_add->{'year'} = $date->year;
+    $stash_add->{'curr'} = $date->year . "/" . sprintf("%02d", $date->month);
+    $stash_add->{'book_ym'} = $date->year . "-" . sprintf("%02d", $date->month) . "-";
     
     $stash_add->{'calendar'} = \@cal;
     
@@ -53,11 +95,17 @@ override 'extend_page_widget' => sub {
     my $self = shift;
     my $widget = shift;
     my $page = shift;
+    my $admin = shift;
+
+    if ($admin) {
+        $widget->element('Checkbox', 'confirmed')->label('Confirmed')
+            ->checked( $page->get_extra('confirmed') ? 1 : 0 )
+    }
     
-    $widget->element('Checkbox', 'confirmed')->label('Confirmed')->checked( $page->get_extra('confirmed') ? 1 : 0 );
-    
-    $widget->element('Textfield', 'from_date')->label('From');
-    $widget->element('Textfield', 'to_date')->label('To');
+    $widget->element('Textfield', 'from_date')->label('From')
+        ->value($page->from_date ? $page->from_date->ymd('-') : undef);
+    $widget->element('Textfield', 'to_date')->label('To')
+        ->value($page->to_date ? $page->to_date->ymd('-') : undef);
     $widget->element('Textfield', 'booker_name')->label('Booker')->value($page->get_extra('booker_name'));
     $widget->element('Textfield', 'booker_email')->label('Email')->value($page->get_extra('booker_email'));
     $widget->element('Textfield', 'booker_phone')->label('Phone')->value($page->get_extra('booker_phone'));
@@ -90,6 +138,16 @@ override 'extend_page_save' => sub {
 __DATA__
 {
     'template' => qq{
+[% IF c.req.param('from') %]
+
+<p>Present booking form</p>
+[% category.book_form %]
+
+[% ELSE %]
+
+[% IF c.req.param('confirm') %]
+<p>Your booking is now registered</p>
+[% END %]
 [% SET cal = category.calendar %]
 [% SET items = category.items %]
 [% SET i = items.next %]
@@ -118,15 +176,24 @@ END;
 END;
 END %]
 
-<td[% IF in_order %] class="taken"[% END %]>[% day %]</td>
+<td[% IF in_order %] class="[% i.get_extra('confirmed') ? 'confirmed ' : '' %]taken"[% END %]>
+[% IF NOT in_order %]<a href="[% cat.uri_for(c, category.curr, {from => category.book_ym _ day}) %]">[% END %][% day %]
+[% IF NOT in_order %]</a>[% END %]</td>
 [% END %]
 </tr>
+[% END %]
 [% END %]
 </table>
     },
     'css' => q{
+@import "/static/css/forms.css";
+
 td.taken {
     background-color: red;
 }
+td.confirmed {
+    background-color: green;
+}
+
     }
 }

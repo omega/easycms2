@@ -3,23 +3,43 @@ use inc::Module::Install;
 name 'EasyCMS2';
 all_from 'lib/EasyCMS2.pm';
 
-requires Catalyst => '5.7';
-requires Catalyst::Plugin::HTML::Widget => 0;
-requires Catalyst::Model::DBIC::Schema => '0.18';
-requires Catalyst::Controller::BindLex => 0;
-requires Catalyst::Action::RenderView => 0;
-requires Moose => 0;
-requires MIME::Types => 0;
-requires Imager => 0;
-requires Text::Textile => 0;
-requires Digest::SHA1 => 0;
-requires Catalyst::View::TT => 0;
-requires DateTime::Format::DBI => 0.031;
-requires Calendar::Calendar => 0;
-requires DBIx::Class => 0.07999_02;
-requires DBIx::Class::HTMLWidget => 0.09;
-requires HTML::Widget => 0;
+requires 'Catalyst::Runtime' => '5.7';
+requires 'Catalyst::Plugin::HTML::Widget' => 0;
+requires 'Catalyst::Model::DBIC::Schema' => '0.18';
+requires 'Catalyst::Controller::BindLex' => 0;
+requires 'Catalyst::Action::RenderView' => 0;
+requires 'Catalyst::Plugin::Static::Simple' => 0;
 
+requires 'Catalyst::Plugin::Session' => 0;
+requires 'Catalyst::Plugin::Session::Store::FastMmap' => 0;
+requires 'Catalyst::Plugin::Session::State::Cookie' => 0;
+
+
+
+requires 'Catalyst::Plugin::Session::State::Cookie' => 0;
+requires 'Catalyst::Plugin::Authentication' => 0;
+requires 'Catalyst::Plugin::Authentication::Store::DBIC' => 0;
+requires 'Catalyst::Plugin::Authentication::Credential::Password' => 0;
+requires 'Catalyst::Plugin::ConfigLoader' => 0;
+requires 'Data::Dumper::Simple' => 0;
+
+requires 'Moose' => 0;
+requires 'MIME::Types' => 0;
+requires 'Imager' => 0;
+requires 'Text::Textile' => 0;
+requires 'Digest::SHA1' => 0;
+requires 'Catalyst::View::TT' => 0;
+requires 'Catalyst::View::JSON' => 0;
+
+requires 'DateTime::Format::DBI' => 0.031;
+requires 'Calendar::Calendar' => 0;
+requires 'DBIx::Class' => 0.08003;
+requires 'DBIx::Class::HTMLWidget' => 0.09;
+requires 'HTML::Widget' => '1.11';
+requires 'Catalyst::Plugin::HTML::Widget' => 0;
+
+
+requires 'SQL::Translator' => '0.08';
 
 catalyst;
 

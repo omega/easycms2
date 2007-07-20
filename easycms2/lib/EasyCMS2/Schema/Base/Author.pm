@@ -9,7 +9,7 @@ __PACKAGE__->table('author');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1},
     
-    'login' => { data_type => 'TEXT' },
+    'login' => { data_type => 'varchar', size => 255 },
     'email' => { data_type => 'TEXT', is_nullable => 1 },
     'password' => { data_type => 'TEXT' },
     

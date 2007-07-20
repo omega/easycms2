@@ -10,7 +10,7 @@ __PACKAGE__->table('template');
 
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1},
-    'name' => { data_type => 'TEXT' },
+    'name' => { data_type => 'varchar', size => 255 },
     
     'before' => { data_type => 'TEXT' },
     'after' => { data_type => 'TEXT' },

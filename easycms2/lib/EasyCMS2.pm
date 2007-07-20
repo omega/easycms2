@@ -29,7 +29,7 @@ use Catalyst qw/
         Static::Simple 
 /;
 
-our $VERSION = '0.02';
+our $VERSION = '0.10';
 
 __PACKAGE__->config(setup_components => { search_extra => [ qw/::CategoryType/ ] });
 
@@ -71,6 +71,7 @@ sub get_snippet {
         $args = $self->stash();
         $args->{c} = $self;
     }
+    return undef unless $snip;
     
     my $stash_add = $snip->category->prepare_index($self);
     foreach my $key (keys %$stash_add) {

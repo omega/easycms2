@@ -13,7 +13,7 @@ __PACKAGE__->table('mimetype');
 
 __PACKAGE__->add_columns(
     'id'            => { data_type => 'INTEGER', is_auto_increment => 1 },
-    'type'      => { data_type => 'TEXT' },
+    'type'      => { data_type => 'varchar', size => 255 },
     'name'   => { data_type => 'TEXT', is_nullable => 1 },
     'extensions' => { data_type => 'TEXT', is_nullable => 1},
     'icon'          => { data_type => 'TEXT', is_nullable => 1 },

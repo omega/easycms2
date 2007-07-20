@@ -26,7 +26,7 @@ is($catchAll->id, 'test_catch_all');
 is($catchAll->catch_all, 1);
 
 
-is(scalar(EasyCMS2->category_types), 3);
+is(scalar(EasyCMS2->category_types), 4);
 
 
 is(EasyCMS2::CategoryType::Test->ID, "test");

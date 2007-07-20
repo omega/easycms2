@@ -98,7 +98,7 @@ sub edit : Local {
     
     $c->widget('edit_page')->element('Checkbox','allow_comments')->label('Allow comments');
     
-    $object->category->type->extend_page_widget($c->widget('edit_page'), $object);
+    $object->category->type->extend_page_widget($c->widget('edit_page'), $object, 1);
         
     $c->widget('edit_page')->element('Submit','save')->label('Save');
     $c->widget('edit_page')->element('Submit','save')->label('Save and Close');
