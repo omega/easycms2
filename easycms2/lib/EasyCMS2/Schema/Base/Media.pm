@@ -93,8 +93,6 @@ sub file {
         if ($db_type) {
             warn "db_type: " . $db_type->type;
             
-            $db_type->check_imager();
-            
             if ($db_type->check_imager()) {
 
                 my $img = Imager->new();

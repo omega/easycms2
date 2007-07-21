@@ -85,7 +85,7 @@ override 'index' => sub {
     my $items = $self->row->pages({-or => [
         'from_date' => { '-between' => [$date, $next] },
         'to_date' => { '-between' => [$date, $next] }
-    ]}, { 'order_by' => 'from_date ASC'});
+    ]}, { 'order_by' => \'from_date ASC'});
     $stash_add->{'items'} = $items;
     
     return $stash_add;
