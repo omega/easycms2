@@ -39,8 +39,8 @@ __PACKAGE__->add_columns(
     'extra' => { data_type => 'TEXT', is_nullable => 1 },
     'extra_search1' => { data_type => 'TEXT', is_nullable => 1 },
     'extra_search2' => { data_type => 'TEXT', is_nullable => 1 },
-    'from_date' => { data_type => 'TIMESTAMP', is_nullable => 1 },
-    'to_date' => { data_type => 'TIMESTAMP', is_nullable => 1 },
+    'from_date' => { data_type => 'date', is_nullable => 1 },
+    'to_date' => { data_type => 'date', is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key('id');
 
@@ -61,12 +61,12 @@ __PACKAGE__->inflate_column('created' => {
     'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
 });
 __PACKAGE__->inflate_column('from_date' => {
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_date($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_date($val); } 
 });
 __PACKAGE__->inflate_column('to_date' => {
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_date($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_date($val); } 
 });
 
 __PACKAGE__->inflate_column('extra' => {
