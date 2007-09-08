@@ -29,7 +29,7 @@ use Catalyst qw/
         Static::Simple 
 /;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 __PACKAGE__->config(setup_components => { search_extra => [ qw/::CategoryType/ ] });
 
