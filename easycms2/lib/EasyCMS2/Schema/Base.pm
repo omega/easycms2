@@ -44,7 +44,8 @@ sub run_upgrade {
 sub _on_connect
 {
     my ($self) = @_;
-#    my $pversion = '0.23';
+#    my $pversion = '0.09';
+#=pod
     my $vschema = DBIx::Class::Version->connect(@{$self->storage->connect_info()});
     my $vtable = $vschema->resultset('Table');
     my $pversion;
@@ -87,7 +88,7 @@ sub _on_connect
         $self->deploy();
         return 1;
     }
-
+#=cut
     my $file = $self->ddl_filename(
                                    $self->storage->sqlt_type,
                                    $self->upgrade_directory,
