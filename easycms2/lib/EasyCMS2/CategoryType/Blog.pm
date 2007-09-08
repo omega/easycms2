@@ -54,6 +54,7 @@ override  'index' => sub {
     } else {
         $hashref->{'posts'} = $self->row->pages({}, {order_by => 'created desc', rows => 5});
     }
+    $hashref->{'latest_posts'} = $self->row->pages({}, {order_by => 'created desc', rows => 5});
     return $hashref;
 };
 

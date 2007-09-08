@@ -83,7 +83,7 @@ ALTER TABLE template RENAME COLUMN name_new TO name;
 
 ALTER TABLE template ADD COLUMN parent_new integer;
 UPDATE template SET parent_new = CAST(parent AS integer);
-ALTER TABLE template ALTER COLUMN parent_new SET NOT NULL;
+--ALTER TABLE template ALTER COLUMN parent_new SET NOT NULL;
 ALTER TABLE template DROP COLUMN parent;
 ALTER TABLE template RENAME COLUMN parent_new TO parent;
 
@@ -99,7 +99,7 @@ ALTER TABLE page ADD to_date date;
 -- ALTER TABLE page CHANGE url_title varchar(255) NOT NULL;
 
 ALTER TABLE page ADD COLUMN url_title_new varchar(255);
-UPDATE page SET url_title_new = CAST(url_title AS integer);
+UPDATE page SET url_title_new = CAST(url_title AS varchar);
 ALTER TABLE page ALTER COLUMN url_title_new SET NOT NULL;
 ALTER TABLE page DROP COLUMN url_title;
 ALTER TABLE page RENAME COLUMN url_title_new TO url_title;
@@ -118,7 +118,7 @@ ALTER TABLE page RENAME COLUMN author_new TO author;
 
 ALTER TABLE page ADD COLUMN template_new integer;
 UPDATE page SET template_new = CAST(template AS integer);
-ALTER TABLE page ALTER COLUMN template_new SET NOT NULL;
+--ALTER TABLE page ALTER COLUMN template_new SET NOT NULL;
 ALTER TABLE page DROP COLUMN template;
 ALTER TABLE page RENAME COLUMN template_new TO template;
 
@@ -143,7 +143,10 @@ ALTER TABLE media RENAME COLUMN type_new TO type;
 
 
 
-ALTER TABLE category ADD type varchar(64) DEFAULT 'article' NOT NULL;
+ALTER TABLE category ADD type varchar(64);
+ALTER TABLE category ALTER COLUMN type SET DEFAULT 'article';
+UPDATE category SET type = 'article';
+ALTER TABLE category ALTER COLUMN type SET NOT NULL;
 ALTER TABLE category ADD index_page text;
 ALTER TABLE category ADD allow_comments integer;
 ALTER TABLE category ADD css text;
@@ -153,7 +156,7 @@ ALTER TABLE category ADD config text;
 
 ALTER TABLE category ADD COLUMN parent_new integer;
 UPDATE category SET parent_new = CAST(parent AS integer);
-ALTER TABLE category ALTER COLUMN parent_new SET NOT NULL;
+-- ALTER TABLE category ALTER COLUMN parent_new SET NOT NULL;
 ALTER TABLE category DROP COLUMN parent;
 ALTER TABLE category RENAME COLUMN parent_new TO parent;
 
@@ -186,6 +189,7 @@ ALTER TABLE author DROP COLUMN login;
 ALTER TABLE author RENAME COLUMN login_new TO login;
 
 
-ALTER TABLE media ADD CONSTRAINT FOREIGN KEY (category) REFERENCES category (id) ON DELETE cascade ON UPDATE cascade;
+ALTER TABLE media ADD FOREIGN KEY (category) 
+REFERENCES category (id) ON DELETE cascade ON UPDATE cascade;
 
 commit;
