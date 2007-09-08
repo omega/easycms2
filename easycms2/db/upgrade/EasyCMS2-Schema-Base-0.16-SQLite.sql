@@ -1,8 +1,9 @@
 -- 
 -- Created by SQL::Translator::Producer::SQLite
--- Created on Tue Dec 26 15:35:55 2006
+-- Created on Wed Dec 27 08:08:11 2006
 -- 
 BEGIN TRANSACTION;
+
 
 --
 -- Table: mimetype
@@ -16,6 +17,8 @@ CREATE TABLE mimetype (
   icon TEXT
 );
 
+CREATE UNIQUE INDEX unique_name_mimetype on mimetype (type);
+
 --
 -- Table: setting
 --
@@ -25,6 +28,7 @@ CREATE TABLE setting (
   value TEXT,
   PRIMARY KEY (key)
 );
+
 
 --
 -- Table: template
@@ -37,6 +41,8 @@ CREATE TABLE template (
   after TEXT NOT NULL,
   parent INTEGER
 );
+
+CREATE UNIQUE INDEX unique_name_template on template (name);
 
 --
 -- Table: category
@@ -52,6 +58,8 @@ CREATE TABLE category (
   url_name TEXT NOT NULL
 );
 
+CREATE UNIQUE INDEX url_name_parent_category on category (url_name, parent);
+
 --
 -- Table: author
 --
@@ -63,6 +71,8 @@ CREATE TABLE author (
   password TEXT NOT NULL,
   name TEXT NOT NULL
 );
+
+CREATE UNIQUE INDEX unique_login_author on author (login);
 
 --
 -- Table: page
@@ -80,6 +90,8 @@ CREATE TABLE page (
   updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX unique_url_page on page (category, url_title);
+
 --
 -- Table: media
 --
@@ -92,9 +104,5 @@ CREATE TABLE media (
   category INTEGER
 );
 
-CREATE UNIQUE INDEX unique_name_mimetype on mimetype (type);
-CREATE UNIQUE INDEX unique_name_template on template (name);
-CREATE UNIQUE INDEX url_name_parent_category on category (url_name, parent);
-CREATE UNIQUE INDEX unique_login_author on author (login);
-CREATE UNIQUE INDEX unique_url_page on page (category, url_title);
+
 COMMIT;
