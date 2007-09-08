@@ -1,6 +1,7 @@
--- Convert schema '/Users/andremar/Projects/easycms2/db/upgrade/EasyCMS2-Schema-Base-0.23-PostgreSQL.sql' to '/Users/andremar/Projects/easycms2/db/upgrade/EasyCMS2-Schema-Base-0.27-PostgreSQL.sql':
+-- Convert schema '/Users/andremar/Projects/easycms2/db/upgrade/EasyCMS2-Schema-Base-0.23-PostgreSQL.sql';
+-- to '/Users/andremar/Projects/easycms2/db/upgrade/EasyCMS2-Schema-Base-0.27-PostgreSQL.sql':;
 
--- Target database PostgreSQL is untested/unsupported!!!
+-- Target database PostgreSQL is untested/unsupported!!!;
 
 begin;
 ALTER TABLE mimetype ADD COLUMN type_new varchar(255);
@@ -53,7 +54,7 @@ ALTER TABLE page DROP COLUMN to;
 ALTER TABLE page RENAME COLUMN to_new TO to;
 commit;
 
---ALTER TABLE category CHANGE type varchar(64) NOT NULL DEFAULT 'article';
+-- ALTER TABLE category CHANGE type varchar(64) NOT NULL DEFAULT 'article';
 
 begin;
 ALTER TABLE category ADD COLUMN type_new varchar(64);
@@ -64,7 +65,8 @@ ALTER TABLE category DROP COLUMN type;
 ALTER TABLE category RENAME COLUMN type_new TO type;
 commit;
 
---ALTER TABLE category CHANGE url_name varchar(255) NOT NULL;
+-- ALTER TABLE category CHANGE url_name varchar(255) NOT NULL;
+
 begin;
 ALTER TABLE category ADD COLUMN url_name_new varchar(255);
 UPDATE category SET url_name_new = CAST(url_name AS varchar);
@@ -73,7 +75,8 @@ ALTER TABLE category DROP COLUMN url_name;
 ALTER TABLE category RENAME COLUMN url_name_new TO url_name;
 commit;
 
---ALTER TABLE author CHANGE login varchar(255) NOT NULL;
+-- ALTER TABLE author CHANGE login varchar(255) NOT NULL;
+
 begin;
 ALTER TABLE author ADD COLUMN login_new varchar(255);
 UPDATE author SET login_new = CAST(login AS varchar);
