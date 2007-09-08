@@ -79,16 +79,16 @@ ALTER TABLE template DROP COLUMN name;
 ALTER TABLE template RENAME COLUMN name_new TO name;
 
 
--- ALTER TABLE template CHANGE parent integer(10);
+-- ALTER TABLE template CHANGE parent integer;
 
-ALTER TABLE template ADD COLUMN parent_new integer(10);
+ALTER TABLE template ADD COLUMN parent_new integer;
 UPDATE template SET parent_new = CAST(parent AS integer);
 ALTER TABLE template ALTER COLUMN parent_new SET NOT NULL;
 ALTER TABLE template DROP COLUMN parent;
 ALTER TABLE template RENAME COLUMN parent_new TO parent;
 
 
-ALTER TABLE page ADD allow_comments integer(10);
+ALTER TABLE page ADD allow_comments integer;
 ALTER TABLE page ADD extra text;
 ALTER TABLE page ADD extra_search1 text;
 ALTER TABLE page ADD extra_search2 text;
@@ -105,37 +105,37 @@ ALTER TABLE page DROP COLUMN url_title;
 ALTER TABLE page RENAME COLUMN url_title_new TO url_title;
 
 
--- ALTER TABLE page CHANGE author integer(10) NOT NULL;
+-- ALTER TABLE page CHANGE author integer NOT NULL;
 
-ALTER TABLE page ADD COLUMN author_new integer(10);
+ALTER TABLE page ADD COLUMN author_new integer;
 UPDATE page SET author_new = CAST(author AS integer);
 ALTER TABLE page ALTER COLUMN author_new SET NOT NULL;
 ALTER TABLE page DROP COLUMN author;
 ALTER TABLE page RENAME COLUMN author_new TO author;
 
 
--- ALTER TABLE page CHANGE template integer(10);
+-- ALTER TABLE page CHANGE template integer;
 
-ALTER TABLE page ADD COLUMN template_new integer(10);
+ALTER TABLE page ADD COLUMN template_new integer;
 UPDATE page SET template_new = CAST(template AS integer);
 ALTER TABLE page ALTER COLUMN template_new SET NOT NULL;
 ALTER TABLE page DROP COLUMN template;
 ALTER TABLE page RENAME COLUMN template_new TO template;
 
 
--- ALTER TABLE page CHANGE category integer(10) NOT NULL;
+-- ALTER TABLE page CHANGE category integer NOT NULL;
 
-ALTER TABLE page ADD COLUMN category_new integer(10);
+ALTER TABLE page ADD COLUMN category_new integer;
 UPDATE page SET category_new = CAST(category AS integer);
 ALTER TABLE page ALTER COLUMN category_new SET NOT NULL;
 ALTER TABLE page DROP COLUMN category;
 ALTER TABLE page RENAME COLUMN category_new TO category;
 
 
-ALTER TABLE media ADD category integer(10);
--- ALTER TABLE media CHANGE type integer(10);
+ALTER TABLE media ADD category integer;
+-- ALTER TABLE media CHANGE type integer;
 
-ALTER TABLE media ADD COLUMN type_new integer(10);
+ALTER TABLE media ADD COLUMN type_new integer;
 UPDATE media SET type_new = CAST(type AS integer);
 ALTER TABLE media ALTER COLUMN type_new SET NOT NULL;
 ALTER TABLE media DROP COLUMN type;
@@ -145,22 +145,22 @@ ALTER TABLE media RENAME COLUMN type_new TO type;
 
 ALTER TABLE category ADD type varchar(64) DEFAULT 'article' NOT NULL;
 ALTER TABLE category ADD index_page text;
-ALTER TABLE category ADD allow_comments integer(10);
+ALTER TABLE category ADD allow_comments integer;
 ALTER TABLE category ADD css text;
 ALTER TABLE category ADD js text;
 ALTER TABLE category ADD config text;
--- ALTER TABLE category CHANGE parent integer(10);
+-- ALTER TABLE category CHANGE parent integer;
 
-ALTER TABLE category ADD COLUMN parent_new integer(10);
+ALTER TABLE category ADD COLUMN parent_new integer;
 UPDATE category SET parent_new = CAST(parent AS integer);
 ALTER TABLE category ALTER COLUMN parent_new SET NOT NULL;
 ALTER TABLE category DROP COLUMN parent;
 ALTER TABLE category RENAME COLUMN parent_new TO parent;
 
 
--- ALTER TABLE category CHANGE template integer(10) NOT NULL;
+-- ALTER TABLE category CHANGE template integer NOT NULL;
 
-ALTER TABLE category ADD COLUMN template_new integer(10);
+ALTER TABLE category ADD COLUMN template_new integer;
 UPDATE category SET template_new = CAST(template AS integer);
 ALTER TABLE category ALTER COLUMN template_new SET NOT NULL;
 ALTER TABLE category DROP COLUMN template;
