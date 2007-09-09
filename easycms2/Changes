@@ -1,5 +1,7 @@
 This file documents the revision history for Perl extension EasyCMS2.
         - Added support for categories as homepage
+        - Fix a bug in category/cat handling for rendering pages and snippets
+        - Fix a != vs ne bug
         
 0.11  Sat Sep 08 10:56:00 2007
         - Alot of changes gahgah

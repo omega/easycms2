@@ -153,7 +153,7 @@ sub homepage : Chained('category') Args(0) {
     
     my $msg : Flashed = 'Category successfully set as homepage';
     
-    $msg = 'Error while setting category as homepage' if ($c->setting('default-page') != "c" . $object->id);
+    $msg = 'Error while setting category as homepage' if ($c->setting('default-page') ne "c" . $object->id);
     
     $c->res->redirect($c->req->referer);
     

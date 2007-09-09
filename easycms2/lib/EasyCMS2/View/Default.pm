@@ -8,7 +8,7 @@ use Data::Dumper::Simple;
 sub process {
     my ($self, $c) = @_;
     my $template = $c->stash->{templ};
-    my $category = $c->stash->{category};
+    my $category = $c->stash->{cat};
     if ($template) {
         my $tmpl_in_header = $template->get_header;
         my $templ_header = $c->view('Default')->render($c, \($template->get_header));

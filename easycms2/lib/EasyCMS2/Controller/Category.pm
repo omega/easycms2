@@ -24,19 +24,19 @@ Catalyst Controller.
 sub render : Local {
     my ( $self, $c ) = @_;
     
-    my $category : Stashed = $c->req->args->[0];
+    my $cat : Stashed = $c->req->args->[0];
     
-    my $stash_add = $category->prepare_index($c, $c->stash->{rest_path});
+    my $stash_add = $cat->prepare_index($c, $c->stash->{rest_path});
     foreach my $key (keys %$stash_add) {
         $c->log->debug('adding ' . $key . ' : ' . $stash_add->{$key});
         $c->stash->{category}->{$key} = $stash_add->{$key};
     }
-    $c->log->debug('rendering category ' . $category->id);
-    if ($category) {
-        $c->stash->{templ} = $category->template;
+    $c->log->debug('rendering category ' . $cat->id);
+    if ($cat) {
+        $c->stash->{templ} = $cat->template;
         $c->stash->{template} = 'category/render.tt';    
-        $c->stash->{cat} = $category;
-        $c->stash->{title} = $category->name;
+        $c->stash->{cat} = $cat;
+        $c->stash->{title} = $cat->name;
     } else {
         return $c->detach('/error/no_page');
     }
