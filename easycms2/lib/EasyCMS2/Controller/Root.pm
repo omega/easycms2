@@ -34,8 +34,14 @@ sub auto : Private {
 }
 sub index : Private {
     my ( $self, $c ) = @_;
-    my $page = $c->model('Base::Page')->find($c->setting('default-page'));
-    $c->forward('page/render', [$page]);
+    my $def = $c->setting('default-page');
+    if ($def =~ m/^c(\d+)/) {
+        my $cat = $c->model('Base::Category')->find($1);
+        $c->forward('category/render', [$cat]);
+    } else {
+        my $page = $c->model('Base::Page')->find($def);
+        $c->forward('page/render', [$page]);        
+    }
     
 }
 sub end : ActionClass('RenderView') {

@@ -143,6 +143,22 @@ sub delete : Chained('category') Args(0) {
     
 }
 
+sub homepage : Chained('category') Args(0) {
+    my ( $self, $c ) = @_;
+    
+    my $object : Stashed;
+    die "no such category" unless $object;
+    
+    $c->setting('default-page' => "c" . $object->id);
+    
+    my $msg : Flashed = 'Category successfully set as homepage';
+    
+    $msg = 'Error while setting category as homepage' if ($c->setting('default-page') != "c" . $object->id);
+    
+    $c->res->redirect($c->req->referer);
+    
+}
+
 =head1 AUTHOR
 
 Andreas Marienborg

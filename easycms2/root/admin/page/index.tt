@@ -1,8 +1,8 @@
 [% PROCESS header.tt %]
 [% MACRO render_tree_node(node) BLOCK %]
 <li class="category"><span class="buttons">
+    [% UNLESS c.setting('default-page') == "c" _ node.id %]<a href="[% c.uri_for('/admin/category', node.id, 'homepage') %]">[% icon('user-home', 'home', 'set as homepage') %]</a>[% END %]
         <a href="[% c.uri_for('create', {category => node.id}) %]">[% icon('document-new', 'new', 'new page') %]</a>
-    
     </span>
     [% node.name %]
     <ul>
