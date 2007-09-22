@@ -1,4 +1,8 @@
 This file documents the revision history for Perl extension EasyCMS2.
+        - Fixed some problems with snippets and category frontpages 
+          clashing in the stash. Now snippets add their stuff to $snip->url_name
+          instead of the clashing category namespace.
+        - Added Tag table, and PageTag relation to Page.
         - Added support for categories as homepage
         - Fix a bug in category/cat handling for rendering pages and snippets
         - Fix a != vs ne bug

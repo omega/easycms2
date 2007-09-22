@@ -1,6 +1,8 @@
 package EasyCMS2::Schema::Base::Page;
 
 use base qw/DBIx::Class/;
+use strict;
+use warnings;
 
 use Text::Textile;
 
@@ -45,17 +47,25 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key('id');
 
 
-__PACKAGE__->belongs_to(author => EasyCMS2::Schema::Base::Author);
-__PACKAGE__->belongs_to(template => EasyCMS2::Schema::Base::Template);
-__PACKAGE__->belongs_to(category => EasyCMS2::Schema::Base::Category);
+__PACKAGE__->belongs_to(author => 'EasyCMS2::Schema::Base::Author');
+__PACKAGE__->belongs_to(template => 'EasyCMS2::Schema::Base::Template');
+__PACKAGE__->belongs_to(category => 'EasyCMS2::Schema::Base::Category');
 
 
 __PACKAGE__->add_unique_constraint('unique_url' => ['category', 'url_title']);
 
 __PACKAGE__->has_many('comments' => 'EasyCMS2::Schema::Base::Comment', 'page', {order_by => 'created'});
 
+__PACKAGE__->has_many('page_tags' => 'EasyCMS2::Schema::Base::PageTag', 'page');
+#__PACKAGE__->many_to_many('tags' => '_page_tags', 'tag');
+
 
 __PACKAGE__->inflate_column('created' => {
+    
+    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
+    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
+});
+__PACKAGE__->inflate_column('updated' => {
     
     'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
     'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
@@ -175,5 +185,69 @@ sub allow_comment {
 sub comment_form {
     my $self = shift;
     
+}
+
+sub set_tags {
+    my ($self, $tags) = @_;
+    warn "tagging page with '$tags'";
+    $self->page_tags->delete_all;
+    my @tags = $self->parse_tags($tags);
+    foreach my $name (@tags) {
+        $self->tag($name);
+    }
+}
+
+sub parse_tags {
+    my ($self, $tags) = @_;
+    my @tags;
+    my $w;
+    my $q = 0;
+    foreach (split(//, $tags)) {
+        if (/\s/ and !$q) {
+            # end of a word
+            next if ($w eq '');
+            push @tags, $w;
+            $w = '';
+        }
+        elsif (/["'`]/ and $q) {
+            # we end a quote
+            push @tags, $w;
+            $q = 0;
+            $w = '';
+        }
+        elsif (/["'`]/ and !$q) {
+            # we begin a quote
+            $q = 1;
+            $w = '';
+        } 
+        else {
+            $w .= $_;
+        }
+    }
+    push @tags, $w if ($w ne '');
+
+    return (wantarray ? @tags : \@tags);
+}
+sub get_tags {
+    my ($self) = @_;
+    $self->page_tags->stringify;
+}
+
+sub tag {
+    my ($self, $name) = @_;
+    return unless $name;
+    $name = lc($name);
+    warn "creating relation for $name";
+    my $tag = $self->result_source->schema->resultset('Tag')->find_or_create({
+        'name' => $name
+    });
+    $self->add_to_page_tags({'page' => $self, 'tag' => $tag});
+}
+
+sub untag {
+    my ($self, $name) = @_;
+    return unless $name;
+    $name = lc($name);
+    $self->page_tags->find({'tag' => {'name' => $name}})->delete_all;
 }
 1;

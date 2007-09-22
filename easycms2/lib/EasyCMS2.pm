@@ -13,6 +13,7 @@ use warnings;
 #                 directory
 #
 use Catalyst qw/
+        StackTrace
         ConfigLoader 
                 
     	Authentication
@@ -77,8 +78,8 @@ sub get_snippet {
     my $stash_add = $snip->category->prepare_index($self);
     
     foreach my $key (keys %$stash_add) {
-        $self->log->debug("Adding $key: " . $stash_add->{$key} . " for snippet " . $snip->name);
-        $args->{category}->{$key} = $stash_add->{$key};
+        $self->log->debug("Adding $key: " . $stash_add->{$key} . " for snippet " . $snip->name . "(" . $snip->url_name . ")");
+        $args->{$snip->url_name}->{$key} = $stash_add->{$key};
     }
     $snip = $self->view('Default')->render_snippet(\($snip->text), $args);
     return $snip;

@@ -85,14 +85,30 @@ sub default : Private {
         @args = @catch_all_args;
     }
     
+    my ($tag, $view);
+    $c->log->debug(scalar(@args));
+    foreach my $i (0 .. scalar(@args)) {
+        $c->log->debug($args[$i]);
+        if ($args[$i] && $args[$i] =~  m/!(.+)/) {
+            my $t = $1;
+            $t =~ s/\+/ /g;
+            $c->log->debug("tag: $t");
+            delete $args[$i];
+            $tag = $c->model('Base::Tag')->find({ name => $t});
+        }
+        if ($args[$i] && $args[$i] =~ m/\.(.+)/) {
+            $c->stash->{'current_view'} = $1;
+            delete $args[$i];
+        }
+    }
     return $c->detach('/error/no_page') unless ($category || $page);
     if ($page) {
         $c->stash->{title} = $page->title;
         $c->forward('page/render', [$page]);
     } elsif ($category) {
-        $c->stash->{rest_path} = join('/', @args);
+        $c->stash->{rest_path} = join('/', grep { $_ && $_ ne ''} @args);
         $c->log->debug('restpath: ' . $c->stash->{rest_path});
-        $c->forward('category/render', [$category]);
+        $c->forward('category/render', [$category, $tag]);
     }
    
 }

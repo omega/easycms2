@@ -4,10 +4,10 @@ use strict;
 use warnings;
 
 use base qw/DBIx::Class::Schema/;
-__PACKAGE__->load_classes(qw/Page Template Author Category Setting Media MimeType Snippet Comment/);
+__PACKAGE__->load_classes();
 __PACKAGE__->load_components(qw/+DBIx::Class::Schema::Versioned/);
 
-our $VERSION = '0.27';
+our $VERSION = '0.28';
 
 
 
@@ -115,9 +115,8 @@ sub _on_connect
 
     my $fh;
     open $fh, "<$file" or warn("Can't open upgrade file, $file ($!)");
-    my @data = split(/;\n/, join('', <$fh>));
+    my @data = split(/;\n/, join('', grep { $_ && $_ !~ /^--/ && $_ !~ /^\s+$/ } <$fh>));
     close($fh);
-    @data = grep { $_ && $_ !~ /^-- /m } @data;
     @data = grep { $_ !~ /^(BEGIN TRANACTION|COMMIT)/m } @data;
 
     $self->_filedata(\@data);

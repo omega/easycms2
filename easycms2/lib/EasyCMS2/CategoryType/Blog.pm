@@ -10,6 +10,9 @@ override  'index' => sub {
     my $self = shift;
     my $c = shift;
     my $rest_path = shift;
+    
+    my $tag = $c->stash->{'tag'};
+    
     my $hashref = {};
     $hashref->{'resultset'} = $self->row;
     my ($func, $file, $line) = caller(2);
@@ -43,9 +46,10 @@ override  'index' => sub {
             my $datetime = DateTime->now();
 
             $hashref->{'archive_end'}   = $datetime;
-            $hashref->{'archive_start'} = $datetime->clone->subtract(month => 1);
+            $hashref->{'archive_start'} = $datetime->clone->subtract(months => 1);
             $hashref->{'archive_title'} = $datetime->year;
         }
+        $c->log->debug("archive request");
         my $posts = $self->row->pages({ 
             created => { -between => [$hashref->{archive_start}, $hashref->{archive_end}]}
         }, {order_by => 'created desc'});
@@ -53,6 +57,14 @@ override  'index' => sub {
         
     } else {
         $hashref->{'posts'} = $self->row->pages({}, {order_by => 'created desc', rows => 5});
+    }
+    if ($tag) {
+        $c->log->debug("constraining resultset posts to a given tag");
+        $hashref->{'posts'} = $hashref->{'posts'}->search({
+            'page_tags.tag' => $tag->id,
+        }, {
+            join => 'page_tags',
+        });
     }
     $hashref->{'latest_posts'} = $self->row->pages({}, {order_by => 'created desc', rows => 5});
     return $hashref;

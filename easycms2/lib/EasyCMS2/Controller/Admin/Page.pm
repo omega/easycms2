@@ -97,7 +97,12 @@ sub edit : Local {
     }
     
     $c->widget('edit_page')->element('Checkbox','allow_comments')->label('Allow comments');
-    
+    $c->widget('edit_page')->element('Textfield', 'tags')->label('Tags')->value($object->get_tags)
+        ->comment('Seperate tags with space. Tags that need to contain spaces can be quoted with "this is one tag"');
+
+    $c->widget('edit_page')->element('Span', 'index_page_default')
+        ->content($c->model('Base::Tag')->search({})->stringify)->class("hidden");
+
     $object->category->type->extend_page_widget($c->widget('edit_page'), $object, 1);
         
     $c->widget('edit_page')->element('Submit','save')->label('Save');
@@ -111,7 +116,8 @@ sub edit : Local {
         my $title = lc($result->param('title'));
         $title =~ s/[^a-z0-9_-]+/_/g;
         $object->url_title($title);
-        
+        $c->log->debug("tags: " . $result->param("tags"));
+        $object->set_tags($result->param('tags'));
         $object->populate_from_widget($result);
         # we also allow the category type to save its extensions.
         $object->category->type->extend_page_save($result, $object);

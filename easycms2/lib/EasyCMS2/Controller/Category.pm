@@ -25,7 +25,7 @@ sub render : Local {
     my ( $self, $c ) = @_;
     
     my $cat : Stashed = $c->req->args->[0];
-    
+    my $tag : Stashed = $c->req->args->[1];
     my $stash_add = $cat->prepare_index($c, $c->stash->{rest_path});
     foreach my $key (keys %$stash_add) {
         $c->log->debug('adding ' . $key . ' : ' . $stash_add->{$key});
@@ -70,6 +70,7 @@ sub js : Chained('cat') Args(0) {
     $c->res->status(200);
     $c->res->content_type('text/javascript');
 }
+
 =head1 AUTHOR
 
 Andreas Marienborg
