@@ -1,5 +1,6 @@
 ---
 name: EasyCMS2
+recovery_password: UNSET
 db:
     dsn: 'dbi:SQLite:__HOME__/db/sqlite.db'
     user:
@@ -11,12 +12,27 @@ db:
     TEMPLATE_EXTENSION: '.tt'
     DEBUG: 1
 authentication:
-    dbic:
-        user_class: "EasyCMS2::Model::Base::Author"
-        user_field: "login"
-        password_field: "password"
-        password_type: "hashed"
-        password_hash_type: "SHA-1"
+    default_realm: authors
+    realms:
+        authors:
+            credential:
+                class: Password
+                password_field: password
+                password_type: hashed
+                password_hash_type: SHA-1
+            store:
+                class: DBIx::Class
+                user_class: "EasyCMS2::Model::Base::Author"
+                user_field: login
+        recovery:
+            credential:
+                class: +EasyCMS2::SetupCred
+                password_field: password
+            store:
+                class: Minimal
+                users:
+                    setup:
+                        password: whocares
 session:
     flash_to_stash: 1
 stacktrace:

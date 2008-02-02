@@ -1,4 +1,7 @@
 This file documents the revision history for Perl extension EasyCMS2.
+0.12  Sat Sep 22 10:09:00 2007
+        - Added tag-support to pages. It is up to categorytypes to make use of it though
+          Look at the blog type to see an example
         - Fixed some problems with snippets and category frontpages 
           clashing in the stash. Now snippets add their stuff to $snip->url_name
           instead of the clashing category namespace.

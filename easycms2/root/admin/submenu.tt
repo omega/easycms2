@@ -6,8 +6,8 @@
 <li><a href="[% c.uri_for('/admin/media') %]">[% icon('image-x-generic', '', 'media', '', 'big') %] Media</a></li>
 <!-- 
 <li><a href="[% c.uri_for('/admin/setting') %]">Settings</a></li>
-<li><a href="[% c.uri_for('/admin/author') %]">Authors</a></li>
 -->
+<li><a href="[% c.uri_for('/admin/author') %]">[% icon('system-users', '', 'media', '', 'big') %] Authors</a></li>
 <li class="menuitem_right">[% icon('help-browser', 'online help', 'open online help browser', 'open_help_button', 'big') %]</li>
 
 </ul>

@@ -1,14 +1,21 @@
+[% INCLUDE header.tt %]
+
 <div id="setup">
     <h1>Welcome!</h1>
-    <ul id="steps">
-        <li>Step 1: Initial configuration</li>
-        <li>Step 2: Configure startup page</li>
+    <p>This page lets you recover your EasyCMS2 instalation if you ever mess up badly.
+        It also lets you setup your instalation the first time
+    </p>
+    
+    <h2>Setup steps</h2>
+    
+    <ul>
+        <li id="step1">Initial setup [% IF c.setting('init_step') >= 1 %](completed)[% END %]</li>
     </ul>
     
-    <div id="navbar">
-        <a href="[% next_step %]" id="next">Next step</a>
-        <a href="[% prev_step %]" id="prev">Previous step</a>
-    </div>
-    
+    <h2>Recovery</h2>
+    <ul>
+        <li id="reset_admin_pw"><a href="[% c.uri_for('/setup/reset_admin_pw') %]">Reset admin password</a></li>
+    </ul>
 </div>
 
+[% INCLUDE footer.tt %]

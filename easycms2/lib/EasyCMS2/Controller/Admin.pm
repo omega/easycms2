@@ -23,10 +23,10 @@ Catalyst Controller.
 sub auto : Private {
     my ($self, $c) = @_;
     
-    unless ($c->user_exists) {
+    unless ($c->user_exists && $c->user_in_realm('authors')) {
         # need to make this user log in
         $c->forward('/auth/login');
-        return 0 unless $c->user_exists;
+        return 0 unless ($c->user_exists && $c->user_in_realm('authors'));
     }
     my $submenu : Stashed = 'admin/submenu.tt';
     my $onload : Stashed;

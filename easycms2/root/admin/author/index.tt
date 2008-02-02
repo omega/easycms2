@@ -1,0 +1,14 @@
+[% PROCESS header.tt %]
+<p>Authors are people who can administer pages, templates and categories.</p>
+<ul class="tree">
+[% WHILE (node = authors.next) %]
+<li class="author"><span class="buttons">
+    <a href="[% c.uri_for('edit', node.id) %]">[% icon('accessories-text-editor', 'edit', 'edit page') %]</a>
+    [% IF node.can_remove %]<a href="[% c.uri_for(node.id, 'delete') %]">[% icon('user-trash-full', 'delete', 'delete category') %]</a>[% ELSE %][% icon('edit-delete', 'delete', 'Cannot delete author') %][% END %]
+    </span>
+    [% node.name %]
+</li>
+[% END %]
+</ul>
+<a href="[% c.uri_for('create') %]">[% icon('document-new', 'new', 'new author') %] New author</a>
+[% INCLUDE footer.tt %]

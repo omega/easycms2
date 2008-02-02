@@ -117,8 +117,8 @@ sub edit : Local {
         $title =~ s/[^a-z0-9_-]+/_/g;
         $object->url_title($title);
         $c->log->debug("tags: " . $result->param("tags"));
-        $object->set_tags($result->param('tags'));
         $object->populate_from_widget($result);
+        $object->set_tags($result->param('tags'));
         # we also allow the category type to save its extensions.
         $object->category->type->extend_page_save($result, $object);
         $object->update();

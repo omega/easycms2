@@ -13,13 +13,12 @@ requires 'Catalyst::Plugin::Static::Simple' => 0;
 requires 'Catalyst::Plugin::Session' => 0;
 requires 'Catalyst::Plugin::Session::Store::FastMmap' => 0;
 requires 'Catalyst::Plugin::Session::State::Cookie' => 0;
-
+requires 'Catalyst::Plugin::StackTrace' => 0;
 
 
 requires 'Catalyst::Plugin::Session::State::Cookie' => 0;
-requires 'Catalyst::Plugin::Authentication' => 0;
-requires 'Catalyst::Plugin::Authentication::Store::DBIC' => 0;
-requires 'Catalyst::Plugin::Authentication::Credential::Password' => 0;
+requires 'Catalyst::Plugin::Authentication' => '0.10000';
+requires 'Catalyst::Authentication::Store::DBIx::Class' => 0;
 requires 'Catalyst::Plugin::ConfigLoader' => 0;
 requires 'Data::Dumper::Simple' => 0;
 
@@ -38,6 +37,7 @@ requires 'DBIx::Class::HTMLWidget' => 0.09;
 requires 'HTML::Widget' => '1.11';
 requires 'Catalyst::Plugin::HTML::Widget' => 0;
 
+requires 'XML::Atom';
 
 requires 'SQL::Translator' => '0.08';
 

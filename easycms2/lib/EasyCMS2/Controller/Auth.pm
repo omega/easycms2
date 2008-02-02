@@ -24,11 +24,14 @@ sub login : Private {
     my ($self, $c) = @_;
     
     if ($c->req->param('user') && $c->req->param('pw')) {
-		$c->login($c->req->param('user'), $c->req->param('pw')) 
+		$c->authenticate({
+		    username => $c->req->param('user'),
+		    password => $c->req->param('pw')
+		}, 'authors') 
 			or my $loginfailed : Stashed = 'Could not log you in.';
 	}
 	
-	unless ($c->user_exists) {
+	unless ($c->user_exists && $c->user_in_realm('authors')) {
 	    $c->widget('login')->method('post')->action($c->uri_for(''));
         $c->widget('login')->indicator(sub { $c->req->method eq 'POST' } );
 

@@ -5,6 +5,7 @@
     <li>static link: <a href="[% object.uri_for(c) %]">[% object.uri_for(c) %]</a></li>
     <li>Page created: [% object.created %]</li>
     <li>Page last updated: [% object.updated  %]</li>
+    <li>Author: <a href="[% c.uri_for('/admin/author/edit', object.author.id) %]">[% object.author.name %]</a></li>
     
 </ul>
 [% result.as_xml %]

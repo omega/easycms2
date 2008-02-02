@@ -22,12 +22,17 @@ Catalyst Controller.
 
 sub auto : Private {
     my ( $self, $c ) = @_;
-    
-    if ($c->setting('init_step') && $c->setting('init_step') > 4) {
-        # We are done!
-        $c->res->redirect('/admin');
+    unless ($c->user_exists && $c->user_in_realm('recovery')) {
+        $c->forward('/setup/login');
+        $c->log($c->user);
+        return 0 unless ($c->user_exists && $c->user_in_realm('recovery'));
     }
+
     return 1;
+}
+sub begin : Private {
+    my ($self, $c) = @_;
+    my $templ : Stashed = $c->model('Base::Template')->find({ name => 'Admin template'});
 }
 
 sub index : Private {
@@ -35,6 +40,64 @@ sub index : Private {
     
     # do app-initialization, unless its already been done!
 
+}
+sub login : Local {
+    my ( $self, $c ) = @_;
+    
+    if ($c->req->param('pw')) {
+		$c->authenticate(
+		    {
+		        username => 'setup',
+		        password => $c->req->param('pw')
+		    }, 'recovery') 
+			or my $loginfailed : Stashed = 'Could not log you in.';
+	}
+	unless ($c->user_exists && $c->user_in_realm('recovery')) {
+	    $c->widget('login')->method('post')->action($c->uri_for(''));
+        $c->widget('login')->indicator(sub { $c->req->method eq 'POST' } );
+
+        $c->widget('login')->element('Password','pw')->label('Password');
+        
+        $c->widget('login')->element('Submit','login')->label('Login');
+        
+		my $result : Stashed = $c->widget_result('login');
+	
+	    my $template : Stashed = 'setup/login.tt';
+	    
+	} else {
+	    $c->res->redirect($c->uri_for('/setup'));
+	}
+	
+    
+}
+sub reset_admin_pw : Local {
+    my ($self, $c) = @_;
+    # check that we have a admin-user to reset
+    my $message : Stashed;
+    my $object : Stashed = $c->model('Base::Author')->find({login => 'admin'});
+    unless ($object) {
+        # no admin-user found, create one?
+        $message = "No admin user found";
+    } else {
+        $c->widget('edit_author')->method('post')->action($c->uri_for($c->action->name(), $object->id ));
+        $c->widget('edit_author')->indicator(sub { $c->req->method eq 'POST' } );
+        $c->widget('edit_author')->element('Password','password')->label('Password');
+        $c->widget('edit_author')->element('Password','confirm_password')->label('Confirm password');
+
+        $c->widget('edit_author')->element('Submit','save')->label('Set password');
+
+        $c->widget('edit_author')->constraint('All', 'password', 'confirm_password');
+        $c->widget('edit_author')->constraint('Equal', 'password', 'confirm_password');
+
+        my $result : Stashed = $c->widget_result($c->widget('edit_author'));
+
+        if (! $result->has_errors and $c->req->method() eq 'POST') {
+
+            $object->populate_from_widget($result);
+            $c->res->redirect($c->uri_for('/setup'));
+        }
+        
+    }
 }
 sub step1 : Local {
     my ( $self, $c ) = @_;
@@ -152,6 +215,8 @@ __END__
             <div id="menu">
                 [% INCLUDE \$submenu %]
             </div>
+            [% IF message %]<p class="message">[% message %]</p>[% END %]
+            [% IF error %]<p class="error">[% error %]</p>[% END %]
 END
             ,
             'after' => << "END"

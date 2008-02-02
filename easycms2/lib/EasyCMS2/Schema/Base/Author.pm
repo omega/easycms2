@@ -3,7 +3,7 @@ package EasyCMS2::Schema::Base::Author;
 use base qw/DBIx::Class/;
 use Digest::SHA1 qw/sha1_hex/;
 
-__PACKAGE__->load_components(qw/PK::Auto Core/);
+__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('author');
 
 __PACKAGE__->add_columns(
@@ -29,6 +29,21 @@ sub store_column {
 	}
 	
 	return $self->next::method($column, $value, @rest);
+}
+sub can_remove {
+    my $self = shift;
+    
+    return ($self->pages->count == 0);
+    
+}
+sub remove {
+    my $self = shift;
+    if ($self->can_remove) {
+        #$self->delete();
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 1;

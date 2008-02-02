@@ -1,4 +1,5 @@
 [% INCLUDE header.tt %]
 [% page.formated_body %]
 [% IF page.allow_comment %]COMMENTFORM[% END %]
+[% IF page.comments.length %]COMMENTS[% END %]
 [% INCLUDE footer.tt %]

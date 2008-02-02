@@ -1,0 +1,16 @@
+[% PROCESS header.tt %]
+<ul>
+</ul>
+[% result.as_xml %]
+[% SET pages = object.pages %]
+<ul>
+    [% FOREACH node IN pages %]
+    <li class="page"><span class="buttons">
+        <a href="[% c.uri_for('/admin/page/edit', node.id) %]">[% icon('accessories-text-editor', 'edit', 'edit page') %]</a>
+        [% IF node.can_remove %]<a href="[% c.uri_for('/admin/page/delete', node.id) %]">[% icon('user-trash-full', 'delete', 'delete category') %]</a>[% ELSE %][% icon('edit-delete', 'delete', 'Cannot delete author') %][% END %]
+        </span>
+        [% node.title %]
+    </li>
+    [% END %]
+</ul>
+[% PROCESS footer.tt %]

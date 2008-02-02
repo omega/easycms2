@@ -50,7 +50,6 @@ sub process {
         my $content = XML::Atom::Content->new(type => 'html');
         $content->body($page->formated_body);
         $entry->content($page->formated_body);
-        
         my $author = XML::Atom::Person->new();
         $author->name($page->author->name);
         $author->email($page->author->email) if $page->author->email;

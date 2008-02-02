@@ -1,0 +1,4 @@
+[% INCLUDE header.tt %]
+[% message %]
+[% result.as_xml %]
+[% INCLUDE footer.tt %]

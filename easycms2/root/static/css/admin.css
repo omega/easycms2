@@ -49,6 +49,10 @@ li.template {
 li.default_page {
     list-style-image: url(../images/icons/go-home.png);
 }
+li.author {
+    list-style-image: url(../images/icons/user.png);
+    color: #666666;
+}
 
 span.hidden {
     visibility: hidden;

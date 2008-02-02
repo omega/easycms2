@@ -17,8 +17,6 @@ use Catalyst qw/
         ConfigLoader 
                 
     	Authentication
-    	Authentication::Store::DBIC
-    	Authentication::Credential::Password
 
     	Session
     	Session::Store::FastMmap
@@ -30,7 +28,7 @@ use Catalyst qw/
         Static::Simple 
 /;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 __PACKAGE__->config(setup_components => { search_extra => [ qw/::CategoryType/ ] });
 

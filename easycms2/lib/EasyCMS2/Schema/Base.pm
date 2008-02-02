@@ -41,6 +41,18 @@ sub run_upgrade {
 
     return 1;
 }
+sub _source_exists
+{   
+    my ($self, $rs) = @_;
+
+    my $c = eval {
+        $rs->search({ version => 0 })->count;
+    };  
+    warn $@ if $@;
+    return 0 if $@ || !defined $c;
+
+    return 1;
+}
 sub _on_connect
 {
     my ($self) = @_;
