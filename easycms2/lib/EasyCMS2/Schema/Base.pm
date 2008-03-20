@@ -2,6 +2,7 @@ package EasyCMS2::Schema::Base;
 
 use strict;
 use warnings;
+use POSIX 'strftime';
 
 use base qw/DBIx::Class::Schema/;
 __PACKAGE__->load_classes();
@@ -17,12 +18,16 @@ sub upgrade {
     $self->run_upgrade(qr//i, $dryrun);
 
     unless ($dryrun) {
-        my $vschema = DBIx::Class::Version->connect(@{$self->storage->connect_info()});
+		my $connect_info = $self->storage->connect_info();
+		$self->storage->disconnect();
+        my $vschema = DBIx::Class::Version->connect(@{$connect_info});
         my $vtable = $vschema->resultset('Table');
         $vtable->create({ 
             Version => $self->schema_version,
             Installed => strftime("%Y-%m-%d %H:%M:%S", gmtime())
         });
+		$vschema->storage->disconnect;
+		$self->storage->ensure_connected();
     }
 }
 
