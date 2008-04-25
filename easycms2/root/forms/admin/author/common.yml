@@ -1,0 +1,47 @@
+---
+elements:
+    - 
+        type: Text
+        name: name
+        label_loc: name
+        constraints:
+            - type: Required
+            - type: Printable
+    - 
+        type: Text
+        name: login
+        label_loc: login
+        constraints:
+            - type: Required
+            - type: Printable
+    - 
+        type: Text
+        name: email
+        label_loc: email
+        constraints:
+            - Required
+            - 
+                type: Regex
+                regex:
+                    - Common
+                    - Email
+    - 
+        type: Password
+        name: password
+        label_loc: password
+        constraints:
+            - Required
+            - 
+                type: AllOrNone
+                others: 
+                    - password_confirm
+    - 
+        type: Password
+        name: password_confirm
+        label_loc: password_confirm
+        constraints:
+            - Required
+            -
+                type: Equal
+                others: password
+    

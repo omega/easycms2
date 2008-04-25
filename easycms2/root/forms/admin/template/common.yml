@@ -1,0 +1,27 @@
+---
+    elements:
+        -
+            type: Text
+            name: name
+            label_loc: name
+        -
+            type: Textarea
+            name: before
+            label_loc: before
+        -
+            type: Textarea
+            name: after
+            label_loc: after
+        -
+            type: Textarea
+            name: js
+            label_loc: js
+        -
+            type: Textarea
+            name: css
+            label_loc: css
+        -
+            type: Select
+            name: parent
+            label_loc: parent
+            
