@@ -255,6 +255,7 @@ __END__
     $c->log->debug('page: ' . $def_page->id);
     $c->setting('init_step' => 1);
     $c->setting('default-page' => $def_page->id);
+	$c->res->redirect($c->uri_for('/setup'));
 }    
 
 

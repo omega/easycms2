@@ -1,6 +1,6 @@
 @import "online_help.css";
 @import "admin_pages.css";
-
+@import "formfu.css";
 
 div#admin {
     position: relative;

@@ -15,7 +15,7 @@ use warnings;
 use Catalyst qw/
         StackTrace
         ConfigLoader 
-                
+		I18N
     	Authentication
 
     	Session

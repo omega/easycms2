@@ -19,12 +19,12 @@ Catalyst Controller.
 =head1 METHODS
 
 =cut
+
 sub index : Private {
     my ($self, $c) = @_;
     
     $c->forward('list');
 }
-
 
 sub list : Private {
     my ($self, $c) = @_;
@@ -33,7 +33,7 @@ sub list : Private {
     
 }
 
-sub category : Chained('/admin/admin') PathPart('category') CaptureArgs(1) {
+sub load : Chained('/admin/admin') PathPart('category') CaptureArgs(1) {
     my ($self, $c, $cat_id) = @_;
     my $object : Stashed = $c->model('Base::Category')->find($cat_id);
 }
@@ -47,7 +47,7 @@ sub create : Local {
     $c->forward('edit');
 }
 
-sub edit : Chained('category') Args(0) {
+sub edit : Chained('load') Args(0) {
     my ($self, $c) = @_;
     
     my $object : Stashed;
@@ -126,7 +126,7 @@ sub edit : Chained('category') Args(0) {
 
 }
 
-sub delete : Chained('category') Args(0) {
+sub delete : Chained('load') Args(0) {
     my ( $self, $c) = @_;
     
     my $object : Stashed;
@@ -143,7 +143,7 @@ sub delete : Chained('category') Args(0) {
     
 }
 
-sub homepage : Chained('category') Args(0) {
+sub homepage : Chained('load') Args(0) {
     my ( $self, $c ) = @_;
     
     my $object : Stashed;

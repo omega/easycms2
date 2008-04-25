@@ -11,8 +11,8 @@
     <ul>
         [% FOREACH page IN node.medias %]
             <li class="media"><span class="buttons">
-                <a href="[% c.uri_for('edit', page.id) %]">[% icon('accessories-text-editor', 'edit', 'edit page') %]</a>
-                <a href="[% c.uri_for('delete', page.id) %]">[% icon('user-trash-full', 'delete', 'delete page') %]</a>
+                <a href="[% c.uri_for(page.id, 'edit') %]">[% icon('accessories-text-editor', 'edit', 'edit page') %]</a>
+                <a href="[% c.uri_for(page.id, 'delete') %]">[% icon('user-trash-full', 'delete', 'delete page') %]</a>
                 <a href="[% page.uri_for(c) %]">[% icon('go-jump', 'go', 'go to page') %]</a>
             </span>[% page.description %] </li>
         [% END %]

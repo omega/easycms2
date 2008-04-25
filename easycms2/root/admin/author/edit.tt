@@ -1,7 +1,5 @@
 [% PROCESS header.tt %]
-<ul>
-</ul>
-[% result.as_xml %]
+[% form %]
 [% SET pages = object.pages %]
 <ul>
     [% FOREACH node IN pages %]

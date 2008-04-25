@@ -41,17 +41,22 @@ sub list : Private {
     my $root : Stashed = $c->model('Base::Category')->search({parent => undef});
 }
 
+sub load : Chained('/admin/admin') PathPart('page') CaptureArgs(1) {
+    my ( $self, $c, $id ) = @_;
+    my $object : Stashed = $c->model('Base::Page')->find($id);
+}
+
 sub create : Local {
     my ($self, $c) = @_;
     my $category = $c->req->param('category');
     
-    my $object : Stashed = $c->model('Base::Page')->new({author => $c->user->user->id, category => $category });
+    my $object : Stashed = $c->model('Base::Page')->new({author => $c->user->id, category => $category });
     
     $c->forward('edit');
 }
 
-sub edit : Local {
-    my ($self, $c, $id) = @_;
+sub edit : Chained('load') Args(0) {
+    my ( $self, $c ) = @_;
     my $onload : Stashed;
 
     if (ref($onload)) {
@@ -61,7 +66,6 @@ sub edit : Local {
     }
     
     my $object : Stashed;
-    $object = $c->model('Base::Page')->find($id) unless $object;
     die "no page" unless $object;
     $c->widget('edit_page')->method('post')->action($c->uri_for($c->action->name(), $object->id ));
     $c->widget('edit_page')->indicator(sub { $c->req->method eq 'POST' } );
@@ -103,7 +107,7 @@ sub edit : Local {
     $c->widget('edit_page')->element('Span', 'index_page_default')
         ->content($c->model('Base::Tag')->search({})->stringify)->class("hidden");
 
-    $object->category->type->extend_page_widget($c->widget('edit_page'), $object, 1);
+    $object->category->type->extend_page_widget($c->widget('edit_page'), $object, 1) if $object->category;
         
     $c->widget('edit_page')->element('Submit','save')->label('Save');
     $c->widget('edit_page')->element('Submit','save')->label('Save and Close');
@@ -135,10 +139,10 @@ sub edit : Local {
     
 }
 
-sub delete : Local {
-    my ( $self, $c, $id) = @_;
+sub delete : Chained('load') Args(0) {
+    my ( $self, $c ) = @_;
     
-    my $object : Stashed = $c->model('Base::Page')->find($id) if $id;
+    my $object : Stashed;
     
     die "no such page" unless $object;
     my $msg : Stashed;
@@ -153,10 +157,10 @@ sub delete : Local {
     
 }
 
-sub homepage : Local {
-    my ( $self, $c, $id ) = @_;
+sub homepage : Chained('load_page') Args(0) {
+    my ( $self, $c ) = @_;
     
-    my $object : Stashed = $c->model('Base::Page')->find($id) if $id;
+    my $object : Stashed;
     
     die "no such page" unless $object;
     

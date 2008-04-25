@@ -34,6 +34,13 @@ sub list : Private {
     my $medias : Stashed = $c->model('Base::Media')->search({}, {order_by => 'description'});
 }
 
+sub load : Chained('/admin/admin') PathPart('media') CaptureArgs(1) {
+    my ( $self, $c, $id ) = @_;
+    
+    my $object : Stashed = $c->model('Base::Media')->find($id);
+
+}
+
 sub create : Local {
     my ( $self, $c ) = @_;
     my $category = $c->req->param('category');  
@@ -42,10 +49,9 @@ sub create : Local {
     $c->forward('edit');
 }
 
-sub edit : Local {
-    my ( $self, $c, $id) = @_;
+sub edit : Chained('load') Args(0) {
+    my ( $self, $c ) = @_;
     my $object : Stashed;
-    $object = $c->model('Base::Media')->find($id) unless $object;
     
     die "no media" unless $object;
     
@@ -84,10 +90,10 @@ sub edit : Local {
     
 }
 
-sub delete : Local {
-    my ( $self, $c, $id) = @_;
+sub delete : Chained('load') Args(0) {
+    my ( $self, $c ) = @_;
     
-    my $object : Stashed = $c->model('Base::Media')->find($id) if $id;
+    my $object : Stashed;
     
     die "no such media" unless $object;
     my $msg : Flashed = 'Media removed';

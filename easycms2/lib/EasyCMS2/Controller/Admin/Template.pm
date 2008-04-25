@@ -2,7 +2,7 @@ package EasyCMS2::Controller::Admin::Template;
 
 use strict;
 use warnings;
-use base 'Catalyst::Controller::BindLex';
+use base qw(Catalyst::Controller::HTML::FormFu Catalyst::Controller::BindLex);
 
 use Data::Dumper::Simple;
 =head1 NAME
@@ -33,35 +33,31 @@ sub list : Private {
     
     my $root : Stashed = $c->model('Base::Template')->search({parent => undef});
 }
-
-sub create : Local {
+sub load : Chained('/admin/admin') PathPart('template') CaptureArgs(1) {
+    my ( $self, $c, $id ) = @_;
+    my $object : Stashed = $c->model('Base::Template')->find($id);
+}
+sub create : Local : FormConfig {
     my ($self, $c) = @_;
     my $parent = $c->req->param('parent');
     
     my $object : Stashed = $c->model('Base::Template')->new({parent => $parent || undef });
     
-    $c->forward('edit');
+    $c->forward('doit');
 }
 
-sub edit : Local {
-    my ($self, $c, $id) = @_;
+sub edit : Chained('load') Args(0) FormConfig {
+    my ($self, $c) = @_;
     
-    my $object : Stashed;
-    $object = $c->model('Base::Template')->find($id) unless $object;
-    
-    die "no template" unless $object;
-        
-    $c->widget('edit_template')->method('post')->action($c->uri_for($c->action->name,  $object->id));
-    
-    $c->widget('edit_template')->element('Textfield','name')->label('Name');
-    $c->widget('edit_template')->element('Textarea','before')->label('Before');
-    $c->widget('edit_template')->element('Textarea','after')->label('After');
+    $c->forward('doit');
+}
+sub doit : Private {
+    my ( $self, $c ) = @_;
 
-    $c->widget('edit_template')->element('Textarea','js')->label('Javascript');
-    $c->widget('edit_template')->element('Textarea','css')->label('CSS');
+    my $object : Stashed;
+    die "no template" unless $object;
     
-    $c->widget('edit_template')->indicator(sub { $c->req->method eq 'POST' } );
-    
+    # Load all other templates that might be parents
     my $roots = $c->model('Base::Template')->search({parent => undef}, {order_by => 'name'});
     
     my @templates;
@@ -69,34 +65,25 @@ sub edit : Local {
     while (my $root = $roots->next) {
         push @templates, $root->node('-- ');
     }
-
     
-    my $template_select = $c->widget('edit_template')->element('Select','parent')->label('Parent')->options(
-        map { $_->{id} => $_->{name} } @templates
+    
+    my $form : Stashed;
+    # Find the 'parent'-select and set the options
+    my $parent_select = $form->get_all_element({ name => 'parent'});
+    my @options = map { {'value' => $_->{id}, 'label' => $_->{name}} } @templates;
+    $parent_select->options(
+        \@options
     );
     
-    $c->widget('edit_template')->element('Submit','save')->value('Save');
-    $c->widget('edit_template')->element('Submit','save')->label('Save and Close');
+    $form->model('DBIC')->default_values($object);
     
-    my $result : Stashed = $c->widget_result($c->widget('edit_template'));
-    
-
-    if (! $result->has_errors and $c->req->method() eq 'POST') {
-        $object->populate_from_widget($result);
-        $object->update();
-        if ($c->req->param('save') ne 'Save') {
-            $c->res->redirect($c->uri_for(''));
-        } else {
-            $c->res->redirect($c->uri_for('edit', $object->id));
-        }
+    if ($form->submitted_and_valid) {
+        $form->model()->update($object);
     }
-    $object->fill_widget($c->widget('edit_template'));
     
-    $template_select->value( ( $object->parent && $object->parent->can('id') ) ? $object->parent->id : undef);
-
 }
 
-sub delete : Local {
+sub delete : Chained('load') Args(0) {
     my ( $self, $c, $id) = @_;
     
     my $object : Stashed = $c->model('Base::Template')->find($id) if $id;

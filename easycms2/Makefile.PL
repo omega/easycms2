@@ -4,7 +4,9 @@ name 'EasyCMS2';
 all_from 'lib/EasyCMS2.pm';
 
 requires 'Catalyst::Runtime' => '5.7';
-requires 'Catalyst::Plugin::HTML::Widget' => 0;
+requires 'Catalyst::Controller::HTML::FormFu' => 0;
+requires 'Catalyst::Plugin::I18N' => 0;
+
 requires 'Catalyst::Model::DBIC::Schema' => '0.18';
 requires 'Catalyst::Controller::BindLex' => 0;
 requires 'Catalyst::Action::RenderView' => 0;

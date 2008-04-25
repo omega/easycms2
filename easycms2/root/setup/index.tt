@@ -9,7 +9,7 @@
     <h2>Setup steps</h2>
     
     <ul>
-        <li id="step1">Initial setup [% IF c.setting('init_step') >= 1 %](completed)[% END %]</li>
+        <li id="step1">Initial setup [% IF c.setting('init_step') && c.setting('init_step') >= 1 %](completed)[% ELSE %]<a href="[% c.uri_for('/setup/step1') %]">Do it</a>[% END %]</li>
     </ul>
     
     <h2>Recovery</h2>
