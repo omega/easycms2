@@ -11,13 +11,17 @@ __PACKAGE__->load_components(qw/+DBIx::Class::Schema::Versioned/);
 our $VERSION = '0.28';
 
 
+sub bogus {
+    my ($self) = @_;
+    $self->storage->ensure_connected();
+}
 
 sub upgrade {
     my ($self, $dryrun) = @_;
+    my $ret = $self->run_upgrade(qr//i, $dryrun);
 
-    $self->run_upgrade(qr//i, $dryrun);
-
-    unless ($dryrun) {
+    if ($ret and !$dryrun) {
+        warn "adding the damn version!";
 		my $connect_info = $self->storage->connect_info();
 		$self->storage->disconnect();
         my $vschema = DBIx::Class::Version->connect(@{$connect_info});
@@ -34,6 +38,7 @@ sub upgrade {
 sub run_upgrade {
 
     my ($self, $stm, $dryrun) = @_;
+    die "no statements?" unless ref($self->_filedata);
     my @statements = grep { $_ =~ $stm } @{$self->_filedata};
     $self->_filedata([ grep { $_ !~ /$stm/i } @{$self->_filedata} ]);
 
@@ -53,7 +58,7 @@ sub _source_exists
     my $c = eval {
         $rs->search({ version => 0 })->count;
     };  
-    warn $@ if $@;
+    warn $@ if ($@ and $@ !~ /no such table/);
     return 0 if $@ || !defined $c;
 
     return 1;

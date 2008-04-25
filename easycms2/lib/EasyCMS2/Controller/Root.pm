@@ -35,7 +35,7 @@ sub auto : Private {
 sub index : Private {
     my ( $self, $c ) = @_;
     my $def = $c->setting('default-page');
-    if ($def =~ m/^c(\d+)/) {
+    if ($def and $def =~ m/^c(\d+)/) {
         my $cat = $c->model('Base::Category')->find($1);
         $c->forward('category/render', [$cat]);
     } else {

@@ -13,11 +13,15 @@ my $cfg = EasyCMS2->config->{db};
 my $upgrade = shift;
 
 if (defined($upgrade) and $upgrade eq '--upgrade') {
-    my $schema = EasyCMS2->model('Base')->schema->upgrade;
+    EasyCMS2->model('Base')->schema->upgrade;
 } elsif (defined($upgrade) and $upgrade eq '--dryrun') {
-    my $schema = EasyCMS2->model('Base')->schema->upgrade(1);
+    EasyCMS2->model('Base')->schema->upgrade(1);
 } else {
-    print "please specify --upgrade as commandline parameter to perform upgrade\n";    
+    print <<END
+please specify one of the following:
+    --upgrade       To perform an upgrade from your current to the newest
+    --dryrun        To dryrun an upgrade. Best used with DBIC_TRACE=1
+END
 }
 
 package DBIx::Class::Storage::DBI;
