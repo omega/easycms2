@@ -23,6 +23,7 @@ Catalyst Controller.
 sub auto : Private {
     my ($self, $c) = @_;
     
+    $c->log->debug('lang: ' . $c->language . " loc:" . $c->loc('email')) if $c->debug;
     unless ($c->user_exists && $c->user_in_realm('authors')) {
         # need to make this user log in
         $c->forward('/auth/login');
