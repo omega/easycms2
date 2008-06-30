@@ -130,7 +130,7 @@ sub edit : Chained('load') Args(0) {
         if ($c->req->param('save') ne 'Save') {
             $c->res->redirect($c->uri_for(''));
         } else {
-            $c->res->redirect($c->uri_for('edit', $object->id));
+            $c->res->redirect($c->uri_for($object->id, 'edit'));
         }
     }
     $object->fill_widget($c->widget('edit_page'));
