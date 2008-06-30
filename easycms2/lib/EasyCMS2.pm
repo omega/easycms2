@@ -26,6 +26,8 @@ use Catalyst qw/
         HTML::Widget 
         
         Static::Simple 
+        Server
+        Server::XMLRPC
 /;
 
 our $VERSION = '0.12';
