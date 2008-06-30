@@ -1,4 +1,10 @@
 This file documents the revision history for Perl extension EasyCMS2.
+0.13
+        - Added support for different views (Atom and JSON added for now)
+        - Added ATOM api for managing pages in one Blog-type category (EXPERIMENTAL)
+        - Switched to FormFu for formhandling
+        - Started switching to Chained for the admin part
+        
 0.12  Sat Sep 22 10:09:00 2007
         - Added tag-support to pages. It is up to categorytypes to make use of it though
           Look at the blog type to see an example

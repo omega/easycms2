@@ -30,7 +30,7 @@ use Catalyst qw/
         Server::XMLRPC
 /;
 
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 __PACKAGE__->config(setup_components => { search_extra => [ qw/::CategoryType/ ] });
 
