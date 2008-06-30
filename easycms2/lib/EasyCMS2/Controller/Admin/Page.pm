@@ -67,7 +67,7 @@ sub edit : Chained('load') Args(0) {
     
     my $object : Stashed;
     die "no page" unless $object;
-    $c->widget('edit_page')->method('post')->action($c->uri_for($c->action->name(), $object->id ));
+    $c->widget('edit_page')->method('post')->action($c->uri_for($object->id, $c->action->name() ));
     $c->widget('edit_page')->indicator(sub { $c->req->method eq 'POST' } );
 
     $c->widget('edit_page')->element('Textfield','title')->label('Title');

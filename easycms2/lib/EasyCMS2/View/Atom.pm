@@ -40,7 +40,7 @@ sub process {
     unless ($pages) {
         # single page, show that item as atom
         $feed->title($c->stash->{'page'}->title);
-        $feed->id($c->stash->{'page'}->uri_for($c));
+        $feed->id($c->uri_for($c->stash->{'page'}->uri_for($c)));
         push @entries, $self->render_page($c, $c->stash->{'page'})
     } else {
         while (my $page = $pages->next) {
@@ -62,7 +62,7 @@ sub process {
 
 sub render_page {
     my ($self, $c, $page) = @_;
-    $self->updated($page->updated) if ($page->updated > $self->updated);
+    $self->updated($page->updated) if (!$self->updated or $page->updated > $self->updated);
     my $entry = XML::Atom::Entry->new();
 
     $entry->title($page->title);
