@@ -55,6 +55,28 @@ sub default : Private {
     # each entry in @args is a part of the path. It should either point at a 
     # page or a category. In case of a category, we try to render the index 
     # method of that category.
+    # It can also be a tag, it then starts with !
+    # alternate rendering formats are available as .<view>
+
+    my ($tag);
+    $c->log->debug("args: " . scalar(@args));
+    foreach my $i (0 .. scalar(@args)) {
+        $c->log->debug($args[$i]);
+        if ($args[$i] && $args[$i] =~  m/!(.+)/) {
+            my $t = $1;
+            $t =~ s/\+/ /g;
+            $c->log->debug("tag: $t");
+            delete $args[$i];
+            $tag = $c->model('Base::Tag')->find({ name => $t});
+        }
+        elsif ($args[$i] && $args[$i] =~ m/\.(.+)/) {
+            $c->stash->{'current_view'} = $1;
+            delete $args[$i];
+        }
+    }
+    $c->log->debug("args: " . scalar(@args));
+    
+    return $c->detach('index') if scalar(@args) == 0;
 
     my $parent_category;
     my $page;
@@ -85,22 +107,6 @@ sub default : Private {
         @args = @catch_all_args;
     }
     
-    my ($tag, $view);
-    $c->log->debug(scalar(@args));
-    foreach my $i (0 .. scalar(@args)) {
-        $c->log->debug($args[$i]);
-        if ($args[$i] && $args[$i] =~  m/!(.+)/) {
-            my $t = $1;
-            $t =~ s/\+/ /g;
-            $c->log->debug("tag: $t");
-            delete $args[$i];
-            $tag = $c->model('Base::Tag')->find({ name => $t});
-        }
-        if ($args[$i] && $args[$i] =~ m/\.(.+)/) {
-            $c->stash->{'current_view'} = $1;
-            delete $args[$i];
-        }
-    }
     return $c->detach('/error/no_page') unless ($category || $page);
     if ($page) {
         $c->stash->{title} = $page->title;

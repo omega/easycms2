@@ -157,7 +157,7 @@ sub delete : Chained('load') Args(0) {
     
 }
 
-sub homepage : Chained('load_page') Args(0) {
+sub homepage : Chained('load') Args(0) {
     my ( $self, $c ) = @_;
     
     my $object : Stashed;

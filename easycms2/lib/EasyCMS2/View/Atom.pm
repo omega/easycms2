@@ -3,6 +3,9 @@ package EasyCMS2::View::Atom;
 use strict;
 use warnings;
 use base 'Catalyst::View';
+
+__PACKAGE__->mk_accessors(qw(updated));
+
 use XML::Atom::Feed;
 use XML::Atom::Link;
 use XML::Atom::Entry;
@@ -34,31 +37,18 @@ sub process {
     my $pages = $c->stash->{'category'}->{'posts'};
     my $updated = DateTime->from_epoch(epoch => 1);
     my @entries;
-    while (my $page = $pages->next) {
-        $updated = $page->updated if ($page->updated > $updated);
-        my $entry = XML::Atom::Entry->new();
-        
-        $entry->title($page->title);
-        $entry->id($c->uri_for($page->uri_for($c)));
-        $entry->updated($page->updated . "Z");
-        my $link = XML::Atom::Link->new;
-        $link->type('text/html');
-        $link->rel('alternate');
-        $link->href($c->uri_for($page->uri_for($c)));
-        $entry->link($link);
-        
-        my $content = XML::Atom::Content->new(type => 'html');
-        $content->body($page->formated_body);
-        $entry->content($page->formated_body);
-        my $author = XML::Atom::Person->new();
-        $author->name($page->author->name);
-        $author->email($page->author->email) if $page->author->email;
-        $entry->author($author);
-        
-        push @entries, $entry;
+    unless ($pages) {
+        # single page, show that item as atom
+        $feed->title($c->stash->{'page'}->title);
+        $feed->id($c->stash->{'page'}->uri_for($c));
+        push @entries, $self->render_page($c, $c->stash->{'page'})
+    } else {
+        while (my $page = $pages->next) {
+            push @entries, $self->render_page($c, $page);
+        }
         
     }
-    $feed->updated($updated . "Z");
+    $feed->updated($self->updated . "Z");
     
     $feed->add_entry($_) foreach(@entries);
     my $b = $feed->as_xml;
@@ -70,6 +60,30 @@ sub process {
     
 }
 
+sub render_page {
+    my ($self, $c, $page) = @_;
+    $self->updated($page->updated) if ($page->updated > $self->updated);
+    my $entry = XML::Atom::Entry->new();
+
+    $entry->title($page->title);
+    $entry->id($c->uri_for($page->uri_for($c)));
+    $entry->updated($page->updated . "Z");
+    my $link = XML::Atom::Link->new;
+    $link->type('text/html');
+    $link->rel('alternate');
+    $link->href($c->uri_for($page->uri_for($c)));
+    $entry->link($link);
+
+    my $content = XML::Atom::Content->new(type => 'html');
+    $content->body($page->formated_body);
+    $entry->content($page->formated_body);
+    my $author = XML::Atom::Person->new();
+    $author->name($page->author->name);
+    $author->email($page->author->email) if $page->author->email;
+    $entry->author($author);
+    
+    return $entry;
+}
 =head1 NAME
 
 EasyCMS2::View::Atom - Catalyst View
