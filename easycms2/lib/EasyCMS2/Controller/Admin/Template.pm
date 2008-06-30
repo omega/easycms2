@@ -61,7 +61,7 @@ sub doit : Private {
     my $roots = $c->model('Base::Template')->search({parent => undef}, {order_by => 'name'});
     
     my @templates;
-    push @templates, { id => 'undef', name => 'No parent'};
+    push @templates, { id => '', name => 'No parent'};
     while (my $root = $roots->next) {
         push @templates, $root->node('-- ');
     }

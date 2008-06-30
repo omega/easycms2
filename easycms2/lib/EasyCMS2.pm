@@ -65,7 +65,7 @@ sub get_snippet {
     
     $self->log->debug('getting snippet with url: ' . $url);
     my $snip = $self->model('Base::Snippet')->find_by_path($url);
-    $self->log->debug("found snippet: " . $snip->name);
+    $self->log->debug("found snippet: " . ($snip ? $snip->name : "no snippet found"));
     my $args;
     unless (ref($self)) {
         $args = {'test' => 'test2'};
