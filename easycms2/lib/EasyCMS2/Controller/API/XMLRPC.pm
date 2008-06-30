@@ -109,7 +109,7 @@ sub recent_posts : XMLRPCPath('/metaWeblog/getRecentPosts') {
     
     my $pages = $cat->pages({}, {
         order_by    => 'created DESC',
-        rows        => $number,
+        rows        => $number || 10,
     });
     my @res;
     while (my $page = $pages->next) {
@@ -198,6 +198,17 @@ sub set_categories : XMLRPCPath('/mt/setPostCategories') {
 
 sub publish_post : XMLRPCPath('/mt/publishPost') {
     my ( $self, $c ) = @_;
+    
+}
+
+sub delete_post : XMLRPCPath('/blogger/deletePost') {
+    my ( $self, $c ) = @_;
+    
+    my ($appkey, $id, $user, $pass) = @{$c->req->xmlrpc->args};
+    
+    my $page = $c->model('Base::Page')->find($id) || return;
+    
+    $page->remove;
     
 }
 sub end : Private {
