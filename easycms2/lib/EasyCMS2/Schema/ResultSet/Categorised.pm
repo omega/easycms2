@@ -25,7 +25,7 @@ sub find_by_path {
                 last;
             }
             next;
-        } else {
+        } elsif($parent_category) {
             # we found no category. We should try to find a page perhaps?
             my $objects = $self->search({ category => $parent_category->id });
             while (my $object = $objects->next) {
