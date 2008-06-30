@@ -10,6 +10,13 @@ __PACKAGE__->load_components(qw/+DBIx::Class::Schema::Versioned/);
 
 our $VERSION = '0.28';
 
+sub urify {
+    my ($self, $s) = @_;
+    $s = lc($s);
+    $s =~ s/[^a-z0-9_-]+/_/g;
+    
+    return $s;
+}
 
 sub bogus {
     my ($self) = @_;
