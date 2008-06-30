@@ -169,10 +169,11 @@ sub new_post : XMLRPCPath('/metaWeblog/newPost') {
     });
     $page->title($content->{title});
     $page->body($content->{description});
+
+    $page->insert_or_update;
     
     $page->set_tags($content->{mt_keywords}) if $content->{mt_keywords};
     
-    $page->insert_or_update;
     
     $c->stash->{xmlrpc} = $page->id;
     

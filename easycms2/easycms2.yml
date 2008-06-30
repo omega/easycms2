@@ -43,6 +43,8 @@ stacktrace:
 default_view: 'Default'
 file_store: '__HOME__/root/static/upload'
 file_base: '/static/upload'
+xmlrpc:
+    xml_encoding: utf-8
 media:
     resizes:
         - 
