@@ -17,6 +17,7 @@ requires 'Catalyst::Plugin::Session::Store::FastMmap' => 0;
 requires 'Catalyst::Plugin::Session::State::Cookie' => 0;
 requires 'Catalyst::Plugin::StackTrace' => 0;
 
+requires 'Catalyst::Plugin::Server::XMLRPC' => 0;
 
 requires 'Catalyst::Plugin::Session::State::Cookie' => 0;
 requires 'Catalyst::Plugin::Authentication' => '0.10000';
@@ -38,6 +39,9 @@ requires 'DBIx::Class' => 0.08003;
 requires 'DBIx::Class::HTMLWidget' => 0.09;
 requires 'HTML::Widget' => '1.11';
 requires 'Catalyst::Plugin::HTML::Widget' => 0;
+
+requires 'HTML::FormFu';
+requires 'HTML::FormFu::Model::DBIC';
 
 requires 'XML::Atom';
 

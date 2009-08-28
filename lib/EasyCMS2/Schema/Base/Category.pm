@@ -116,7 +116,7 @@ sub uri_for {
         $cat = $cat->parent || undef;
     }
    
-    return ($c ? $c->uri_for('/', @parents, @additions)->path_query : join ('/', @parents, @additions));
+    return ($c ? $c->uri_for('', @parents, @additions)->path_query : join ('/', @parents, @additions));
 }
 
 sub can_remove {

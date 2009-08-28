@@ -4,6 +4,9 @@
             type: Text
             name: name
             label_loc: name
+            constraints:
+                -
+                    type: Required
         -
             type: Textarea
             name: before

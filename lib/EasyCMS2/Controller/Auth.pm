@@ -22,32 +22,37 @@ Catalyst Controller.
 
 sub login : Private {
     my ($self, $c) = @_;
-    
+
     if ($c->req->param('user') && $c->req->param('pw')) {
-		$c->authenticate({
-		    username => $c->req->param('user'),
-		    password => $c->req->param('pw')
-		}, 'authors') 
-			or my $loginfailed : Stashed = 'Could not log you in.';
-	}
-	
-	unless ($c->user_exists && $c->user_in_realm('authors')) {
-	    $c->widget('login')->method('post')->action($c->uri_for(''));
+        $c->authenticate({
+            username => $c->req->param('user'),
+            password => $c->req->param('pw')
+        }, 'authors') 
+        or my $loginfailed : Stashed = 'Could not log you in.';
+    }
+
+    unless ($c->user_exists && $c->user_in_realm('authors')) {
+        $c->widget('login')->method('post')->action($c->uri_for($c->action));
         $c->widget('login')->indicator(sub { $c->req->method eq 'POST' } );
 
         $c->widget('login')->element('Textfield','user')->label('User');
         $c->widget('login')->element('Password','pw')->label('Password');
-        
+
         $c->widget('login')->element('Submit','login')->label('Login');
-        
-		my $template : Stashed = 'auth/login.tt';
-		
-		my $result : Stashed = $c->widget_result('login');
-	}
-	
-	
-	
+
+        my $template : Stashed = 'auth/login.tt';
+
+        my $result : Stashed = $c->widget_result('login');
+    }
 }
+
+sub logout : Local {
+    my ( $self, $c ) = @_;
+    
+    $c->logout;
+    $c->res->redirect($c->uri_for('/'));
+}
+
 #
 # Uncomment and modify this or add new actions to fit your needs
 #
