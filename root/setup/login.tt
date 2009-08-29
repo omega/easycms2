@@ -1,7 +1,7 @@
-[% INCLUDE header.tt %]
+[% INCLUDE setup/inc/header.tt %]
 <h1>Login required</h1>
 <p> The page you are trying to access is restricted to logged in users.
     Pleas provide your recovery password to continue</p>
 
 [% form %]
-[% INCLUDE footer.tt %]
+[% INCLUDE setup/inc/footer.tt %]

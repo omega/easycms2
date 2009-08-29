@@ -1,1 +1,17 @@
+[% INCLUDE setup/inc/header.tt %]
 <h1> step 1</h1>
+
+[% IF setup_log %]
+<ul>
+    [% FOREACH l IN setup_log %]
+    <li class="[% l.fatal ? 'fatal' : 'info' %]">
+        <strong>[% l.title %]</strong>
+        [% IF l.description %]
+        <p>[% l.description %]</p>
+        [% END %]
+    </li>
+    [% END %]
+</ul>
+[% END %]
+
+[% INCLUDE setup/inc/footer.tt %]

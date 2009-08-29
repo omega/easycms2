@@ -28,7 +28,6 @@ sub auto : Private {
         $c->log->debug( $c->user ) if $c->debug && $c->user_exists;
         return 0 unless ( $c->user_exists && $c->user_in_realm('recovery') );
     }
-    $c->log->debug('about to return 1 from auto in Setup') if $c->debug;
     return 1;
 }
 
@@ -64,11 +63,13 @@ sub login : Local : FormConfig {
 
 }
 
-sub reset_admin_pw : Local {
+sub reset_admin_pw : Local : FormConfig {
     my ( $self, $c ) = @_;
 
     # check that we have a admin-user to reset
     my $message : Stashed;
+    my $form : Stashed;
+    
     my $object : Stashed =
       $c->model('Base::Author')->find( { login => 'admin' } );
     unless ($object) {
@@ -77,46 +78,58 @@ sub reset_admin_pw : Local {
         $message = "No admin user found";
     }
     else {
-        $c->widget('edit_author')->method('post')
-          ->action( $c->uri_for( $c->action->name(), $object->id ) );
-        $c->widget('edit_author')
-          ->indicator( sub { $c->req->method eq 'POST' } );
-        $c->widget('edit_author')->element( 'Password', 'password' )
-          ->label('Password');
-        $c->widget('edit_author')->element( 'Password', 'confirm_password' )
-          ->label('Confirm password');
 
-        $c->widget('edit_author')->element( 'Submit', 'save' )
-          ->label('Set password');
 
-        $c->widget('edit_author')
-          ->constraint( 'All', 'password', 'confirm_password' );
-        $c->widget('edit_author')
-          ->constraint( 'Equal', 'password', 'confirm_password' );
-
-        my $result : Stashed = $c->widget_result( $c->widget('edit_author') );
-
-        if ( !$result->has_errors and $c->req->method() eq 'POST' ) {
-
-            $object->populate_from_widget($result);
+        if ($form->submitted_and_valid) {
+            $form->model()->update($object);
             $c->res->redirect( $c->uri_for('/setup') );
-        }
 
+        }
     }
 }
+sub log : Private {
+    my ($self, $c, $str) = @_;
 
+    unless (ref($str) eq 'HASH') {
+        $str = {
+            title => $str,
+        }
+    }
+    
+    my $setup_log : Stashed;
+    $setup_log ||= [];
+    
+    push(@$setup_log, $str);
+}
+
+sub fatal : Private {
+    my ( $self, $c, $str ) = @_;
+    unless (ref($str) eq 'HASH') {
+        $str = {
+            title => $str,
+        }
+    }
+    $str->{fatal} = 1;
+    my $setup_fatal : Stashed = 1;
+    $self->log( $c, $str )
+}
 sub step1 : Local {
     my ( $self, $c ) = @_;
 
+    $self->log($c, "Starting setup step 1");
     my $file_store = $c->config()->{'file_store'};
+    
     unless ( -w $file_store ) {
-        die "cannot write to file_store: $file_store";
+        $c->detach('fatal', [{
+            title => "I cannot write to configured upload location",
+            description => <<__DESC__
+You have configured your upload location to be <em>$file_store</em>, however
+whomever you have me configured to be does not seem to have write 
+access to that location, or perhaps it simply does not exists?
+__DESC__
+        }] );
     }
-
-    # Create an default author, that is admin
-    # FIXME: Should autogenerate perhaps?
-
-    $c->log->debug('Creating or updating mime-type-table');
+    $self->log($c, 'Creating or updating mime-type-table');
 
     my $mime_type_file = $c->path_to('/db/mime.types');
     open MIME, $mime_type_file or die "cannot read $mime_type_file: $!";
@@ -126,7 +139,7 @@ sub step1 : Local {
 
     my @mimetypes = grep { $_ !~ /^\#/ } split( /\n/, $mime_content );
 
-    $c->log->debug( ' found ' . scalar(@mimetypes) . " mimetypes in file" );
+    $self->log($c,  ' found ' . scalar(@mimetypes) . " mimetypes in file" );
 
     foreach my $line (@mimetypes) {
         next if ( $line =~ /^\s*$/ );
@@ -176,7 +189,11 @@ sub step1 : Local {
         }
     }
 
-    $c->log->debug('creating admin-author');
+    # Create an default author, that is admin
+    # FIXME: Should autogenerate perhaps?
+
+
+    $self->log($c, 'creating admin-author');
 
     my $admin_pw : Stashed = 'admin';
 
@@ -192,7 +209,7 @@ sub step1 : Local {
             }
         );
     }
-    $c->log->debug( "user: " . $def_user->id );
+    $self->log($c,  "user: " . $def_user->id );
 
 # create the "main template", which the others will inherit from, that has the basic
 # HTML structure and head etc.
@@ -227,7 +244,7 @@ __END__
         );
     }
 
-    $c->log->debug( "template: " . $def_template->id );
+    $self->log($c,  "template: " . $def_template->id );
 
     my $admin_template;
     unless (
@@ -275,7 +292,7 @@ END
         );
     }
 
-    $c->log->debug( "cat: " . $def_cat->id );
+    $self->log($c,  "cat: " . $def_cat->id );
     my $def_page;
     unless ( $def_page =
         $c->model('Base::Page')
@@ -297,10 +314,9 @@ __END__
             }
         );
     }
-    $c->log->debug( 'page: ' . $def_page->id );
+    $self->log($c,  'page: ' . $def_page->id );
     $c->setting( 'init_step'    => 1 );
     $c->setting( 'default-page' => $def_page->id );
-    $c->res->redirect( $c->uri_for('/setup') );
 }
 
 =head1 AUTHOR
