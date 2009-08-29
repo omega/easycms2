@@ -3,6 +3,7 @@ package EasyCMS2::Controller::Admin::Page;
 use strict;
 use warnings;
 use base 'Catalyst::Controller::BindLex';
+__PACKAGE__->config->{unsafe_bindlex_ok} = 1;
 
 use Data::Dumper::Simple;
 

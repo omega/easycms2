@@ -3,6 +3,7 @@ package EasyCMS2::Controller::Admin::Template;
 use strict;
 use warnings;
 use base qw(Catalyst::Controller::HTML::FormFu Catalyst::Controller::BindLex);
+__PACKAGE__->config->{unsafe_bindlex_ok} = 1;
 
 use Data::Dumper::Simple;
 =head1 NAME

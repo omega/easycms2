@@ -3,6 +3,7 @@ package EasyCMS2::Controller::Javascript;
 use strict;
 use warnings;
 use base 'Catalyst::Controller';
+__PACKAGE__->config->{unsafe_bindlex_ok} = 1;
 
 =head1 NAME
 

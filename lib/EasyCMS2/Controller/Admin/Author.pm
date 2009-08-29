@@ -3,7 +3,7 @@ package EasyCMS2::Controller::Admin::Author;
 use strict;
 use warnings;
 use base qw(Catalyst::Controller::HTML::FormFu Catalyst::Controller::BindLex);
-
+__PACKAGE__->config->{unsafe_bindlex_ok} = 1;
 =head1 NAME
 
 EasyCMS2::Controller::Admin::Author - Catalyst Controller
