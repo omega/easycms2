@@ -1,0 +1,10 @@
+---
+    elements:
+        -
+            type: Text
+            name: pw
+            label_loc: password
+        
+        - 
+            type: Submit
+            value_loc: login

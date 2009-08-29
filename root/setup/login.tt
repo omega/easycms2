@@ -3,5 +3,5 @@
 <p> The page you are trying to access is restricted to logged in users.
     Pleas provide your recovery password to continue</p>
 
-[% result.as_xml %]
+[% form %]
 [% INCLUDE footer.tt %]
