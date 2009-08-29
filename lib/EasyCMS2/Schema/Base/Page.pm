@@ -20,7 +20,7 @@ use Data::Dumper::Simple;
 
 use EasyCMS2::Extra;
 
-__PACKAGE__->load_components(qw/ResultSetManager PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('page');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
@@ -84,6 +84,8 @@ __PACKAGE__->inflate_column('extra' => {
     'deflate' => sub { return shift->store(); }
 });
 
+__PACKAGE__->resultset_class('EasyCMS2::Schema::ResultSet::Page');
+
 sub get_extra {
     my $self = shift;
     my $extra = shift;
@@ -104,11 +106,6 @@ sub set_extra {
     return $value;
 }
 
-sub links : ResultSet {
-    my $self = shift;
-    
-    return $self->search({}, {order_by => 'title'});
-}
 
 sub toHash {
     my $self = shift;

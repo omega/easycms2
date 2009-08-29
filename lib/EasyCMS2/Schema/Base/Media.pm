@@ -7,7 +7,7 @@ use Imager;
 
 use base qw/DBIx::Class/;
 
-__PACKAGE__->load_components(qw/ResultSetManager PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('media');
 
 __PACKAGE__->add_columns(
@@ -23,11 +23,7 @@ __PACKAGE__->set_primary_key('id');
 __PACKAGE__->belongs_to('category' => 'EasyCMS2::Schema::Base::Category');
 __PACKAGE__->belongs_to('type' => 'EasyCMS2::Schema::Base::MimeType');
 
-sub images : ResultSet {
-    my $self = shift;
-    
-    return $self->search({'type.type' => [qw(image/png image/jpeg image/gif)]}, {join => 'type', prefetch => 'type'});
-}
+__PACKAGE__->resultset_class('EasyCMS2::Schema::ResultSet::Media');
 
 sub toHash {
     my $self = shift;
