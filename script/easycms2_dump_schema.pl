@@ -5,13 +5,10 @@ use warnings;
 
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-#use lib "$FindBin::Bin/../../Other/dbic-current/lib";
 
 use EasyCMS2;
 
-use EasyCMS2::Schema::Base;
-
-my $cfg = EasyCMS2->config->{db};
+my $cfg = EasyCMS2->config->{'Model::Base'};
 
 my $schema = EasyCMS2->model('Base')->schema;
 
@@ -24,4 +21,9 @@ if ($pversion) {
     $pversion = undef;
 }
 
-$schema->create_ddl_dir([qw/PostgreSQL MySQL SQLite/], $schema->VERSION, $cfg->{upgrade}, $pversion);
+$schema->create_ddl_dir(
+    [qw/PostgreSQL MySQL SQLite/], 
+    $schema->schema_version, 
+    $cfg->{upgrade_directory}, 
+    $pversion
+);

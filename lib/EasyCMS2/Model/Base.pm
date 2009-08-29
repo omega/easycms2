@@ -4,20 +4,11 @@ use strict;
 use base 'Catalyst::Model::DBIC::Schema';
 
 use EasyCMS2::Schema::Base;
-my $cfg = EasyCMS2->config->{db};
 
 __PACKAGE__->config(
     schema_class => 'EasyCMS2::Schema::Base',
-    connect_info => [
-    $cfg->{'dsn'},
-    $cfg->{'user'},
-    $cfg->{'password'},
-    $cfg->{'options'},
-    ],
-
 );
 
-EasyCMS2::Schema::Base->upgrade_directory($cfg->{upgrade});
 
 =head1 NAME
 

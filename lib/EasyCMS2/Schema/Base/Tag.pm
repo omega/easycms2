@@ -2,7 +2,7 @@ package EasyCMS2::Schema::Base::Tag;
 
 use base qw/DBIx::Class/;
 
-__PACKAGE__->load_components(qw/ResultSetManager PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('tag');
 __PACKAGE__->resultset_class('EasyCMS2::Schema::ResultSet::Tag');
 

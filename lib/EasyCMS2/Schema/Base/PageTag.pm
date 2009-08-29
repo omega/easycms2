@@ -9,7 +9,7 @@ $textile->charset('utf-8');
 
 
 
-__PACKAGE__->load_components(qw/ResultSetManager PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
 __PACKAGE__->table('page_tag');
 __PACKAGE__->resultset_class('EasyCMS2::Schema::ResultSet::Tag');
 

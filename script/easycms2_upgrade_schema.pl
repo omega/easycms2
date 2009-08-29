@@ -7,15 +7,18 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 
 use EasyCMS2;
-use EasyCMS2::Schema::Base;
 
-my $cfg = EasyCMS2->config->{db};
+my $cfg = EasyCMS2->config->{'Model::Base'};
 my $upgrade = shift;
 
+my $schema = EasyCMS2->model('Base')->schema;
 if (defined($upgrade) and $upgrade eq '--upgrade') {
-    EasyCMS2->model('Base')->schema->upgrade;
-} elsif (defined($upgrade) and $upgrade eq '--dryrun') {
-    EasyCMS2->model('Base')->schema->upgrade(1);
+    
+    if  (!$schema->get_db_version) {
+        $schema->deploy();
+    } else {
+        $schema->upgrade;
+    }
 } else {
     print <<END
 please specify one of the following:
@@ -24,7 +27,11 @@ please specify one of the following:
 END
 }
 
+=pod
 package DBIx::Class::Storage::DBI;
 sub backup {  
 }
+
+=cut
+
 1;
