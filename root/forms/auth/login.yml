@@ -1,0 +1,14 @@
+---
+    elements:
+        -
+            type: Text
+            name: user
+            label_loc: username
+        -
+            type: Password
+            name: pw
+            label_loc: password
+        -
+            type: Submit
+            value_loc: login
+            

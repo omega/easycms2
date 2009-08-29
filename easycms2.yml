@@ -27,7 +27,7 @@ authentication:
                 password_hash_type: SHA-1
             store:
                 class: DBIx::Class
-                user_class: "EasyCMS2::Model::Base::Author"
+                user_model: "Base::Author"
                 user_field: login
         recovery:
             credential:
@@ -41,7 +41,7 @@ authentication:
 session:
     flash_to_stash: 1
 stacktrace:
-    verbose: 0
+    verbose: 1
 default_view: 'Default'
 file_store: '__HOME__/root/static/upload'
 file_base: '/static/upload'
