@@ -5,13 +5,14 @@ Controller::HTML::FormFu:
 
 name: EasyCMS2
 recovery_password: UNSET
-db:
-    dsn: 'dbi:SQLite:__HOME__/db/sqlite.db'
-    user:
-    password:
-    options:
-        AutoCommit: 1
-    upgrade: '__HOME__/db/upgrade/'
+Model::Base:
+    connect_info:
+        - 'dbi:SQLite:__HOME__/db/sqlite.db'
+        -
+        -
+        -
+            AutoCommit: 1
+    upgrade_directory: '__HOME__/db/upgrade/'
 'View::Default':
     TEMPLATE_EXTENSION: '.tt'
     DEBUG: 1

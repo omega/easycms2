@@ -15,12 +15,12 @@ use warnings;
 use Catalyst qw/
         StackTrace
         ConfigLoader 
-		I18N
-    	Authentication
+        I18N
+        Authentication
 
-    	Session
-    	Session::Store::FastMmap
-    	Session::State::Cookie
+        Session
+        Session::Store::FastMmap
+        Session::State::Cookie
 
 
         HTML::Widget 
