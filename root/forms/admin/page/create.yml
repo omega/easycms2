@@ -1,0 +1,12 @@
+---
+elements:
+    - type: Block
+      tag: h3
+      content_loc: create
+---
+load_config_file:
+    - __path_to(root/forms/admin/header.yml)__
+    - __path_to(root/forms/admin/page/common.yml)__
+elements:
+    - type: Submit
+      value_loc: create

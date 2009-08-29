@@ -1,0 +1,55 @@
+---
+    elements:
+        -
+            type: Text
+            name: name
+            label_loc: name
+            constraints:
+                - Required
+        -
+            type: Select
+            name: parent
+            label_loc: parent
+        -
+            type: Select
+            name: template
+            label_loc: template
+        -
+            type: Select
+            name: type
+            label_loc: category_type
+            id: edit_category_type
+        -
+            type: Checkbox
+            name: allow_comments
+            label_loc: allow_comments
+        -
+            type: Textarea
+            name: index_page
+            label_loc: index_page
+            id: edit_category_index_page
+        -
+            type: Textarea
+            name: js
+            label_loc: javascript
+            id: edit_category_js
+        -
+            type: Textarea
+            name: css
+            label_loc: css
+            id: edit_category_css
+        -
+            type: Block
+            tag: Button
+            name: insert_defaults
+            content_loc: insert_defaults
+            attributes:
+                onclick: 'setDefault()'
+                type: button
+        -
+            type: Block
+            tag: Span
+            name: index_page_default
+            attributes:
+                class: hidden
+        

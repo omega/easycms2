@@ -184,6 +184,15 @@ sub comment_form {
     
 }
 
+sub tags {
+    my $self = shift;
+    
+    if (@_) {
+        # We need to set
+        $self->set_tags(@_);
+    }
+    return $self->get_tags();
+}
 sub set_tags {
     my ($self, $tags) = @_;
     warn "tagging page with '$tags'";

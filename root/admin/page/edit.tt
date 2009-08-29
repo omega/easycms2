@@ -8,5 +8,5 @@
     <li>Author: <a href="[% c.uri_for('/admin/author/edit', object.author.id) %]">[% object.author.name %]</a></li>
     
 </ul>
-[% result.as_xml %]
+[% form %]
 [% PROCESS footer.tt %]

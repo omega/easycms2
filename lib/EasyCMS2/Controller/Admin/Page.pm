@@ -2,7 +2,7 @@ package EasyCMS2::Controller::Admin::Page;
 
 use strict;
 use warnings;
-use base 'Catalyst::Controller::BindLex';
+use base qw(Catalyst::Controller::HTML::FormFu Catalyst::Controller::BindLex);
 __PACKAGE__->config->{unsafe_bindlex_ok} = 1;
 
 use Data::Dumper::Simple;
@@ -47,17 +47,27 @@ sub load : Chained('/admin/admin') PathPart('page') CaptureArgs(1) {
     my $object : Stashed = $c->model('Base::Page')->find($id);
 }
 
-sub create : Local {
+sub create : Local : FormConfig {
     my ($self, $c) = @_;
     my $category = $c->req->param('category');
     
-    my $object : Stashed = $c->model('Base::Page')->new({author => $c->user->id, category => $category });
+    my $object : Stashed = $c->model('Base::Page')->new({
+        author => $c->user->id, 
+        category => $category 
+    });
     
-    $c->forward('edit');
+    $c->forward('doit');
 }
 
-sub edit : Chained('load') Args(0) {
+sub edit : Chained('load') Args(0) : FormConfig{
     my ( $self, $c ) = @_;
+    
+    $c->forward('doit');
+}
+
+sub doit : Private {
+    my ( $self, $c ) = @_;
+    
     my $onload : Stashed;
 
     if (ref($onload)) {
@@ -68,25 +78,36 @@ sub edit : Chained('load') Args(0) {
     
     my $object : Stashed;
     die "no page" unless $object;
-    $c->widget('edit_page')->method('post')->action($c->uri_for($object->id, $c->action->name() ));
-    $c->widget('edit_page')->indicator(sub { $c->req->method eq 'POST' } );
 
-    $c->widget('edit_page')->element('Textfield','title')->label('Title');
-    $c->widget('edit_page')->element('Textarea','body')->label('Body');
+    my $form : Stashed;
     
     {
-        my $roots = $c->model('Base::Category')->search({parent => undef}, {order_by => 'name'});
+        # Populate the category dropdown
+        my $roots = $c->model('Base::Category')->search({
+            parent => undef
+        }, {
+            order_by => 'name'
+        });
         my @categories;
         while (my $root = $roots->next) {
             push @categories, $root->node('-- ');
         }
-        my $category_select = $c->widget('edit_page')->element('Select','category')->label('Category')->options(
-            map { $_->{id} => $_->{name} } @categories
+        $form->get_all_element({ 
+            type => 'Select', 
+            name => 'category'
+        })->options(
+            [map { [$_->{id} => $_->{name}] } @categories]
         );
     }
 
+
     {
-        my $roots = $c->model('Base::Template')->search({parent => undef}, {order_by => 'name'});
+        # Populate the template dropdown
+        my $roots = $c->model('Base::Template')->search({
+            parent => undef
+        }, {
+            order_by => 'name'
+        });
     
         my @templates;
         push @templates, { id => 'undef', name => 'Inherit from category'};
@@ -96,36 +117,32 @@ sub edit : Chained('load') Args(0) {
         }
 
     
-        my $template_select = $c->widget('edit_page')->element('Select','template')->label('Template')->options(
-            map { $_->{id} => $_->{name} } @templates
+        $form->get_all_element({
+            type => 'Select',
+            name => 'template',
+        })->options(
+            [map { [$_->{id} => $_->{name}] } @templates]
         );
     }
-    
-    $c->widget('edit_page')->element('Checkbox','allow_comments')->label('Allow comments');
-    $c->widget('edit_page')->element('Textfield', 'tags')->label('Tags')->value($object->get_tags)
-        ->comment('Seperate tags with space. Tags that need to contain spaces can be quoted with "this is one tag"');
 
-    $c->widget('edit_page')->element('Span', 'index_page_default')
-        ->content($c->model('Base::Tag')->search({})->stringify)->class("hidden");
+  
+    # Extend the damn form from the category type
+    $object->category->type->extend_page_form($form, $object, 1) if $object->category;
 
-    $object->category->type->extend_page_widget($c->widget('edit_page'), $object, 1) if $object->category;
-        
-    $c->widget('edit_page')->element('Submit','save')->label('Save');
-    $c->widget('edit_page')->element('Submit','save')->label('Save and Close');
-    # We extend the widget with the categorytypes extensions, if any
     
-    my $result : Stashed = $c->widget_result($c->widget('edit_page'));
     
-    if (! $result->has_errors and $c->req->method() eq 'POST') {
+    if ($form->submitted_and_valid) {
+
         
-        my $title = lc($result->param('title'));
+        my $title = lc($form->param('title'));
         $title =~ s/[^a-z0-9_-]+/_/g;
-        $object->url_title($title);
-        $c->log->debug("tags: " . $result->param("tags"));
-        $object->populate_from_widget($result);
-        $object->set_tags($result->param('tags'));
+
+        $form->add_valid(url_title => $title);
+        $c->log->debug("tags: " . $form->param("tags")) if $c->debug;
+        $form->model->update($object);
+        
         # we also allow the category type to save its extensions.
-        $object->category->type->extend_page_save($result, $object);
+        $object->category->type->extend_page_save($form, $object);
         $object->update();
         
         if ($c->req->param('save') ne 'Save') {
@@ -133,10 +150,11 @@ sub edit : Chained('load') Args(0) {
         } else {
             $c->res->redirect($c->uri_for($object->id, 'edit'));
         }
+
+    } elsif( !$form->submitted) {
+        $form->model->default_values( $object );
     }
-    $object->fill_widget($c->widget('edit_page'));
-    $c->log->debug('uri_for:' . $object->uri_for($c));
-    
+    $c->log->debug('uri_for:' . $object->uri_for($c)) if $c->debug;
     
 }
 
