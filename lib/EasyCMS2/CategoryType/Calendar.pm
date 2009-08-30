@@ -49,8 +49,8 @@ override 'index' => sub {
             label_loc => 'save',
         }));
         
-        $form->process($c->req);
-        $stash_add->{'book_form'} = $form;
+        $w->process($c->req);
+        $stash_add->{'book_form'} = $w;
         
         $c->log->debug($w);
         
@@ -68,7 +68,7 @@ override 'index' => sub {
 
             $w->model->update($page);
             # we also allow the category type to save its extensions.
-            $page->category->type->extend_page_save($r, $page);
+            $page->category->type->extend_page_save($w, $page);
             $page->update();
 
             $c->res->redirect($page->category->uri_for($c, {confirm => 1}));
