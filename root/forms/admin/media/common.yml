@@ -1,0 +1,15 @@
+---
+    elements:
+        -
+            type: Select
+            name: category
+            label_loc: category
+        -
+            type: Text
+            name: description
+            label_loc: description
+        -
+            type: Block
+            tag: span
+            name: media-preview
+        
