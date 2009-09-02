@@ -36,9 +36,6 @@ requires 'Catalyst::View::JSON' => 0;
 requires 'DateTime::Format::DBI' => 0.031;
 requires 'Calendar::Calendar' => 0;
 requires 'DBIx::Class' => 0.08003;
-requires 'DBIx::Class::HTMLWidget' => 0.09;
-requires 'HTML::Widget' => '1.11';
-requires 'Catalyst::Plugin::HTML::Widget' => 0;
 
 requires 'HTML::FormFu';
 requires 'HTML::FormFu::Model::DBIC';

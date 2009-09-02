@@ -5,7 +5,7 @@ use base qw/DBIx::Class/;
 #use EasyCMS2::CategoryType;
 use EasyCMS2::Extra;
 
-__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('category');
 
 __PACKAGE__->add_columns(

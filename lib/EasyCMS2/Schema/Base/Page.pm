@@ -20,7 +20,7 @@ use Data::Dumper::Simple;
 
 use EasyCMS2::Extra;
 
-__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('page');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },

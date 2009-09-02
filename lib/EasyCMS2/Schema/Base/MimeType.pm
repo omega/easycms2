@@ -8,7 +8,7 @@ use base qw/DBIx::Class/;
 use Imager;
 use Data::Dumper::Simple;
 
-__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('mimetype');
 
 __PACKAGE__->add_columns(

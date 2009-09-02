@@ -9,7 +9,7 @@ $textile->charset('utf-8');
 
 
 
-__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('comment');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
