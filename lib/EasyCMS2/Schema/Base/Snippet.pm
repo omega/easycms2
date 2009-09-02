@@ -6,7 +6,7 @@ use warnings;
 use base qw/DBIx::Class/;
 
 use EasyCMS2::Schema::ResultSet::Categorised;
-__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('snippet');
 
 __PACKAGE__->add_columns(

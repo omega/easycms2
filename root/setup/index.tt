@@ -1,21 +1,21 @@
-[% INCLUDE header.tt %]
+[% INCLUDE setup/inc/header.tt %]
 
 <div id="setup">
-    <h1>Welcome!</h1>
+    <h2>Welcome!</h2>
     <p>This page lets you recover your EasyCMS2 instalation if you ever mess up badly.
         It also lets you setup your instalation the first time
     </p>
     
-    <h2>Setup steps</h2>
+    <h3>Setup steps</h3>
     
     <ul>
         <li id="step1">Initial setup [% IF c.setting('init_step') && c.setting('init_step') >= 1 %](completed)[% ELSE %]<a href="[% c.uri_for('/setup/step1') %]">Do it</a>[% END %]</li>
     </ul>
     
-    <h2>Recovery</h2>
+    <h3>Recovery</h3>
     <ul>
         <li id="reset_admin_pw"><a href="[% c.uri_for('/setup/reset_admin_pw') %]">Reset admin password</a></li>
     </ul>
 </div>
 
-[% INCLUDE footer.tt %]
+[% INCLUDE setup/inc/footer.tt %]

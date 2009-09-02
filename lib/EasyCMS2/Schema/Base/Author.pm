@@ -3,7 +3,7 @@ package EasyCMS2::Schema::Base::Author;
 use base qw/DBIx::Class/;
 use Digest::SHA1 qw/sha1_hex/;
 
-__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('author');
 
 __PACKAGE__->add_columns(

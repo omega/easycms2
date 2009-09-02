@@ -1,0 +1,24 @@
+---
+default_model: DBIC
+elements:
+    -
+        type: Password
+        name: password
+        label_loc: password
+        constraints:
+            -
+                type: Required
+    -
+        type: Password
+        name: confirm_password
+        label_loc: confirm_password
+        constraints:
+            -
+                type: Required
+            -
+                type: Equal
+                others: password
+    -
+        type: Submit
+        name: submit
+        value_loc: reset_password

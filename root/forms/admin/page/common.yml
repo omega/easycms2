@@ -1,0 +1,31 @@
+---
+    elements:
+        -
+            type: Text
+            name: title
+            label_loc: title
+            constraints:
+                - Required
+        -
+            type: Textarea
+            name: body
+            label_loc: body
+        -
+            type: Select
+            name: category
+            label_loc: category
+        -
+            type: Select
+            name: template
+            label_loc: template
+        -
+            type: Checkbox
+            name: allow_comments
+            label_loc: allow_comments
+        -
+            type: Text
+            name: tags
+            label_loc: tags
+            comment_loc: tags_help_text
+            
+        

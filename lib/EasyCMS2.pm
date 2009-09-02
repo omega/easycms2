@@ -21,9 +21,6 @@ use Catalyst qw/
         Session
         Session::Store::FastMmap
         Session::State::Cookie
-
-
-        HTML::Widget 
         
         Static::Simple 
         Server

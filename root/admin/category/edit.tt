@@ -7,5 +7,5 @@
     <li># of pictures: [% object.pictures.size %]</li>
     <li># of pages: [% object.pages.size %]</li>
 </ul>
-[% result.as_xml %]
+[% form %]
 [% PROCESS footer.tt %]

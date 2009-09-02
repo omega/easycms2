@@ -2,7 +2,7 @@ package EasyCMS2::Controller::Admin::Category::Snippet;
 
 use strict;
 use warnings;
-use base 'Catalyst::Controller::BindLex';
+use base qw(Catalyst::Controller::HTML::FormFu Catalyst::Controller::BindLex);
 __PACKAGE__->config->{unsafe_bindlex_ok} = 1;
 
 =head1 NAME
@@ -22,60 +22,55 @@ Catalyst Controller.
 
 =cut
 
-sub list : Chained('/admin/category/category') PathPart('snippets') Args(0) {
+sub list : Chained('/admin/category/load') PathPart('snippets') Args(0) {
     my ($self, $c) = @_;
     my $object : Stashed;
     
     my $root : Stashed = $object->snippets;
 }
 
-sub chain : Chained('/admin/category/category') CaptureArgs(0) PathPart('snippets') {
+sub chain : Chained('/admin/category/load') CaptureArgs(0) PathPart('snippets') {
     
 }
 
-sub chain_capture : Chained('/admin/category/category') CaptureArgs(1) PathPart('snippets') {
+sub chain_capture : Chained('/admin/category/load') CaptureArgs(1) PathPart('snippets') {
     my ($self, $c, $id) = @_;
     
     my $snippet : Stashed = $c->model('Base::Snippet')->find($id);    
 }
-sub create : Chained('chain') PathPart('create') Args(0) {
+sub create : Chained('chain') PathPart('create') Args(0) FormConfig {
     my ($self, $c) = @_;
     my $object : Stashed;
     
     my $snippet : Stashed = $c->model('Base::Snippet')->new({ category => $object->id });
     
-    $c->forward('edit');    
+    $c->forward('doit');    
 }
 
-sub edit : Chained('chain_capture') PathPart('edit') Args(0) {
+sub edit : Chained('chain_capture') PathPart('edit') Args(0) FormConfig {
     my ($self, $c) = @_;
+    
+    $c->forward('doit');
+}
+sub doit : Private {
+    my ( $self, $c ) = @_;
     
     my $snippet : Stashed;
     my $object : Stashed;
+    my $form : Stashed;
     
-    $c->widget('edit_snippet')->method('post')->action($c->uri_for('/admin/category', $object->id, 
-        'snippets', ($c->action->name =~ m/create/ ? 'create' : $snippet->id . '/edit')));
-    $c->widget('edit_snippet')->indicator('name');
-    
-    $c->widget('edit_snippet')->element('Textfield','name')->label('Name');
-    $c->widget('edit_snippet')->element('Textarea','text')->label('Text');
-    
-    $c->widget('edit_snippet')->element('Submit','save')->label('Save');
-    $c->widget('edit_snippet')->element('Submit','save')->label('Save and close');
-    
-    my $result : Stashed = $c->widget_result($c->widget('edit_snippet'));
-    
-    if (! $result->has_errors and $c->req->method() eq 'POST') {
+    if ($form->submitted_and_valid) {
         
-        $snippet->populate_from_widget($result);
-        $snippet->update();
+        $form->model->update($snippet);
+
         if ($c->req->param('save') ne 'Save') {
             $c->res->redirect($c->uri_for('/admin/category', $object->id, 'snippets'));
         } else {
             $c->res->redirect($c->uri_for('/admin/category', $object->id, 'snippets', $snippet->id , 'edit'));
         }
+    } elsif (!$form->submitted) {
+        $form->model->default_values( $snippet );
     }
-    $snippet->fill_widget($c->widget('edit_snippet'));
 }
 
 sub delete : Chained('chain_capture') PathPart('delete') Args(0) {

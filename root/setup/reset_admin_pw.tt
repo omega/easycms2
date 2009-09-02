@@ -1,4 +1,5 @@
-[% INCLUDE header.tt %]
+[% INCLUDE setup/inc/header.tt %]
+<h2>Reset password for admin user</h2>
 [% message %]
-[% result.as_xml %]
-[% INCLUDE footer.tt %]
+[% form %]
+[% INCLUDE setup/inc/footer.tt %]

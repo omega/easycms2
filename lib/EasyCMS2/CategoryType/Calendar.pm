@@ -29,36 +29,46 @@ override 'index' => sub {
     
     if ($c->req->param('from')) {
         # Present a form
-        my $w = $c->widget('booking');
-
-        my $a = $c->model('Base::Author')->find_or_create({name => 'Bookings', 
-            login => 'booking', password => 'apejens'});
-        my $page = $c->model('Base::Page')->new({author => $a->id, category => $self->row->id,
-            from_date => $c->req->param('from') });
+        my $w = HTML::FormFu->new();
         
-        $w = $self->extend_page_widget($w, $page, 0);
-        $w->element('Submit','save')->label('Save');
+        my $a = $c->model('Base::Author')->find_or_create({
+            name => 'Bookings', 
+            login => 'booking', 
+            password => 'apejens'
+        });
+        my $page = $c->model('Base::Page')->new({
+            author => $a->id, 
+            category => $self->row->id,
+            from_date => $c->req->param('from') 
+        });
         
-        my $r = $c->widget_result($w);
-        $stash_add->{'book_form'} = $r;
+        $self->extend_page_form($w, $page, 0);
+        $self->insert_elements($w->element({
+            type => 'Submit',
+            name => 'save',
+            label_loc => 'save',
+        }));
+        
+        $w->process($c->req);
+        $stash_add->{'book_form'} = $w;
         
         $c->log->debug($w);
         
-        if ($c->req->method eq 'POST' and ! $r->has_errors ) {
+        if ($w->submitted_and_valid ) {
             $c->log->debug("SHOULD SAVE PAGE");
             
             my $title = "Booking: " . $page->from_date->ymd("-");
-            $page->title($title);
-            $page->body($title);
+            $w->add_valid(title => $title);
+            $w->add_valid(body => $title);
             
             $title = lc($title);
             $title =~ s/[^a-z0-9_-]+/_/g;
-            $page->url_title($title);
-            $page->populate_from_widget($r);
+            
+            $w->add_valid(url_title => $title);
 
-
+            $w->model->update($page);
             # we also allow the category type to save its extensions.
-            $page->category->type->extend_page_save($r, $page);
+            $page->category->type->extend_page_save($w, $page);
             $page->update();
 
             $c->res->redirect($page->category->uri_for($c, {confirm => 1}));
@@ -91,46 +101,94 @@ override 'index' => sub {
     return $stash_add;
 };
 
-override 'extend_page_widget' => sub {
+override 'extend_page_form' => sub {
     my $self = shift;
-    my $widget = shift;
+    my $form = shift;
     my $page = shift;
     my $admin = shift;
 
     if ($admin) {
-        $widget->element('Checkbox', 'confirmed')->label('Confirmed')
-            ->checked( $page->get_extra('confirmed') ? 1 : 0 )
+        $self->insert_elements(
+            $form, $form->element({
+                type => 'Checkbox',
+                name => 'confirmed',
+                label_loc => 'confirmed',
+            })->checked( $page->get_extra('confirmed') ? 1 : 0 ))
     }
-    
-    $widget->element('Textfield', 'from_date')->label('From')
-        ->value($page->from_date ? $page->from_date->ymd('-') : undef);
-    $widget->element('Textfield', 'to_date')->label('To')
-        ->value($page->to_date ? $page->to_date->ymd('-') : undef);
-    $widget->element('Textfield', 'booker_name')->label('Booker')->value($page->get_extra('booker_name'));
-    $widget->element('Textfield', 'booker_email')->label('Email')->value($page->get_extra('booker_email'));
-    $widget->element('Textfield', 'booker_phone')->label('Phone')->value($page->get_extra('booker_phone'));
-    $widget->element('Textfield', 'booker_addr1')->label('Address')->value($page->get_extra('booker_addr1'));
-    $widget->element('Textfield', 'booker_addr2')->label('Address #2')->value($page->get_extra('booker_addr2'));
-    $widget->element('Textfield', 'booker_zip')->label('Zip-code')->value($page->get_extra('booker_zip'));
-    $widget->element('Textfield', 'booker_city')->label('City')->value($page->get_extra('booker_city'));
-    $widget->element('Textfield', 'booker_number')->label('Number')->value($page->get_extra('booker_number'));
-    return $widget;
+    $self->insert_elements(
+        $form,
+        $form->element({
+            type => 'Text',
+            name => 'from_date',
+            label_loc => 'from',
+        })->value($page->from_date ? $page->from_date->ymd('-') : undef),
+        
+        $form->element({
+            type => 'Text',
+            name => 'to_date',
+            label => 'to',
+        })->value($page->to_date ? $page->to_date->ymd('-') : undef),
+        $form->element({
+            type => 'Text',
+            name => 'booker_name',
+            label_loc => 'booker',
+        })->value($page->get_extra('booker_name')),
+        $form->element({
+            type => 'Text',
+            name => 'booker_email',
+            label_loc => 'email'
+        })->value($page->get_extra('booker_email')),
+        $form->element({
+            type => 'Text',
+            name => 'booker_phone',
+            label_loc => 'phone'
+        })->value($page->get_extra('booker_phone')),
+        $form->element({
+            type => 'Text',
+            name => 'booker_addr1',
+            label_loc => 'address'
+        })->value($page->get_extra('booker_addr1')),
+        $form->element({
+            type => 'Text',
+            name => 'booker_addr2',
+            label_loc => ''
+        })->value($page->get_extra('booker_addr2')),
+        $form->element({
+            type => 'Text',
+            name => 'booker_zip',
+            label_loc => 'zip-code'
+        })->value($page->get_extra('booker_zip')),
+        $form->element({
+            type => 'Text',
+            name => 'booker_city',
+            label_loc => 'city'
+        })->value($page->get_extra('booker_city')),
+        $form->element({
+            type => 'Text',
+            name => 'booker_number',
+            label_loc => 'number'
+        })->value($page->get_extra('booker_number')),
+        
+        
+        
+    );
+    return $form;
 };
 
 override 'extend_page_save' => sub {
     my $self = shift;
-    my $result = shift;
+    my $form = shift;
     my $page = shift;
     
-    $page->set_extra('confirmed', $result->param('confirmed'));
-    $page->set_extra('booker_name', $result->param('booker_name'));
-    $page->set_extra('booker_email', $result->param('booker_email'));
-    $page->set_extra('booker_phone', $result->param('booker_phone'));
-    $page->set_extra('booker_addr1', $result->param('booker_addr1'));
-    $page->set_extra('booker_addr2', $result->param('booker_addr2'));
-    $page->set_extra('booker_zip', $result->param('booker_zip'));
-    $page->set_extra('booker_city', $result->param('booker_city'));
-    $page->set_extra('booker_number', $result->param('booker_number'));
+    $page->set_extra('confirmed', $form->param('confirmed'));
+    $page->set_extra('booker_name', $form->param('booker_name'));
+    $page->set_extra('booker_email', $form->param('booker_email'));
+    $page->set_extra('booker_phone', $form->param('booker_phone'));
+    $page->set_extra('booker_addr1', $form->param('booker_addr1'));
+    $page->set_extra('booker_addr2', $form->param('booker_addr2'));
+    $page->set_extra('booker_zip', $form->param('booker_zip'));
+    $page->set_extra('booker_city', $form->param('booker_city'));
+    $page->set_extra('booker_number', $form->param('booker_number'));
     
 };
 1;

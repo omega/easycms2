@@ -1,0 +1,11 @@
+---
+    elements:
+        -
+            type: Text
+            name: name
+            label_loc: name
+        -
+            type: Textarea
+            name: text
+            label_loc: snippet_content
+            

@@ -7,7 +7,7 @@ use Imager;
 
 use base qw/DBIx::Class/;
 
-__PACKAGE__->load_components(qw/PK::Auto Core HTMLWidget/);
+__PACKAGE__->load_components(qw/PK::Auto Core/);
 __PACKAGE__->table('media');
 
 __PACKAGE__->add_columns(

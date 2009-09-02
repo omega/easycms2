@@ -2,7 +2,7 @@ package EasyCMS2::Controller::Admin::Media;
 
 use strict;
 use warnings;
-use base 'Catalyst::Controller::BindLex';
+use base qw(Catalyst::Controller::HTML::FormFu Catalyst::Controller::BindLex);
 __PACKAGE__->config->{unsafe_bindlex_ok} = 1;
 
 =head1 NAME
@@ -26,7 +26,6 @@ sub index : Private {
     my ( $self, $c ) = @_;
     
     $c->forward('list');
-    
 }
 
 sub list : Private {
@@ -42,53 +41,71 @@ sub load : Chained('/admin/admin') PathPart('media') CaptureArgs(1) {
 
 }
 
-sub create : Local {
+sub create : Local FormConfig {
     my ( $self, $c ) = @_;
     my $category = $c->req->param('category');  
     my $object : Stashed = $c->model('Base::Media')->new({ category => $category });
     
-    $c->forward('edit');
+    my $form : Stashed;
+    # Add the file selector
+    
+    my $file = $form->element({
+        type => 'File',
+        name => 'file',
+        label_loc => 'file',
+    });
+    my $pos = $form->get_all_element( { type => 'Text', name => 'description'});
+    $form->insert_after($file, $pos);
+    
+    $c->forward('doit');
 }
 
-sub edit : Chained('load') Args(0) {
+sub edit : Chained('load') Args(0) formConfig {
     my ( $self, $c ) = @_;
+    
+    $c->forward('doit');
+}
+sub doit : Private {
+    my ( $self, $c ) = @_;
+    
     my $object : Stashed;
     
     die "no media" unless $object;
     
-    $c->widget('edit_media')->method('post')->action($c->uri_for($c->action->name(), $object->id ));
-    $c->widget('edit_media')->indicator(sub { $c->req->method eq 'POST' } );
+    my $form : Stashed;
+    
     {
         my $roots = $c->model('Base::Category')->search({parent => undef}, {order_by => 'name'});
         my @categories;
         while (my $root = $roots->next) {
             push @categories, $root->node('-- ');
         }
-        my $category_select = $c->widget('edit_media')->element('Select','category')->label('Category')->options(
-            map { $_->{id} => $_->{name} } @categories
+        $form->get_all_element({
+            type => 'Select', 
+            name => 'category'
+        })->options(
+            [map { [$_->{id} => $_->{name}] } @categories]
         );
     }
-    $c->widget('edit_media')->element('Textfield','description')->label('Description');
-    $c->widget('edit_media')->element('Upload','file')->label('File') unless $object->filename();
-    $c->widget('edit_media')->element('Submit','save')->label('Save');
-    $c->widget('edit_media')->element('Span', 'media-preview')
+
+    # Add media preview
+    $form->get_all_element({ type => 'Block', name => 'media-preview'})
         ->content(HTML::Element->new('img', src => $object->uri_for($c) )) if $object->filename;
 
-    my $result : Stashed = $c->widget_result($c->widget('edit_media'));
+    # Add the file select element unless this is already an uploaded file
     
-    if (! $result->has_errors and $c->req->method() eq 'POST') {
+    if ($form->submitted_and_valid) {
         
-        $object->populate_from_widget($result);
-        $c->log->debug("media object id: " . $object->id);
+        $form->model->update( $object );
+        $c->log->debug("media object id: " . $object->id) if $c->debug;
         $object->file($c->req->upload('file')) if $c->req->upload('file');
         
         $object->update();
         $c->res->redirect($c->uri_for(''));
+    } elsif (!$form->submitted) {
+        $form->model->default_values( $object );
     }
-    $object->fill_widget($c->widget('edit_media'));
-    $c->log->debug('uri_for:' . $object->uri_for($c));
-    
-    
+    $c->log->debug('uri_for:' . $object->uri_for($c)) if $c->debug;
 }
 
 sub delete : Chained('load') Args(0) {

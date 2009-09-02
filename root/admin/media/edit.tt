@@ -4,5 +4,5 @@
     <li>Imager-support: [% object.type.check_imager %]</li>
     <li>"[% object.uri_for(c, "thumb") %]"</li>
 </ul>
-[% result.as_xml %]
+[% form %]
 [% PROCESS footer.tt %]

@@ -77,22 +77,31 @@ sub public {
 sub order_by {
     return "title";
 }
-sub extend_category_widget {
+sub extend_category_form {
     my $self = shift;
-    my $widget = shift;
+    my $form = shift;
     my $page = shift;
     
 }
-sub extend_page_widget {
+sub extend_page_form {
     my $self = shift;
-    my $widget = shift;
+    my $form = shift;
     my $page = shift;
 }
 
 sub extend_page_save {
     my $self = shift;
-    my $result = shift;
+    my $form = shift;
     my $page = shift;
+}
+
+sub insert_elements {
+    my $self = shift;
+    my $form = shift;
     
+    my $position = $form->get_all_element({ type => 'Submit' });
+    while (my $elem = shift) {
+        $form->insert_before($elem, $position);
+    }
 }
 1;

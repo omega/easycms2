@@ -23,134 +23,164 @@ Catalyst Controller.
 
 sub auto : Private {
     my ( $self, $c ) = @_;
-    unless ($c->user_exists && $c->user_in_realm('recovery')) {
+    unless ( $c->user_exists && $c->user_in_realm('recovery') ) {
         $c->forward('/setup/login');
-        $c->log($c->user);
-        return 0 unless ($c->user_exists && $c->user_in_realm('recovery'));
+        $c->log->debug( $c->user ) if $c->debug && $c->user_exists;
+        return 0 unless ( $c->user_exists && $c->user_in_realm('recovery') );
     }
-
     return 1;
 }
+
 sub begin : Private {
-    my ($self, $c) = @_;
-    my $templ : Stashed = $c->model('Base::Template')->find({ name => 'Admin template'});
+    my ( $self, $c ) = @_;
+    my $templ : Stashed =
+      $c->model('Base::Template')->find( { name => 'Admin template' } );
 }
 
 sub index : Private {
     my ( $self, $c ) = @_;
-    
+
     # do app-initialization, unless its already been done!
 
 }
-sub login : Local {
-    my ( $self, $c ) = @_;
-    
-    if ($c->req->param('pw')) {
-		$c->authenticate(
-		    {
-		        username => 'setup',
-		        password => $c->req->param('pw')
-		    }, 'recovery') 
-			or my $loginfailed : Stashed = 'Could not log you in.';
-	}
-	unless ($c->user_exists && $c->user_in_realm('recovery')) {
-	    $c->widget('login')->method('post')->action($c->uri_for(''));
-        $c->widget('login')->indicator(sub { $c->req->method eq 'POST' } );
 
-        $c->widget('login')->element('Password','pw')->label('Password');
-        
-        $c->widget('login')->element('Submit','login')->label('Login');
-        
-		my $result : Stashed = $c->widget_result('login');
-	
-	    my $template : Stashed = 'setup/login.tt';
-	    
-	} else {
-	    $c->res->redirect($c->uri_for('/setup'));
-	}
-	
+sub login : Local : FormConfig {
+    my ( $self, $c ) = @_;
+    if ( $c->req->param('pw') ) {
+        $c->authenticate(
+            {
+                username => 'setup',
+                password => $c->req->param('pw')
+            },
+            'recovery'
+        ) or my $loginfailed : Stashed = 'Could not log you in.';
+    }
+    if ( $c->user_exists && $c->user_in_realm('recovery') ) {
+        $c->res->redirect( $c->uri_for('/setup') );
+    }
     
+    $c->stash( template => 'setup/login.tt' );
+
 }
-sub reset_admin_pw : Local {
-    my ($self, $c) = @_;
+
+sub reset_admin_pw : Local : FormConfig {
+    my ( $self, $c ) = @_;
+
     # check that we have a admin-user to reset
     my $message : Stashed;
-    my $object : Stashed = $c->model('Base::Author')->find({login => 'admin'});
+    my $form : Stashed;
+    
+    my $object : Stashed =
+      $c->model('Base::Author')->find( { login => 'admin' } );
     unless ($object) {
+
         # no admin-user found, create one?
         $message = "No admin user found";
-    } else {
-        $c->widget('edit_author')->method('post')->action($c->uri_for($c->action->name(), $object->id ));
-        $c->widget('edit_author')->indicator(sub { $c->req->method eq 'POST' } );
-        $c->widget('edit_author')->element('Password','password')->label('Password');
-        $c->widget('edit_author')->element('Password','confirm_password')->label('Confirm password');
-
-        $c->widget('edit_author')->element('Submit','save')->label('Set password');
-
-        $c->widget('edit_author')->constraint('All', 'password', 'confirm_password');
-        $c->widget('edit_author')->constraint('Equal', 'password', 'confirm_password');
-
-        my $result : Stashed = $c->widget_result($c->widget('edit_author'));
-
-        if (! $result->has_errors and $c->req->method() eq 'POST') {
-
-            $object->populate_from_widget($result);
-            $c->res->redirect($c->uri_for('/setup'));
-        }
-        
     }
+    else {
+
+
+        if ($form->submitted_and_valid) {
+            $form->model()->update($object);
+            $c->res->redirect( $c->uri_for('/setup') );
+
+        }
+    }
+}
+sub log : Private {
+    my ($self, $c, $str) = @_;
+
+    unless (ref($str) eq 'HASH') {
+        $str = {
+            title => $str,
+        }
+    }
+    
+    my $setup_log : Stashed;
+    $setup_log ||= [];
+    
+    push(@$setup_log, $str);
+}
+
+sub fatal : Private {
+    my ( $self, $c, $str ) = @_;
+    unless (ref($str) eq 'HASH') {
+        $str = {
+            title => $str,
+        }
+    }
+    $str->{fatal} = 1;
+    my $setup_fatal : Stashed = 1;
+    $self->log( $c, $str )
 }
 sub step1 : Local {
     my ( $self, $c ) = @_;
 
+    $self->log($c, "Starting setup step 1");
     my $file_store = $c->config()->{'file_store'};
-    unless (-w $file_store) {
-        die "cannot write to file_store: $file_store";
+    
+    unless ( -w $file_store ) {
+        $c->detach('fatal', [{
+            title => "I cannot write to configured upload location",
+            description => <<__DESC__
+You have configured your upload location to be <em>$file_store</em>, however
+whomever you have me configured to be does not seem to have write 
+access to that location, or perhaps it simply does not exists?
+__DESC__
+        }] );
     }
-    # Create an default author, that is admin
-    # FIXME: Should autogenerate perhaps?
-    
-    $c->log->debug('Creating or updating mime-type-table');
-    
+    $self->log($c, 'Creating or updating mime-type-table');
+
     my $mime_type_file = $c->path_to('/db/mime.types');
     open MIME, $mime_type_file or die "cannot read $mime_type_file: $!";
     my $mime_content;
-    { local $/; $mime_content = <MIME>;}
+    { local $/; $mime_content = <MIME>; }
     close MIME;
-    
-    my @mimetypes = grep { $_ !~ /^\#/ } split(/\n/, $mime_content);
-    
-    $c->log->debug(' found ' . scalar(@mimetypes) . " mimetypes in file");
-    
+
+    my @mimetypes = grep { $_ !~ /^\#/ } split( /\n/, $mime_content );
+
+    $self->log($c,  ' found ' . scalar(@mimetypes) . " mimetypes in file" );
+
     foreach my $line (@mimetypes) {
-        next if ($line =~ /^\s*$/);
-        my ($type, $extensions) = split(/\s/, $line);
+        next if ( $line =~ /^\s*$/ );
+        my ( $type, $extensions ) = split( /\s/, $line );
         my $mt;
-        unless ( $mt = $c->model('Base::MimeType')->find({'type' => $type,}) ) {
-            $mt = $c->model('Base::MimeType')->create({
-                'type' => $type,
-                'name' => $type,
-                'extensions' => $extensions,
-            });
+        unless ( $mt =
+            $c->model('Base::MimeType')->find( { 'type' => $type, } ) )
+        {
+            $mt = $c->model('Base::MimeType')->create(
+                {
+                    'type'       => $type,
+                    'name'       => $type,
+                    'extensions' => $extensions,
+                }
+            );
         }
         if ($mt) {
             my $icon;
             my $icon_guess = $type . ".png";
             $icon_guess =~ s|/|-|;
-            if (-f $c->path_to('/root/static/images/icons/mimetypes', $icon_guess)) {
+            if (
+                -f $c->path_to(
+                    '/root/static/images/icons/mimetypes', $icon_guess
+                )
+              )
+            {
                 $icon = $icon_guess;
-            } else {
+            }
+            else {
+
                 # We need to be clever!
                 my $clever_searches = {
                     'image-x-generic.png' => qr/^image/,
                     'audio-x-generic.png' => qr/^audio/,
-                    'text-x-generic.png' => qr/^text/,
+                    'text-x-generic.png'  => qr/^text/,
                     'video-x-generic.png' => qr/^video/,
                 };
 
-                foreach $icon_guess (keys %$clever_searches) {
+                foreach $icon_guess ( keys %$clever_searches ) {
                     my $re = $clever_searches->{$icon_guess};
-                    $icon = $icon_guess if ($type =~ $re);
+                    $icon = $icon_guess if ( $type =~ $re );
                 }
             }
             $mt->icon($icon) if $icon;
@@ -158,28 +188,40 @@ sub step1 : Local {
 
         }
     }
-    
-    $c->log->debug('creating admin-author');
-    
+
+    # Create an default author, that is admin
+    # FIXME: Should autogenerate perhaps?
+
+
+    $self->log($c, 'creating admin-author');
+
     my $admin_pw : Stashed = 'admin';
-    
+
     my $def_user;
-    unless($def_user = $c->model('Base::Author')->find({login => 'admin'})) {
-        $def_user = $c->model('Base::Author')->create({
-            'login' => 'admin',
-            'password' => $admin_pw,
-            'name' => 'Admin pwnz',      
-        });
-    }    
-    $c->log->debug("user: " . $def_user->id);
-    # create the "main template", which the others will inherit from, that has the basic
-    # HTML structure and head etc.
+    unless ( $def_user =
+        $c->model('Base::Author')->find( { login => 'admin' } ) )
+    {
+        $def_user = $c->model('Base::Author')->create(
+            {
+                'login'    => 'admin',
+                'password' => $admin_pw,
+                'name'     => 'Admin pwnz',
+            }
+        );
+    }
+    $self->log($c,  "user: " . $def_user->id );
+
+# create the "main template", which the others will inherit from, that has the basic
+# HTML structure and head etc.
 
     my $def_template;
-    unless ($def_template = $c->model('Base::Template')->find({name => 'Root template'})) {
-        $def_template = $c->model('Base::Template')->create({
-            'name' => 'Root template',
-            'before' => <<__END__
+    unless ( $def_template =
+        $c->model('Base::Template')->find( { name => 'Root template' } ) )
+    {
+        $def_template = $c->model('Base::Template')->create(
+            {
+                'name'   => 'Root template',
+                'before' => <<__END__
 <html>
     <head>
         <title>[% title %]</title>
@@ -192,25 +234,33 @@ sub step1 : Local {
     </head>
     <body[% IF onload %] onload="[% FOREACH onl IN onload %][% onl %];[% END %]"[% END %]>
 __END__
-        ,
-        'after' => <<__END__
+                ,
+                'after' => <<__END__
     </body>
 </html>
 __END__
-        ,
-        });
+                ,
+            }
+        );
     }
-     
-    $c->log->debug("template: " . $def_template->id);
-    
+
+    $self->log($c,  "template: " . $def_template->id );
+
     my $admin_template;
-    unless ($admin_template = $c->model('Base::Template')->find({
-        name => 'Admin template', parent => $def_template->id
-    })) {
-        $admin_template = $c->model('Base::Template')->create({
-            'name' => 'Admin template',
-            'parent' => $def_template->id,
-            'before' => << "END"
+    unless (
+        $admin_template = $c->model('Base::Template')->find(
+            {
+                name   => 'Admin template',
+                parent => $def_template->id
+            }
+        )
+      )
+    {
+        $admin_template = $c->model('Base::Template')->create(
+            {
+                'name'   => 'Admin template',
+                'parent' => $def_template->id,
+                'before' => << "END"
         <h1>Administration</h1>
         <div id="admin">
             <div id="menu">
@@ -219,47 +269,55 @@ __END__
             [% IF message %]<p class="message">[% message %]</p>[% END %]
             [% IF error %]<p class="error">[% error %]</p>[% END %]
 END
-            ,
-            'after' => << "END"
+                ,
+                'after' => << "END"
         </div>
 END
-            ,
-        });
+                ,
+            }
+        );
     }
-    
+
     my $def_cat;
-    unless ($def_cat = $c->model('Base::Category')->find({name => 'Default Category', parent => undef}) ) {
-        $def_cat = $c->model('Base::Category')->create({
-            template => $def_template->id,
-            name => 'Default category',
-            url_name => 'default_category',
-        });
+    unless ( $def_cat =
+        $c->model('Base::Category')
+        ->find( { name => 'Default Category', parent => undef } ) )
+    {
+        $def_cat = $c->model('Base::Category')->create(
+            {
+                template => $def_template->id,
+                name     => 'Default category',
+                url_name => 'default_category',
+            }
+        );
     }
-    
-    $c->log->debug("cat: " . $def_cat->id);
+
+    $self->log($c,  "cat: " . $def_cat->id );
     my $def_page;
-    unless ($def_page = $c->model('Base::Page')->find({url_title => 'default_page', category => $def_cat->id})) {
-        $def_page = $c->model('Base::Page')->create({
-            category => $def_cat->id,
-            author => $def_user->id,
-            title => 'Default page',
-            url_title => 'default_page',
-            body => <<__END__
+    unless ( $def_page =
+        $c->model('Base::Page')
+        ->find( { url_title => 'default_page', category => $def_cat->id } ) )
+    {
+        $def_page = $c->model('Base::Page')->create(
+            {
+                category  => $def_cat->id,
+                author    => $def_user->id,
+                title     => 'Default page',
+                url_title => 'default_page',
+                body      => <<__END__
 h1. hello and welcome! This is the default page, and will be the homepage untill you edit it
 
 To edit it, you should enter the admin-section.
 
 __END__
-        
-        });
+
+            }
+        );
     }
-    $c->log->debug('page: ' . $def_page->id);
-    $c->setting('init_step' => 1);
-    $c->setting('default-page' => $def_page->id);
-	$c->res->redirect($c->uri_for('/setup'));
-}    
-
-
+    $self->log($c,  'page: ' . $def_page->id );
+    $c->setting( 'init_step'    => 1 );
+    $c->setting( 'default-page' => $def_page->id );
+}
 
 =head1 AUTHOR
 
