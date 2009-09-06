@@ -22,8 +22,7 @@ elements:
             - Required
             - 
                 type: Regex
-                regex:
-                    - Common
+                common:
                     - Email
     - 
         type: Password
