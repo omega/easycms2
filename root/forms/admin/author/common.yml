@@ -19,11 +19,10 @@ elements:
         name: email
         label_loc: email
         constraints:
-            - Required
             - 
-                type: Regex
-                common:
-                    - Email
+                type: Required
+            - 
+                type: Email
     - 
         type: Password
         name: password

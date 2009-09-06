@@ -39,7 +39,7 @@ sub can_remove {
 sub remove {
     my $self = shift;
     if ($self->can_remove) {
-        #$self->delete();
+        $self->delete();
         return 1;
     } else {
         return 0;

@@ -63,6 +63,9 @@ sub doit : Private {
     
     if ($form->submitted_and_valid) {
         $form->model()->update($object);
+        
+        $c->res->redirect($c->uri_for($object->id, 'edit'));
+        
     }
 }
 
