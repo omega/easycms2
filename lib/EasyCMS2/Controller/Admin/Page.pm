@@ -143,6 +143,9 @@ sub doit : Private {
         
         # we also allow the category type to save its extensions.
         $object->category->type->extend_page_save($form, $object);
+        
+        # Fix tags
+        $object->set_tags($form->param_value('tags'));
         $object->update();
         
         if ($c->req->param('save') ne 'Save') {

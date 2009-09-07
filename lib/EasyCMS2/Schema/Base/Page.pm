@@ -186,16 +186,18 @@ sub comment_form {
 
 sub tags {
     my $self = shift;
-    
+
+
     if (@_) {
         # We need to set
-        $self->set_tags(@_);
+#        $self->set_tags(@_);
     }
     return $self->get_tags();
 }
+
+
 sub set_tags {
     my ($self, $tags) = @_;
-    warn "tagging page with '$tags'";
     $self->page_tags->delete_all;
     my @tags = $self->parse_tags($tags);
     foreach my $name (@tags) {
@@ -243,10 +245,10 @@ sub tag {
     my ($self, $name) = @_;
     return unless $name;
     $name = lc($name);
-    warn "creating relation for $name";
     my $tag = $self->result_source->schema->resultset('Tag')->find_or_create({
         'name' => $name
     });
+    
     $self->add_to_page_tags({'page' => $self, 'tag' => $tag});
 }
 
