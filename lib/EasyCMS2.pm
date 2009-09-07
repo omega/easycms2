@@ -1,7 +1,6 @@
 package EasyCMS2;
 
-use strict;
-use warnings;
+use Moose;
 
 #
 # Set flags and add plugins for the application
@@ -26,6 +25,13 @@ use Catalyst qw/
         Server
         Server::XMLRPC
 /;
+
+use CatalystX::RoleApplicator;
+
+extends 'Catalyst';
+__PACKAGE__->apply_request_class_roles(qw/
+    Catalyst::TraitFor::Request::ProxyBase
+/);
 
 our $VERSION = '0.13';
 
@@ -60,10 +66,10 @@ sub get_snippet {
     
     my $url = shift;
     
-    $self->log->debug('getting snippet with url: ' . $url) if $c->debug;
+    $self->log->debug('getting snippet with url: ' . $url) if $self->debug;
     my $snip = $self->model('Base::Snippet')->find_by_path($url);
     $self->log->debug("found snippet: " 
-        . ($snip ? $snip->name : "no snippet found")) if $c->debug;
+        . ($snip ? $snip->name : "no snippet found")) if $self->debug;
     my $args;
     unless (ref($self)) {
         $args = {'test' => 'test2'};
@@ -78,7 +84,7 @@ sub get_snippet {
     foreach my $key (keys %$stash_add) {
         $self->log->debug("Adding $key: " 
             . $stash_add->{$key} . " for snippet " 
-            . $snip->name . "(" . $snip->url_name . ")") if $c->debug;
+            . $snip->name . "(" . $snip->url_name . ")") if $self->debug;
         $args->{$snip->url_name}->{$key} = $stash_add->{$key};
     }
     $snip = $self->view('Default')->render_snippet(\($snip->text), $args);
