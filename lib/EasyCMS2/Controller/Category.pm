@@ -29,10 +29,10 @@ sub render : Local {
     my $tag : Stashed = $c->req->args->[1];
     my $stash_add = $cat->prepare_index($c, $c->stash->{rest_path});
     foreach my $key (keys %$stash_add) {
-        $c->log->debug('adding ' . $key . ' : ' . $stash_add->{$key});
+        $c->log->debug('adding ' . $key . ' : ' . $stash_add->{$key}) if $c->debug;
         $c->stash->{category}->{$key} = $stash_add->{$key};
     }
-    $c->log->debug('rendering category ' . $cat->id);
+    $c->log->debug('rendering category ' . $cat->id) if $c->debug;
     if ($cat) {
         $c->stash->{templ} = $cat->template;
         $c->stash->{template} = 'category/render.tt';    

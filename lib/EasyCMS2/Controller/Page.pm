@@ -28,7 +28,7 @@ sub render : Local {
     
     if ($page) {
         $c->stash->{templ} = $page->template || $page->category->template;
-        $c->log->debug('setting cat to ' . $page->category);
+        $c->log->debug('setting cat to ' . $page->category) if $c->debug;
         $c->stash->{cat} = $page->category;
 
         $c->stash->{template} = 'page/render.tt';    

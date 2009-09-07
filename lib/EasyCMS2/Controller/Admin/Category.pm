@@ -60,7 +60,7 @@ sub doit : Private {
     my ($self, $c) = @_;
     my $object : Stashed;
     if ($object) {
-        $c->log->debug('we have object: ' . $object->id);
+        $c->log->debug('we have object: ' . $object->id) if $c->debug;
     }
 
     my $form : Stashed;

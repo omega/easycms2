@@ -52,10 +52,10 @@ override 'index' => sub {
         $w->process($c->req);
         $stash_add->{'book_form'} = $w;
         
-        $c->log->debug($w);
+        $c->log->debug($w) if $c->debug;
         
         if ($w->submitted_and_valid ) {
-            $c->log->debug("SHOULD SAVE PAGE");
+            $c->log->debug("SHOULD SAVE PAGE") if $c->debug;
             
             my $title = "Booking: " . $page->from_date->ymd("-");
             $w->add_valid(title => $title);

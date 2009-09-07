@@ -60,13 +60,13 @@ sub default : Private {
     # alternate rendering formats are available as .<view>
 
     my ($tag);
-    $c->log->debug("args: " . scalar(@args));
+    $c->log->debug("args: " . scalar(@args)) if $c->debug;
     foreach my $i (0 .. scalar(@args)) {
-        $c->log->debug($args[$i]);
+        $c->log->debug($args[$i]) if $c->debug;
         if ($args[$i] && $args[$i] =~  m/!(.+)/) {
             my $t = $1;
             $t =~ s/\+/ /g;
-            $c->log->debug("tag: $t");
+            $c->log->debug("tag: $t") if $c->debug;
             delete $args[$i];
             $tag = $c->model('Base::Tag')->find({ name => $t});
         }
@@ -75,7 +75,7 @@ sub default : Private {
             delete $args[$i];
         }
     }
-    $c->log->debug("args: " . scalar(@args));
+    $c->log->debug("args: " . scalar(@args)) if $c->debug;
     
     return $c->detach('index') if scalar(@args) == 0;
 
@@ -114,7 +114,7 @@ sub default : Private {
         $c->forward('page/render', [$page]);
     } elsif ($category) {
         $c->stash->{rest_path} = join('/', grep { $_ && $_ ne ''} @args);
-        $c->log->debug('restpath: ' . $c->stash->{rest_path});
+        $c->log->debug('restpath: ' . $c->stash->{rest_path}) if $c->debug;
         $c->forward('category/render', [$category, $tag]);
     }
    

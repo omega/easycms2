@@ -34,7 +34,7 @@ sub css : Chained('template') Args(0) {
     
     my $template : Stashed;
     my $css = $template->get_css;
-    $c->log->debug($template->id);
+    $c->log->debug($template->id) if $c->debug;
     if ($css and $css ne '') {
         $c->res->body($css);
         $c->res->status(200);

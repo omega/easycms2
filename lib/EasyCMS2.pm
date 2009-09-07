@@ -60,9 +60,10 @@ sub get_snippet {
     
     my $url = shift;
     
-    $self->log->debug('getting snippet with url: ' . $url);
+    $self->log->debug('getting snippet with url: ' . $url) if $c->debug;
     my $snip = $self->model('Base::Snippet')->find_by_path($url);
-    $self->log->debug("found snippet: " . ($snip ? $snip->name : "no snippet found"));
+    $self->log->debug("found snippet: " 
+        . ($snip ? $snip->name : "no snippet found")) if $c->debug;
     my $args;
     unless (ref($self)) {
         $args = {'test' => 'test2'};
@@ -75,7 +76,9 @@ sub get_snippet {
     my $stash_add = $snip->category->prepare_index($self);
     
     foreach my $key (keys %$stash_add) {
-        $self->log->debug("Adding $key: " . $stash_add->{$key} . " for snippet " . $snip->name . "(" . $snip->url_name . ")");
+        $self->log->debug("Adding $key: " 
+            . $stash_add->{$key} . " for snippet " 
+            . $snip->name . "(" . $snip->url_name . ")") if $c->debug;
         $args->{$snip->url_name}->{$key} = $stash_add->{$key};
     }
     $snip = $self->view('Default')->render_snippet(\($snip->text), $args);

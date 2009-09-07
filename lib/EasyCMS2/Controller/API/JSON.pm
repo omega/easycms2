@@ -27,7 +27,7 @@ sub default : Private {
     my $func = pop @args;
     my $rel = pop @args;
     
-    $c->log->debug('func: ' . $func . " rel: " . $rel);
+    $c->log->debug('func: ' . $func . " rel: " . $rel) if $c->debug;
     
     my $model = $c->model('Base::' . ucfirst($rel));
     
@@ -37,7 +37,7 @@ sub default : Private {
         while (my $obj = $objs->next) {
             push @$api_list, $obj->toHash;
         }
-        $c->log->debug('found ' . $objs->count . " objects");
+        $c->log->debug('found ' . $objs->count . " objects") if $c->debug;
     }
     
 }

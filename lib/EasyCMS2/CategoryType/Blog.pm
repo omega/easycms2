@@ -49,7 +49,7 @@ override  'index' => sub {
             $hashref->{'archive_start'} = $datetime->clone->subtract(months => 1);
             $hashref->{'archive_title'} = $datetime->year;
         }
-        $c->log->debug("archive request");
+        $c->log->debug("archive request") if $c->debug;
         my $posts = $self->row->pages({ 
             created => { -between => [$hashref->{archive_start}, $hashref->{archive_end}]}
         }, {order_by => 'created desc'});
@@ -59,7 +59,7 @@ override  'index' => sub {
         $hashref->{'posts'} = $self->row->pages({}, {order_by => 'created desc', rows => 5});
     }
     if ($tag) {
-        $c->log->debug("constraining resultset posts to a given tag");
+        $c->log->debug("constraining resultset posts to a given tag") if $c->debug;
         $hashref->{'posts'} = $hashref->{'posts'}->search({
             'page_tags.tag' => $tag->id,
         }, {
