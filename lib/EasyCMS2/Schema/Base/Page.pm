@@ -9,18 +9,11 @@ use Text::Textile;
 my $textile=Text::Textile->new();
 $textile->charset('utf-8');
 
-
-use DateTime::Format::DBI;
-%DateTime::Format::DBI::db_to_parser = (
-    'mysql'	=> 'DateTime::Format::MySQL',
-    'pg'		=> 'DateTime::Format::Pg',
-    'sqlite'  => 'DateTime::Format::MySQL',
-);
 use Data::Dumper::Simple;
 
 use EasyCMS2::Extra;
 
-__PACKAGE__->load_components(qw/PK::Auto Core/);
+__PACKAGE__->load_components(qw/TimeStamp Core/);
 __PACKAGE__->table('page');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
@@ -35,8 +28,11 @@ __PACKAGE__->add_columns(
     'category' => { data_type => 'INTEGER' },
     'allow_comments' => {data_type => 'INTEGER', is_nullable => 1},
         
-    'created' => {data_type => 'TIMESTAMP', default_value => 'now()'},
-    'updated' => {data_type => 'TIMESTAMP', default_value => 'now()'},
+    'created' => {data_type => 'timestamp', set_on_create => 1,},
+    'updated' => {
+        data_type => 'timestamp', 
+        set_on_create => 1, set_on_update => 1,
+    },
     
     'extra' => { data_type => 'TEXT', is_nullable => 1 },
     'extra_search1' => { data_type => 'TEXT', is_nullable => 1 },
@@ -58,26 +54,6 @@ __PACKAGE__->has_many('comments' => 'EasyCMS2::Schema::Base::Comment', 'page', {
 
 __PACKAGE__->has_many('page_tags' => 'EasyCMS2::Schema::Base::PageTag', 'page');
 #__PACKAGE__->many_to_many('tags' => '_page_tags', 'tag');
-
-
-__PACKAGE__->inflate_column('created' => {
-    
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
-});
-__PACKAGE__->inflate_column('updated' => {
-    
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_timestamp($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_timestamp($val); } 
-});
-__PACKAGE__->inflate_column('from_date' => {
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_date($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_date($val); } 
-});
-__PACKAGE__->inflate_column('to_date' => {
-    'inflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->parse_date($val); },
-    'deflate' => sub {my ($val, $row) = @_; DateTime::Format::DBI->new($row->result_source->schema->storage->dbh)->format_date($val); } 
-});
 
 __PACKAGE__->inflate_column('extra' => {
     'inflate' => sub { return EasyCMS2::Extra->new({'stored' => shift})},

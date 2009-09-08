@@ -9,7 +9,7 @@ $textile->charset('utf-8');
 
 
 
-__PACKAGE__->load_components(qw/PK::Auto Core/);
+__PACKAGE__->load_components(qw/TimeStamp Core/);
 __PACKAGE__->table('comment');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
@@ -22,8 +22,8 @@ __PACKAGE__->add_columns(
     'commenter' => { data_type => 'TEXT' },
     'page' => {data_type => 'INTEGER' },
         
-    'created' => {data_type => 'TIMESTAMP', default_value => 'now()'},
-    'updated' => {data_type => 'TIMESTAMP', default_value => 'now()'},
+    'created' => {data_type => 'TIMESTAMP', set_on_create => 1,},
+    'updated' => {data_type => 'TIMESTAMP', set_on_create => 1, set_on_update => 1,},
 );
 __PACKAGE__->set_primary_key('id');
 

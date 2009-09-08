@@ -2,7 +2,7 @@ package EasyCMS2::Schema::Base::Tag;
 
 use base qw/DBIx::Class/;
 
-__PACKAGE__->load_components(qw/PK::Auto Core/);
+__PACKAGE__->load_components(qw/TimeStamp Core/);
 __PACKAGE__->table('tag');
 __PACKAGE__->resultset_class('EasyCMS2::Schema::ResultSet::Tag');
 
@@ -10,7 +10,7 @@ __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
     
     'name' => { data_type => 'VARCHAR', size => 32 },
-    'created' => {data_type => 'TIMESTAMP', default_value => 'now()'},
+    'created' => {data_type => 'TIMESTAMP', set_on_create => 1},
 );
 __PACKAGE__->set_primary_key('id');
 __PACKAGE__->add_unique_constraint('unique_tag_name' => ['name']);
