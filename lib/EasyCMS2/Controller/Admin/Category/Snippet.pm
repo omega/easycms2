@@ -59,7 +59,7 @@ sub doit : Private {
     my $object : Stashed;
     my $form : Stashed;
     
-    if ($form->submitted_and_valid) {
+    if ($c->req->method eq 'POST' and $form->submitted_and_valid) {
         
         $form->model->update($snippet);
 

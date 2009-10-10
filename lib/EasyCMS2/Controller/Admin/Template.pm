@@ -78,7 +78,7 @@ sub doit : Private {
     
     $form->model('DBIC')->default_values($object);
     
-    if ($form->submitted_and_valid) {
+    if ($c->req->method eq 'POST' and $form->submitted_and_valid) {
         $form->model()->update($object);
     }
     

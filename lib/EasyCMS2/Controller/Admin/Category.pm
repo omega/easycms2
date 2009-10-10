@@ -121,7 +121,7 @@ sub doit : Private {
         name => 'index_page_default',
     })->content($object->type->default_template());    
     
-    if ($form->submitted_and_valid) {
+    if ($c->req->method eq 'POST' and $form->submitted_and_valid) {
         
         my $title = lc($form->param('name'));
         $title =~ s/[^a-z0-9_-]+/_/g;
@@ -168,7 +168,8 @@ sub homepage : Chained('load') Args(0) {
     
     my $msg : Flashed = 'Category successfully set as homepage';
     
-    $msg = 'Error while setting category as homepage' if ($c->setting('default-page') ne "c" . $object->id);
+    $msg = 'Error while setting category as homepage' 
+    if ($c->setting('default-page') ne "c" . $object->id);
     
     $c->res->redirect($c->req->referer);
     

@@ -54,7 +54,7 @@ override 'index' => sub {
         
         $c->log->debug($w) if $c->debug;
         
-        if ($w->submitted_and_valid ) {
+        if ($c->req->method eq 'POST' and $w->submitted_and_valid ) {
             $c->log->debug("SHOULD SAVE PAGE") if $c->debug;
             
             my $title = "Booking: " . $page->from_date->ymd("-");

@@ -94,7 +94,7 @@ sub doit : Private {
 
     # Add the file select element unless this is already an uploaded file
     
-    if ($form->submitted_and_valid) {
+    if ($c->req->method eq 'POST' and $form->submitted_and_valid) {
         
         $form->model->update( $object );
         $c->log->debug("media object id: " . $object->id) if $c->debug;

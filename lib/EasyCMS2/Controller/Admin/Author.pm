@@ -61,7 +61,7 @@ sub doit : Private {
     my $form : Stashed;
     $form->model('DBIC')->default_values($object);
     
-    if ($form->submitted_and_valid) {
+    if ($c->req->method eq 'POST' and $form->submitted_and_valid) {
         $form->model()->update($object);
         
         $c->res->redirect($c->uri_for($object->id, 'edit'));
