@@ -1,5 +1,13 @@
 package EasyCMS2::CategoryType;
 
+# so the default value population in FormFu works :p
+use overload 
+    '""' => sub { 
+        my $self = shift;
+        warn "self: " . $self->id;
+        return $self->id;
+}, fallback => 1;
+
 use strict;
 use warnings;
 
