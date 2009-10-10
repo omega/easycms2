@@ -12,6 +12,7 @@ Model::Base:
         -
         -
             AutoCommit: 1
+            unicode: 1
     upgrade_directory: '__HOME__/db/upgrade/'
 'View::Default':
     TEMPLATE_EXTENSION: '.tt'
