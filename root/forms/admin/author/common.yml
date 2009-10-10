@@ -42,4 +42,3 @@ elements:
             -
                 type: Equal
                 others: password
-    

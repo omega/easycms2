@@ -11,6 +11,7 @@ elements:
     - 
         type: Submit
         value_loc: save
+        name: save
     -
         type: Submit
         value_loc: save_and_close

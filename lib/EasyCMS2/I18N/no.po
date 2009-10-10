@@ -12,86 +12,104 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: root/forms/admin/template/common.yml:18
+#: root/forms/admin/template/common.yml:17
 msgid "after"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:26 root/forms/admin/page/common.yml:25
+#: root/forms/admin/category/common.yml:25
 msgid "allow_comments"
 msgstr ""
 
-#: root/forms/admin/template/common.yml:14
+#: root/forms/admin/template/common.yml:13
 msgid "before"
 msgstr ""
 
-#: root/forms/admin/page/common.yml:13
-msgid "body"
-msgstr ""
-
-#: root/forms/admin/page/common.yml:17
+#: root/forms/admin/media/common.yml:6
 msgid "category"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:21
+#: root/forms/admin/category/common.yml:20
 msgid "category_type"
 msgstr ""
 
-#: root/forms/setup/reset_admin_pw.yml:15
+#: root/forms/setup/reset_admin_pw.yml:14
 msgid "confirm_password"
 msgstr ""
 
-#: root/forms/admin/author/create.yml:12 root/forms/admin/author/create.yml:6 root/forms/admin/category/create.yml:12 root/forms/admin/category/create.yml:6 root/forms/admin/page/create.yml:12 root/forms/admin/page/create.yml:6 root/forms/admin/template/create.yml:12 root/forms/admin/template/create.yml:6
+#: root/forms/admin/author/create.yml:12 root/forms/admin/author/create.yml:5
+#: root/forms/admin/category/create.yml:12
+#: root/forms/admin/category/create.yml:5
+#: root/forms/admin/category/snippet/create.yml:12
+#: root/forms/admin/category/snippet/create.yml:5
+#: root/forms/admin/media/create.yml:19 root/forms/admin/media/create.yml:5
+#: root/forms/admin/page/create.yml:12 root/forms/admin/page/create.yml:5
+#: root/forms/admin/template/create.yml:12
+#: root/forms/admin/template/create.yml:5
 msgid "create"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:40 root/forms/admin/template/common.yml:26
+#: root/forms/admin/category/common.yml:39
+#: root/forms/admin/template/common.yml:25
 msgid "css"
 msgstr ""
 
-#: root/forms/admin/author/edit.yml:6
+#: root/forms/admin/media/common.yml:10
+msgid "description"
+msgstr ""
+
+#: root/forms/admin/author/edit.yml:5
 msgid "edit"
 msgstr ""
 
-#: lib/EasyCMS2/Controller/Admin.pm:27 root/forms/admin/author/common.yml:21
+#: lib/EasyCMS2/Controller/Admin.pm:27 root/forms/admin/author/common.yml:20
 msgid "email"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:30
+#: root/forms/admin/media/create.yml:14
+msgid "file"
+msgstr ""
+
+#: root/forms/admin/category/common.yml:29
 msgid "index_page"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:46
+#: root/forms/admin/category/common.yml:45
 msgid "insert_defaults"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:35
+#: root/forms/admin/category/common.yml:34
 msgid "javascript"
 msgstr ""
 
-#: root/forms/admin/template/common.yml:22
+#: root/forms/admin/template/common.yml:21
 msgid "js"
 msgstr ""
 
-#: root/forms/admin/author/common.yml:14 root/forms/auth/login.yml:14 root/forms/setup/login.yml:10
+#: root/forms/admin/author/common.yml:13 root/forms/auth/login.yml:13
+#: root/forms/setup/login.yml:10
 msgid "login"
 msgstr ""
 
-#: root/forms/admin/author/common.yml:7 root/forms/admin/category/common.yml:7 root/forms/admin/template/common.yml:7
+#: root/forms/admin/author/common.yml:6 root/forms/admin/category/common.yml:6
+#: root/forms/admin/category/snippet/common.yml:6
+#: root/forms/admin/template/common.yml:6
 msgid "name"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:13 root/forms/admin/template/common.yml:30
+#: root/forms/admin/category/common.yml:12
+#: root/forms/admin/template/common.yml:29
 msgid "parent"
 msgstr ""
 
-#: root/forms/admin/author/common.yml:32 root/forms/auth/login.yml:11 root/forms/setup/login.yml:7 root/forms/setup/reset_admin_pw.yml:8
+#: root/forms/admin/author/common.yml:29 root/forms/auth/login.yml:10
+#: root/forms/setup/login.yml:6 root/forms/setup/reset_admin_pw.yml:7
 msgid "password"
 msgstr ""
 
-#: root/forms/admin/author/common.yml:42
+#: root/forms/admin/author/common.yml:39
 msgid "password_confirm"
 msgstr ""
 
@@ -99,34 +117,34 @@ msgstr ""
 msgid "reset_password"
 msgstr ""
 
-#: root/forms/admin/category/edit.yml:14 root/forms/admin/page/edit.yml:14
+#: root/forms/admin/category/edit.yml:13
+#: root/forms/admin/category/snippet/edit.yml:13
+#: root/forms/admin/page/edit.yml:13
 msgid "save"
 msgstr ""
 
-#: root/forms/admin/category/edit.yml:16 root/forms/admin/page/edit.yml:16
+#: root/forms/admin/category/edit.yml:17
+#: root/forms/admin/category/snippet/edit.yml:16
+#: root/forms/admin/page/edit.yml:16
 msgid "save_and_close"
 msgstr ""
 
-#: root/forms/admin/page/common.yml:29
-msgid "tags"
+#: root/forms/admin/category/snippet/common.yml:10
+msgid "snippet_content"
 msgstr ""
 
-#: root/forms/admin/page/common.yml:30
-msgid "tags_help_text"
-msgstr ""
-
-#: root/forms/admin/category/common.yml:17 root/forms/admin/page/common.yml:21
+#: root/forms/admin/category/common.yml:16
 msgid "template"
 msgstr ""
 
-#: root/forms/admin/page/common.yml:7
-msgid "title"
-msgstr ""
-
-#: root/forms/admin/author/edit.yml:12 root/forms/admin/category/edit.yml:6 root/forms/admin/page/edit.yml:6 root/forms/admin/template/edit.yml:12 root/forms/admin/template/edit.yml:6
+#: root/forms/admin/author/edit.yml:12 root/forms/admin/category/edit.yml:5
+#: root/forms/admin/category/snippet/edit.yml:5
+#: root/forms/admin/media/edit.yml:12 root/forms/admin/media/edit.yml:5
+#: root/forms/admin/page/edit.yml:5 root/forms/admin/template/edit.yml:12
+#: root/forms/admin/template/edit.yml:5
 msgid "update"
 msgstr ""
 
-#: root/forms/auth/login.yml:7
+#: root/forms/auth/login.yml:6
 msgid "username"
 msgstr ""
