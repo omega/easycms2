@@ -26,7 +26,7 @@ __PACKAGE__->add_columns(
     'updated' => {data_type => 'TIMESTAMP', set_on_create => 1, set_on_update => 1,},
 );
 __PACKAGE__->set_primary_key('id');
-__PACKAGE__->utf8_columns(qw/title body comenter/);
+__PACKAGE__->utf8_columns(qw/title body commenter/);
 
 __PACKAGE__->belongs_to('page' => 'EasyCMS2::Schema::Base::Page');
 
