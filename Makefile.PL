@@ -33,9 +33,15 @@ requires 'Digest::SHA1' => 0;
 requires 'Catalyst::View::TT' => 0;
 requires 'Catalyst::View::JSON' => 0;
 
-requires 'DateTime::Format::DBI' => 0.031;
+requires 'CatalystX::RoleApplicator';
+requires 'Catalyst::TraitFor::Request::ProxyBase';
+
 requires 'Calendar::Calendar' => 0;
+
+
 requires 'DBIx::Class' => 0.08003;
+requires 'DBIx::Class::TimeStamp';
+requires 'DateTime::Format::DBI' => 0.031;
 
 requires 'HTML::FormFu';
 requires 'HTML::FormFu::Model::DBIC';
