@@ -13,7 +13,7 @@ use Data::Dumper::Simple;
 
 use EasyCMS2::Extra;
 
-__PACKAGE__->load_components(qw/TimeStamp Core/);
+__PACKAGE__->load_components(qw/UTF8Columns TimeStamp Core/);
 __PACKAGE__->table('page');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
@@ -61,6 +61,9 @@ __PACKAGE__->inflate_column('extra' => {
 });
 
 __PACKAGE__->resultset_class('EasyCMS2::Schema::ResultSet::Page');
+
+
+__PACKAGE__->utf8_columns(qw/title body extra/);
 
 sub get_extra {
     my $self = shift;
