@@ -62,6 +62,9 @@ __PACKAGE__->inflate_column('extra' => {
 
 __PACKAGE__->resultset_class('EasyCMS2::Schema::ResultSet::Page');
 
+
+__PACKAGE__->utf8_columns(qw/title body extra/);
+
 sub get_extra {
     my $self = shift;
     my $extra = shift;
