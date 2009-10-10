@@ -46,17 +46,6 @@ sub create : Local FormConfig {
     my $category = $c->req->param('category');  
     my $object : Stashed = $c->model('Base::Media')->new({ category => $category });
     
-    my $form : Stashed;
-    # Add the file selector
-    
-    my $file = $form->element({
-        type => 'File',
-        name => 'file',
-        label_loc => 'file',
-    });
-    my $pos = $form->get_all_element( { type => 'Text', name => 'description'});
-    $form->insert_after($file, $pos);
-    
     $c->forward('doit');
 }
 

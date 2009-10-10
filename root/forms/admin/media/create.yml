@@ -8,5 +8,12 @@ load_config_file:
     - __path_to(root/forms/admin/header.yml)__
     - __path_to(root/forms/admin/media/common.yml)__
 elements:
-    - type: Submit
-      value_loc: create
+    - 
+        type: File
+        name: file
+        label_loc: file
+        constraints:
+            - Required
+    - 
+        type: Submit
+        value_loc: create
