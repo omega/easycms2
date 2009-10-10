@@ -110,7 +110,7 @@ sub doit : Private {
         });
     
         my @templates;
-        push @templates, { id => 'undef', name => 'Inherit from category'};
+        push @templates, { id => undef, name => 'Inherit from category'};
 
         while (my $root = $roots->next) {
             push @templates, $root->node('-- ');
