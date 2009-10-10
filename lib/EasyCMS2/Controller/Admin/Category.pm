@@ -71,7 +71,7 @@ sub doit : Private {
             order_by => 'name'
         });
         my @categories;
-        push @categories, { id => 'undef', name => 'No parent'};
+        push @categories, { id => undef, name => 'No parent'};
         while (my $root = $roots->next) {
             push @categories, $root->node('-- ');
         }
