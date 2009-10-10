@@ -7,7 +7,7 @@ use Imager;
 
 use base qw/DBIx::Class/;
 
-__PACKAGE__->load_components(qw/PK::Auto Core/);
+__PACKAGE__->load_components(qw/UTF8Columns Core/);
 __PACKAGE__->table('media');
 
 __PACKAGE__->add_columns(
@@ -19,6 +19,7 @@ __PACKAGE__->add_columns(
     
 );
 __PACKAGE__->set_primary_key('id');
+__PACKAGE__->utf8_columns(qw/description filename/);
 
 __PACKAGE__->belongs_to('category' => 'EasyCMS2::Schema::Base::Category');
 __PACKAGE__->belongs_to('type' => 'EasyCMS2::Schema::Base::MimeType');

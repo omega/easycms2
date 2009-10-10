@@ -5,7 +5,7 @@ use strict;
 
 use base qw/DBIx::Class/;
 
-__PACKAGE__->load_components(qw/PK::Auto Core/);
+__PACKAGE__->load_components(qw/UTF8Columns Core/);
 __PACKAGE__->table('template');
 
 __PACKAGE__->add_columns(
@@ -21,6 +21,7 @@ __PACKAGE__->add_columns(
     'parent' => { data_type => 'INTEGER', is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key('id');
+__PACKAGE__->utf8_columns(qw/name before after css js/);
 
 __PACKAGE__->belongs_to('parent' => 'EasyCMS2::Schema::Base::Template');
 __PACKAGE__->has_many('children' => 'EasyCMS2::Schema::Base::Template', 'parent', { order_by => 'name'});

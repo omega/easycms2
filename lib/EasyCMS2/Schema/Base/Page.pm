@@ -13,7 +13,7 @@ use Data::Dumper::Simple;
 
 use EasyCMS2::Extra;
 
-__PACKAGE__->load_components(qw/TimeStamp Core/);
+__PACKAGE__->load_components(qw/UTF8Columns TimeStamp Core/);
 __PACKAGE__->table('page');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
@@ -41,7 +41,7 @@ __PACKAGE__->add_columns(
     'to_date' => { data_type => 'date', is_nullable => 1 },
 );
 __PACKAGE__->set_primary_key('id');
-
+__PACKAGE__->utf8_columns(qw/title body extra/);
 
 __PACKAGE__->belongs_to(author => 'EasyCMS2::Schema::Base::Author');
 __PACKAGE__->belongs_to(template => 'EasyCMS2::Schema::Base::Template');

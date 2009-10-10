@@ -9,7 +9,7 @@ $textile->charset('utf-8');
 
 
 
-__PACKAGE__->load_components(qw/TimeStamp Core/);
+__PACKAGE__->load_components(qw/UTF8Columns TimeStamp Core/);
 __PACKAGE__->table('comment');
 __PACKAGE__->add_columns(
     'id'    => { data_type => 'INTEGER', is_auto_increment => 1 },
@@ -26,6 +26,7 @@ __PACKAGE__->add_columns(
     'updated' => {data_type => 'TIMESTAMP', set_on_create => 1, set_on_update => 1,},
 );
 __PACKAGE__->set_primary_key('id');
+__PACKAGE__->utf8_columns(qw/title body comenter/);
 
 __PACKAGE__->belongs_to('page' => 'EasyCMS2::Schema::Base::Page');
 

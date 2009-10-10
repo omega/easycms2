@@ -5,7 +5,7 @@ use base qw/DBIx::Class/;
 #use EasyCMS2::CategoryType;
 use EasyCMS2::Extra;
 
-__PACKAGE__->load_components(qw/PK::Auto Core/);
+__PACKAGE__->load_components(qw/UTF8Columns  Core/);
 __PACKAGE__->table('category');
 
 __PACKAGE__->add_columns(
@@ -30,6 +30,7 @@ __PACKAGE__->add_columns(
     
 );
 __PACKAGE__->set_primary_key('id');
+__PACKAGE__->utf8_columns(qw/index_page css js name config/);
 
 __PACKAGE__->belongs_to('template' => 'EasyCMS2::Schema::Base::Template');
 __PACKAGE__->belongs_to('parent' => 'EasyCMS2::Schema::Base::Category');
