@@ -49,7 +49,7 @@ sub create : Local FormConfig {
     $c->forward('doit');
 }
 
-sub edit : Chained('load') Args(0) formConfig {
+sub edit : Chained('load') Args(0) FormConfig {
     my ( $self, $c ) = @_;
     
     $c->forward('doit');
