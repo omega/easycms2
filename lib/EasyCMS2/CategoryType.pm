@@ -4,7 +4,6 @@ package EasyCMS2::CategoryType;
 use overload 
     '""' => sub { 
         my $self = shift;
-        warn "self: " . $self->id;
         return $self->id;
 }, fallback => 1;
 
@@ -67,7 +66,6 @@ sub get_defaults {
 sub read_defaults {
     my $self = shift;
     local $/;
-    my $defs = 
     my $defaults = eval "package " . ref($self) . "; <DATA>";
     $default_cache->{ref($self)} = eval $defaults if $defaults;    
 }
@@ -91,6 +89,13 @@ sub extend_category_form {
     my $page = shift;
     
 }
+sub extend_category_save {
+    my $self = shift;
+    my $form = shift;
+    my $page = shift;
+    
+}
+
 sub extend_page_form {
     my $self = shift;
     my $form = shift;

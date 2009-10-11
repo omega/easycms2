@@ -121,7 +121,7 @@ msgstr ""
 #: root/forms/admin/category/snippet/edit.yml:13
 #: root/forms/admin/page/edit.yml:13
 msgid "save"
-msgstr ""
+msgstr "Save"
 
 #: root/forms/admin/category/edit.yml:17
 #: root/forms/admin/category/snippet/edit.yml:16

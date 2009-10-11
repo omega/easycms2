@@ -70,7 +70,7 @@ sub set_config {
     my $self = shift;
     my $config = shift;
     my $value = shift;
-    my $h = $self->config;
+    my $h = $self->config || EasyCMS2::Extra->new();
     
     $h->set($config => $value);
     $self->config($h);

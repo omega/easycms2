@@ -2,6 +2,7 @@
 unsafe_bindlex_ok: 1
 Controller::HTML::FormFu:
     localize_from_context: 1
+    languages_from_context: 1
 
 name: EasyCMS2
 recovery_password: UNSET

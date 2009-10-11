@@ -119,19 +119,25 @@ sub doit : Private {
     $form->get_all_element({
         type => 'Block',
         name => 'index_page_default',
-    })->content($object->type->default_template());    
+    })->content($object->type->default_template());
+    
+    
+    $object->type->extend_category_form($form, $object, 1) if $object->type;
     
     if ($c->req->method eq 'POST' and $form->submitted_and_valid) {
         
         my $title = lc($form->param('name'));
         $title =~ s/[^a-z0-9_-]+/_/g;
         $form->add_valid(url_name => $title);
+        
+        $object->type->extend_category_save($c->req, $object);
+        
         $form->model->update($object);
 
-        if ($c->req->param('save') ne 'Save') {
-            $c->res->redirect($c->uri_for(''));
-        } else {
+        if ($c->req->param('save')) {
             $c->res->redirect($c->uri_for($object->id , 'edit'));
+        } else {
+            $c->res->redirect($c->uri_for(''));
         }
     } elsif (!$form->submitted) {
         $form->model->default_values( $object );
