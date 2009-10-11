@@ -3,6 +3,8 @@ package EasyCMS2::Controller::Admin::Media;
 use strict;
 use warnings;
 use base qw(Catalyst::Controller::HTML::FormFu Catalyst::Controller::BindLex);
+use HTML::Element;
+
 __PACKAGE__->config->{unsafe_bindlex_ok} = 1;
 
 =head1 NAME
