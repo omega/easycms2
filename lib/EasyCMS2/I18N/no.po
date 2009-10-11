@@ -19,7 +19,7 @@ msgstr ""
 msgid "after"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:25
+#: root/forms/admin/category/common.yml:25 root/forms/admin/page/common.yml:24
 msgid "allow_comments"
 msgstr ""
 
@@ -27,7 +27,11 @@ msgstr ""
 msgid "before"
 msgstr ""
 
-#: root/forms/admin/media/common.yml:6
+#: root/forms/admin/page/common.yml:12
+msgid "body"
+msgstr ""
+
+#: root/forms/admin/media/common.yml:6 root/forms/admin/page/common.yml:16
 msgid "category"
 msgstr ""
 
@@ -133,8 +137,20 @@ msgstr ""
 msgid "snippet_content"
 msgstr ""
 
-#: root/forms/admin/category/common.yml:16
+#: root/forms/admin/page/common.yml:28
+msgid "tags"
+msgstr ""
+
+#: root/forms/admin/page/common.yml:29
+msgid "tags_help_text"
+msgstr ""
+
+#: root/forms/admin/category/common.yml:16 root/forms/admin/page/common.yml:20
 msgid "template"
+msgstr ""
+
+#: root/forms/admin/page/common.yml:6
+msgid "title"
 msgstr ""
 
 #: root/forms/admin/author/edit.yml:12 root/forms/admin/category/edit.yml:5

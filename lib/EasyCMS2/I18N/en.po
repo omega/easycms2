@@ -19,22 +19,25 @@ msgstr ""
 msgid "after"
 msgstr "After"
 
-#: root/forms/admin/category/common.yml:25
+#: root/forms/admin/category/common.yml:25 root/forms/admin/page/common.yml:24
 msgid "allow_comments"
-msgstr ""
+msgstr "Allow comments"
 
 #: root/forms/admin/template/common.yml:13
 msgid "before"
 msgstr "Before"
 
-#: root/forms/admin/media/common.yml:6
-#, fuzzy
+#: root/forms/admin/page/common.yml:12
+msgid "body"
+msgstr "Page body"
+
+#: root/forms/admin/media/common.yml:6 root/forms/admin/page/common.yml:16
 msgid "category"
-msgstr "After"
+msgstr "Category"
 
 #: root/forms/admin/category/common.yml:20
 msgid "category_type"
-msgstr ""
+msgstr "Category type"
 
 #: root/forms/setup/reset_admin_pw.yml:14
 msgid "confirm_password"
@@ -59,7 +62,7 @@ msgstr "CSS"
 
 #: root/forms/admin/media/common.yml:10
 msgid "description"
-msgstr ""
+msgstr "Description"
 
 #: root/forms/admin/author/edit.yml:5
 msgid "edit"
@@ -71,19 +74,19 @@ msgstr "Email"
 
 #: root/forms/admin/media/create.yml:14
 msgid "file"
-msgstr ""
+msgstr "File"
 
 #: root/forms/admin/category/common.yml:29
 msgid "index_page"
-msgstr ""
+msgstr "Index page"
 
 #: root/forms/admin/category/common.yml:45
 msgid "insert_defaults"
-msgstr ""
+msgstr "Insert default index, css and javascript"
 
 #: root/forms/admin/category/common.yml:34
 msgid "javascript"
-msgstr ""
+msgstr "Javascript"
 
 #: root/forms/admin/template/common.yml:21
 msgid "js"
@@ -122,21 +125,35 @@ msgstr "Reset password"
 #: root/forms/admin/category/snippet/edit.yml:13
 #: root/forms/admin/page/edit.yml:13
 msgid "save"
-msgstr ""
+msgstr "Save"
 
 #: root/forms/admin/category/edit.yml:17
 #: root/forms/admin/category/snippet/edit.yml:16
 #: root/forms/admin/page/edit.yml:16
 msgid "save_and_close"
-msgstr ""
+msgstr "Save and close"
 
 #: root/forms/admin/category/snippet/common.yml:10
 msgid "snippet_content"
-msgstr ""
+msgstr "Snippet content"
 
-#: root/forms/admin/category/common.yml:16
-msgid "template"
+#: root/forms/admin/page/common.yml:28
+msgid "tags"
+msgstr "Tags"
+
+#: root/forms/admin/page/common.yml:29
+msgid "tags_help_text"
 msgstr ""
+"Seperate tags with space. Tags that need to contain spaces can be quoted "
+"with \"this is one tag\""
+
+#: root/forms/admin/category/common.yml:16 root/forms/admin/page/common.yml:20
+msgid "template"
+msgstr "Template"
+
+#: root/forms/admin/page/common.yml:6
+msgid "title"
+msgstr "Page title"
 
 #: root/forms/admin/author/edit.yml:12 root/forms/admin/category/edit.yml:5
 #: root/forms/admin/category/snippet/edit.yml:5
@@ -147,11 +164,5 @@ msgid "update"
 msgstr "Update"
 
 #: root/forms/auth/login.yml:6
-#, fuzzy
 msgid "username"
-msgstr "Name"
-
-#~ msgid "tags_help_text"
-#~ msgstr ""
-#~ "Seperate tags with space. Tags that need to contain spaces can be quoted "
-#~ "with \"this is one tag\""
+msgstr "Username"
