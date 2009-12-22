@@ -34,6 +34,7 @@ sub default : Private {
     if ($model and $model->can($func)) {
         my $api_list : Stashed = [];
         my $objs = $model->$func;
+        # XXX: Fix this to use the HashRefInflator instead
         while (my $obj = $objs->next) {
             push @$api_list, $obj->toHash;
         }
