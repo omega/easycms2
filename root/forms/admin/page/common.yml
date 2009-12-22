@@ -10,6 +10,7 @@
             type: Textarea
             name: body
             label_loc: body
+            id: edit_page_body
         -
             type: Select
             name: category
