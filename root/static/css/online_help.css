@@ -8,6 +8,7 @@ div#helpbrowser_window {
     left: 800px;
     top: 0px;
     background-color: #fff;
+    overflow: auto;
 }
 
 div#helpbrowser_window div#helpbrowser_menubar {
@@ -15,4 +16,21 @@ div#helpbrowser_window div#helpbrowser_menubar {
     background-color: #3c3c3c;
     color: #eeeeee;
     padding: 2px;
+    padding: 5px;
+}
+div#helpbrowser_window div#helpbrowser_menubar a {
+    cursor: hand;
+}
+    div#helpbrowser_window div#helpbrowser_menubar a#index {
+        background: no-repeat url(../images/icons/go-home.png) ;
+        padding-left: 20px;
+    }
+    
+div#helpbrowser_window div#helpbrowser_content {
+    padding: 5px;
+    padding-top: 0px;
+}
+div#helpbrowser_window div#helpbrowser_content a {
+    cursor: hand;
+    color: blue;
 }

@@ -22,19 +22,28 @@ Catalyst Controller.
 =cut
 
 sub default : Private {
-    my ( $self, $c, $key) = @_;
+    my ( $self, $c, $help, $key) = @_;
     
-    my $help_doc : Stashed = {'title' => 'test-title', 'body' => 'test-body'};
+    my $help_doc : Stashed;
+    
+    unless ($key) {
+        $help_doc = {'title' => 'test-title', 'body' => 'test-body'};
+    } else {
+        # We have a key, lets try to load this from a template
+        my $content = $c->view('Default')->render($c, 'help/' . $key . '.tt', {});
+        # Should be extract the title from $content?
+        my $title = ucfirst($key);
+        if ($content =~ s|<title>(.*?)</title>||) {
+            $title = $1;
+        }
+        $help_doc = {
+            title => $title,
+            body => $content,
+        };
+    }
 }
 
 
-sub index : Local {
-    my ( $self, $c ) = @_;
-    my $help_doc : Stashed = {'title' => 'EasyCMS2 Help index', 
-        'body' => 'EasyCMS2 should be quite easy to use. <a id="legend">Legend</a>'
-    };
-    
-}
 
 sub end : Private {
     my ( $self, $c ) = @_;

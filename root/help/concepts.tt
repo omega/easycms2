@@ -1,0 +1,40 @@
+<title>EasyCMS2 concepts</title>
+<p>We have a few concepts in easycms2:</p>
+
+<h3>Templates</h3>
+
+<p>We have a tree of templates. Each template gets wrapped with the ones
+    it inherits from. This allows you to create different templates for 
+    different sections for instance.</p>
+
+<h3>Categories</h3>
+
+<p>Categories represent the url-space, and allows you to put things
+    into compartments. It allows the content to be structured in a tree-like
+    fashion.</p>
+    
+<h4>Category types</h4>
+
+<p>A category is of a given type. We have several types</p>
+
+<h5>Article</h5>
+
+<p>This is the default type. It is very basic, just allows you to add pages to it.</p>
+
+<h5>Blog</h5>
+
+<p>A blog comes with some default templates for rendering archives and index pages, as well
+    as Atom-feeds</p>
+
+<h5>Calendar</h5>
+
+<p>This type is currently unfinished, but it is planned to be a simple booking system for cabins and the like</p>
+
+<h5>Gallery</h5>
+
+<p>The default templates for the gallery will take all the images in the category, and display them
+    in a gallery that allows browsing and viewing</p>
+
+<h5>YouTube</h5>
+
+<p>Give a YouTube data feed url, this will display the last n videos with thumbnails and click to play</p>

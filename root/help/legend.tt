@@ -1,6 +1,6 @@
-<div id="legend">
-    <h2>Legend</h2>
-<ul>
+<title>Icon legend</title>
+[%PROCESS inc/macros.tt %]
+<ul id="legend">
     <li>[% icon('user-home', 'home', 'set as homepage') %]
     Set as homepage</li>
 
@@ -26,4 +26,3 @@
     Create new page</li>
     
 </dl>
-</div>
