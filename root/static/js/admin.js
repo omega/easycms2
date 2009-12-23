@@ -83,7 +83,7 @@ TextEditor.TextEditor.prototype._position_buttons = function() {
     var rel_size = s.getElementDimensions(relative);
     var new_pos = new s.Coordinates(0,0);
     new_pos.x = rel_pos.x + rel_size.w + 2;
-    new_pos.y = rel_pos.y;
+    new_pos.y = 5; //rel_pos.y;
     if (new_pos.x && new_pos.y) {
         s.setElementPosition(element, new_pos);
     }

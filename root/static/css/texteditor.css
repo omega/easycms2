@@ -6,16 +6,19 @@ button.TextEditor_button {
     display:  block;
     width:  36px;
     background: #eeeeee;
+    margin-left: 0px !important;
 }
 ul.TextEditor_list, div.TextEditor_panel {
     position:  absolute;
-    top: 200px;
-    left: 822px;
+    top: 100px;
+    left: 972px;
     width:  200px;
     height: 300px;
     overflow:  auto;
     border: 1px solid silver;
     background-color:  #eeeeee;
+    margin: 0;
+    padding: 0;
     margin-left: 5px;
     padding-top:  5px;
     padding-left: 30px;
@@ -26,7 +29,8 @@ ul.TextEditor_list li * {
 }
 ul#img_list {
     list-style: none;
-    padding-left:  5px;    
+    padding-left:  5px;
+    width: 225px;
 }
 ul#img_list li img {
     vertical-align:  top;
