@@ -228,6 +228,7 @@ __DESC__
         <link rel="stylesheet" href="[% c.uri_for('/static/css/main.css') %]" />
         <script lang="javascript" src="[% c.uri_for('/javascript/setup') %]"></script>
         <script lang="javascript" src="[% c.uri_for('/static/js/MochiKit.js') %]"></script>
+        <script lang="javascript" src="[% c.uri_for('/static/js/joose.js') %]"></script>
         <script lang="javascript" src="[% c.uri_for('/static/js/HelpBrowser.js') %]"></script>
         <script lang="javascript" src="[% c.uri_for('/static/js/TextEditor.js') %]"></script>
         <script lang="javascript" src="[% c.uri_for('/static/js/admin.js') %]"></script>
