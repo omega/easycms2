@@ -1,44 +1,126 @@
-div.TextEditor_buttons {
-    margin-left:  -12px;
+.TextEditor_panels {
+    margin: 0px;
+    padding:0px;
+    list-style: none;
     position: absolute;
+    top: 0;
+    left: 800px;
+    width: 200px;
 }
-button.TextEditor_button {
-    display:  block;
+.TextEditor_panels .panel {
+    float: left;
+    display: block;
+}
+.TextEditor_panels > .panel > .button {
     width:  36px;
-    background: #eeeeee;
-    margin-left: 0px !important;
-}
-ul.TextEditor_list, div.TextEditor_panel {
-    position:  absolute;
-    top: 100px;
-    left: 972px;
-    width:  200px;
-    height: 300px;
-    overflow:  auto;
+    background-color: #eeeeee;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
     border: 1px solid silver;
-    background-color:  #eeeeee;
+    z-index: 200;
+    
     margin: 0;
     padding: 0;
-    margin-left: 5px;
-    padding-top:  5px;
-    padding-left: 30px;
-    padding-right:  5px;
+    height: 36px;
+    margin-top: 3px;
 }
-ul.TextEditor_list li * {
-    vertical-align:  top;
+    .TextEditor_panels > .panel.active > .button {
+        border-bottom: 1px solid white !important;
+        z-index: 200;
+        padding-bottom: 3px !important;
+        background-color: white;
+        margin-top: 0px;
+        -webkit-border-top-right-radius: 2px;
+        -webkit-border-top-left-radius: 2px;
+        
+    }
+    .TextEditor_panels > .panel:first-child > .button {
+        -webkit-border-top-left-radius: 3px;
+    }
+    .TextEditor_panels > .panel:last-child > .button {
+        -webkit-border-top-right-radius: 3px;
+    }
+    
+    .TextEditor_panels > .panel > .panel_content {
+        display: none;
+    }
+
+    .TextEditor_panels > .active.panel > .panel_content {
+        display: block;
+    }
+    
+    .TextEditor_panels #format .button {
+        background-image: url("../images/icons/format-text-bold.png");
+    }
+    .TextEditor_panels #links .button {
+        background-image: url("../images/icons/internet-web-browser.png");
+    }
+    .TextEditor_panels #image .button {
+        background-image: url("../images/icons/image-x-generic.png");
+    }
+
+.TextEditor_panels .panel_content {
+    position: absolute;
+    top: 40px;
+/*    z-index: -1; XXX: This breaks in at least safari, 
+        by putting it below body, making buttons not work */
+    left: 0;
+    width: 200px;
+    height: 258px;
+    border: 1px solid silver;
+    background-color: white;
+    padding: 2px;
+    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    -webkit-border-bottom-left-radius: 3px;
 }
-ul#img_list {
-    list-style: none;
-    padding-left:  5px;
-    width: 225px;
-}
-ul#img_list li img {
-    vertical-align:  top;
-    margin-right:  10px;
-    float:  left;
-    display:  block;
-}
-ul#img_list li {
-    padding-top:  5px;
-    clear:  both;
-}
+
+    .panel_content button {
+        margin: 2;
+        padding: 0;
+        height: 22px;
+        width: 22px;
+        background-repeat: no-repeat;
+        background-position: 50% 50%;
+        background-color: white;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+    }
+    .panel_Content button:active {
+        background-color: #eeeeee;
+    }
+        .panel_content #format_text_bold {
+            background-image: url("../images/icons/format-text-bold.png");
+        }
+        .panel_content #format_text_italic {
+            background-image: url("../images/icons/format-text-italic.png");
+        }
+        .panel_content #format_text_underline {
+            background-image: url("../images/icons/format-text-underline.png");
+        }
+        .panel_content #format_text_strikethrough {
+            background-image: url("../images/icons/format-text-strikethrough.png");
+        }
+        .panel_content #format_justify_left {
+            background-image: url("../images/icons/format-justify-left.png");
+        }
+        .panel_content #format_justify_right {
+            background-image: url("../images/icons/format-justify-right.png");
+        }
+        .panel_content #format_justify_center {
+            background-image: url("../images/icons/format-justify-center.png");
+        }
+        .panel_content #format_justify_justify {
+            background-image: url("../images/icons/format-justify-fill.png");
+        }
+        /*
+        .panel_content # {
+            background-image: url("../images/icons/.png");
+        }
+        .panel_content # {
+            background-image: url("../images/icons/.png");
+        }
+        .panel_content # {
+            background-image: url("../images/icons/.png");
+        }
+        */

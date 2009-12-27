@@ -72,60 +72,83 @@ function toggleField(e) {
 }
 
 /** PAGE EDITOR STUFF **/
-/* Example of overloading */
-TextEditor.TextEditor.prototype._position_buttons = function() {
-    element = MochiKit.DOM.getElement(this.btn_row);
-    relative = MochiKit.DOM.getElement(this.textarea);
-    
-    var s = MochiKit.Style;
-    
-    var rel_pos = s.getElementPosition(relative);
-    var rel_size = s.getElementDimensions(relative);
-    var new_pos = new s.Coordinates(0,0);
-    new_pos.x = rel_pos.x + rel_size.w + 2;
-    new_pos.y = 5; //rel_pos.y;
-    if (new_pos.x && new_pos.y) {
-        s.setElementPosition(element, new_pos);
-    }
-    
-};
 
-TextEditor.TextEditor.prototype.create_a = function() {
-    this._create_btn("a_btn_click", 'internet-web-browser.png');
-};
-TextEditor.TextEditor.prototype.a_btn_click= function(e) {
-    if (this.a_list) {
-        this.toggle(this.a_list);
+Class("LinkPanel", {
+    does: [TextEditor.AsyncPanel],
+    has: {
+        id: { init: "links" }
+    },
+    methods: {
+        getJSONUrl: function() {
+            // Display throbber while we load the links?
+            return "page/links";
+            
+        },
+        renderJSON: function(json) {
+            var list = json.api_list;
+            
+            var ul = MochiKit.DOM.UL({'id': 'a_list', 'class': 'TextEditor_list'}, null);
+            for (var media_idx in list) {
+                logDebug(media_idx);
+                var page = list[media_idx];
+                var li = MochiKit.DOM.LI({
+                    'title': page.title || urlbase + page.uri_base,
+                    'url': urlbase + page.uri_base, 
+                    'class': 'page', 
+                    'id': "a" + page.id}, page.title);
+                MochiKit.Signal.connect(li, 'onclick', this, this.handleClick);
+                MochiKit.DOM.appendChildNodes(ul, li);
+            }
+            return ul;
+            
+        },
+        handleClick: function(e) {
+            logDebug("in handleClick: ", this);
+            var val = '"' + MochiKit.DOM.getNodeAttribute(e.src(), 'title') + '":' + 
+                MochiKit.DOM.getNodeAttribute(e.src(), 'url');
+            this.getEditor().insertAtCaret(val);
+            e.stop();
+            
+        }
     }
-    if (!this.a_list || this.a_list_shown) {
-        var alist = MochiKit.Async.loadJSONDoc(this.options.apibase + "page/links");
-        alist.addCallback(this.a_list_return_callback, this);
+})
+
+Class("ImagePanel", {
+    does: [TextEditor.AsyncPanel],
+    has: {
+        id: { init: "image" }
+    },
+    methods: {
+        getJSONUrl: function() {
+            return "media/images";
+        },
+        renderJSON: function(json) {
+            var list = json.api_list;
+            var ul = MochiKit.DOM.UL({'id': 'img_list', 'class': 'TextEditor_list'}, null);
+            this.img_list = ul;
+            this.img_list_shown = true;
+            for (var media_idx in list) {
+                var media = list[media_idx];
+                var thumb = MochiKit.DOM.IMG({'src': this.getEditor()._options.staticbase + media.uri_basename_thumb});
+
+                var li = MochiKit.DOM.getElement('f' + media.id) || MochiKit.DOM.LI({
+                    'filename': media.uri_basename, 
+                    'class': 'image', 
+                    'id': "f" + media.id}, [thumb, media.description]);
+                connect(li, 'onclick', this, this.handleClick);
+                MochiKit.DOM.appendChildNodes(ul, li);
+            }
+            
+            return ul;
+        },
+        handleClick: function(e) {
+            var val = '!' + this.getEditor()._options.staticbase + MochiKit.DOM.getNodeAttribute(e.src(), 'filename') + '!';
+            this.getEditor().insertAtCaret(val);
+            e.stop();
+            
+        }
     }
-};
-TextEditor.TextEditor.prototype.a_insert = function(e) {
-    var val = '"' + MochiKit.DOM.getNodeAttribute(e.src(), 'title') + '":' + 
-        MochiKit.DOM.getNodeAttribute(e.src(), 'url');
-    this.insertAtCaret(val);
-    e.stop();
-};
-TextEditor.TextEditor.prototype.create_img = function() {
-    this._create_btn("img_btn_click", 'image-x-generic.png');
-};
-TextEditor.TextEditor.prototype.img_btn_click = function(e) {
-    if (this.img_list) {
-        this.toggle(this.img_list);
-    }
-    if (!this.img_list || this.img_list_shown) {
-        var imglist = MochiKit.Async.loadJSONDoc(this.options.apibase + "media/images");
-        imglist.addCallback(this.img_list_return_callback, this);
-    }
-};
-TextEditor.TextEditor.prototype.img_insert = function(e) {
-    var val = '!' + this.options.staticbase + MochiKit.DOM.getNodeAttribute(e.src(), 'filename') + '!';
-    
-    this.insertAtCaret(val);
-    e.stop();
-};
+})
 
 TextEditor.TextEditor.prototype.img_list_return_callback = function (obj, json) {
     var list = json.api_list;
@@ -146,31 +169,19 @@ TextEditor.TextEditor.prototype.img_list_return_callback = function (obj, json) 
     }
     MochiKit.DOM.appendChildNodes('admin', ul);
 };
-TextEditor.TextEditor.prototype.a_list_return_callback = function (obj, json) {
-    var list = json.api_list;
-    var ul = MochiKit.DOM.getElement('a_list') || MochiKit.DOM.UL({'id': 'a_list', 'class': 'TextEditor_list'}, null);
-    obj.a_list = ul;
-    obj.a_list_shown = true;
-    for (var media_idx in list) {
-        var page = list[media_idx];
-        var li = MochiKit.DOM.getElement('a' + page.id) || MochiKit.DOM.LI({
-            'title': page.title || urlbase + page.uri_base,
-            'url': urlbase + page.uri_base, 
-            'class': 'page', 
-            'id': "a" + page.id}, page.title);
-        MochiKit.DOM.appendChildNodes(ul, li);
-        disconnectAll(li);
-        connect(li, 'onclick', obj, obj.a_insert);
-    }
-    MochiKit.DOM.appendChildNodes('admin', ul);
-};
 
 function page_onload() {
     /* Init the TextEditor for the body-field */
     var TE = new TextEditor.TextEditor('edit_page_body', { 
-        enabled: ['img', 'a', 'format'], 
         iconbase: imgbase + '/icons/',
         apibase: urlbase + 'api/json/',
-        staticbase: urlbase + 'static/upload/'
+        staticbase: urlbase + 'static/upload/',
     });
+    // need to add some panels:
+    // enabled: ['img', 'a', 'format'], 
+    TE.addPanel(new TextEditor.FormatPanel());
+    TE.addPanel(new LinkPanel());
+    TE.addPanel(new ImagePanel());
+    
+    TE.render();
 }
