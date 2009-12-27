@@ -23,9 +23,6 @@ label span button {
     position: absolute;
     left: 485px;
 }
-textarea {
-    width: 100%;
-}
 input, textarea, button {
     border: 1px solid silver;
 }

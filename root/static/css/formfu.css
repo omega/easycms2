@@ -2,27 +2,34 @@
 
 /* An element has one or more errors */
 form > div {
-	margin: 3px;
-	padding: 5px;
-	position: relative;
+    margin: 3px;
+    padding: 5px;
+    position: relative;
 }
 form > div label {
-	position: absolute;
-	width: 150px;
-	top: 0px;
+    position: absolute;
+    width: 150px;
+    top: 0px;
 }
 form > div input, form > div button, form > div select, form > div textarea {
-	margin-left: 150px;
-	margin-top: 2px;
-	clear: both;
+    margin-left: 150px;
+    margin-top: 2px;
+    clear: both;
+}
+form > div.textarea textarea {
+    margin-left: 0px;
+    width: 100%;
+}
+form > div.textarea label {
+    position: relative;
 }
 form > div.error {
-	background-color: #ff6666;
-	border: #ff0000 1px solid;
-	-webkit-border-radius: 3px;
-	
+    background-color: #ff6666;
+    border: #ff0000 1px solid;
+    -webkit-border-radius: 3px;
+
 }
 form > div.error span.error_message {
-	float: right;
-	clear: right;
+    float: right;
+    clear: right;
 }
