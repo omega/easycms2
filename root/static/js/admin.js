@@ -150,26 +150,6 @@ Class("ImagePanel", {
     }
 })
 
-TextEditor.TextEditor.prototype.img_list_return_callback = function (obj, json) {
-    var list = json.api_list;
-    var ul = MochiKit.DOM.getElement('img_list') || MochiKit.DOM.UL({'id': 'img_list', 'class': 'TextEditor_list'}, null);
-    obj.img_list = ul;
-    obj.img_list_shown = true;
-    for (var media_idx in list) {
-        var media = list[media_idx];
-        var thumb = MochiKit.DOM.IMG({'src': obj.options.staticbase + media.uri_basename_thumb});
-        
-        var li = MochiKit.DOM.getElement('f' + media.id) || MochiKit.DOM.LI({
-            'filename': media.uri_basename, 
-            'class': 'image', 
-            'id': "f" + media.id}, [thumb, media.description]);
-        MochiKit.DOM.appendChildNodes(ul, li);
-        disconnectAll(li);
-        connect(li, 'onclick', obj, obj.img_insert);
-    }
-    MochiKit.DOM.appendChildNodes('admin', ul);
-};
-
 function page_onload() {
     /* Init the TextEditor for the body-field */
     var TE = new TextEditor.TextEditor('edit_page_body', { 
