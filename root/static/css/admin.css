@@ -32,25 +32,38 @@ div#admin div#menu li.menuitem_right {
 
 li.page {
     color: black;
-    list-style-image: url(../images/icons/x-office-document.png);
+    list-style: none;
+    padding-left: 22px;
+    background: url(../images/icons/x-office-document.png) left 1px no-repeat;
 }
 
 li.media {
     color: black;
-    list-style-image: url(../images/icons/image-x-generic.png);
+    list-style: none;
+    padding-left: 22px;
+    background: url(../images/icons/image-x-generic.png) left 1px no-repeat;
 }
 li.category {
-    list-style-image: url(../images/icons/folder.png);
+    list-style: none;
+    padding-left: 22px;
+    background: url(../images/icons/folder.png) left 1px no-repeat;
     color: #666666;
 }
 li.template {
-    list-style-image: url(../images/icons/text-x-generic-template.png);
+    list-style: none;
+    padding-left: 22px;
+    background: url(../images/icons/text-x-generic-template.png) left 1px no-repeat;
 }
 li.default_page {
-    list-style-image: url(../images/icons/go-home.png);
+    list-style: none;
+    padding-left: 22px;
+    background: url(../images/icons/go-home.png) left 1px no-repeat;
+    
 }
 li.author {
-    list-style-image: url(../images/icons/user.png);
+    list-style: none;
+    padding-left: 22px;
+    background: url(../images/icons/user.png) left 1px no-repeat;
     color: #666666;
 }
 

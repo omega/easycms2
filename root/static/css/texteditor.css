@@ -67,6 +67,8 @@
     left: 0;
     width: 200px;
     height: 258px;
+    overflow: auto;
+    
     border: 1px solid silver;
     background-color: white;
     padding: 2px;
@@ -75,8 +77,15 @@
     -webkit-border-bottom-left-radius: 3px;
 }
 
+    .panel_content ul {
+        padding-left: 0;
+        margin: 2px;
+        list-style: none;
+    }
+        .panel_content ul li {
+        }
     .panel_content button {
-        margin: 2;
+        margin: 2px;
         padding: 0;
         height: 22px;
         width: 22px;
