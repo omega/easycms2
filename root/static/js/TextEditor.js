@@ -254,7 +254,7 @@ Module("TextEditor", function(module) {
                 return btn;
             },
             getContent: function() {
-                if (typeof(this.element) != "undefined") {
+                if (typeof(this.element) != "undefined" && this.element != null) {
                     return this.element;
                 }
                 var p = MochiKit.DOM.LI({'class': 'panel', 'id': this.id});
@@ -262,12 +262,10 @@ Module("TextEditor", function(module) {
                 appendChildNodes(this.element, this.getButton());
                 this.content = MochiKit.DOM.DIV({'class': 'panel_content'}, this.getInnerContent());
                 appendChildNodes(this.element, this.content);
-                logDebug("getContent: " + this.content);
                 return this.element;
             },
             
             activate: function() {
-                
                 if (!MochiKit.DOM.hasElementClass(this.element, "active")) {
                     MochiKit.DOM.addElementClass(this.element, "active");
                 }

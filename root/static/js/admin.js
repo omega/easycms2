@@ -89,7 +89,6 @@ Class("LinkPanel", {
             
             var ul = MochiKit.DOM.UL({'id': 'a_list', 'class': 'TextEditor_list'}, null);
             for (var media_idx in list) {
-                logDebug(media_idx);
                 var page = list[media_idx];
                 var li = MochiKit.DOM.LI({
                     'title': page.title || urlbase + page.uri_base,
