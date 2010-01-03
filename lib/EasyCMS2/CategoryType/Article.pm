@@ -11,5 +11,8 @@ override  'index' => sub {
     return $hashref;
 };
 
+override  'textile_index' => sub {
+    return 1;
+};
 
 1;

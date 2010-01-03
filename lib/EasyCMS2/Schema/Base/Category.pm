@@ -5,6 +5,11 @@ use base qw/DBIx::Class/;
 #use EasyCMS2::CategoryType;
 use EasyCMS2::Extra;
 
+use Text::Textile;
+
+my $textile=Text::Textile->new();
+$textile->charset('utf-8');
+
 __PACKAGE__->load_components(qw/UTF8Columns  Core/);
 __PACKAGE__->table('category');
 
@@ -58,6 +63,17 @@ __PACKAGE__->inflate_column('config' => {
     'deflate' => sub { return shift->store(); }
 });
 
+
+sub index_page_content {
+    my $self = shift;
+    # This should check the type if we should render the content with textile first
+    warn "IN index_page_content: " . $self->type->textile_index;
+    if ($self->type->textile_index) {
+        return $textile->process( $self->index_page );
+    } else {
+        return $self->index_page;
+    }
+}
 sub get_config {
     my $self = shift;
     my $config = shift;

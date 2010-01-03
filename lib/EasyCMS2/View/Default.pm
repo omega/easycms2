@@ -31,7 +31,7 @@ sub process {
         
     }
     if ($category) {
-        my $category_index = $c->view('Default')->render($c, \($category->index_page));
+        my $category_index = $c->view('Default')->render($c, \($category->index_page_content));
         if (UNIVERSAL::isa($category_index, 'Template::Exception')) {
             my $error = qq/Couldn't render template: "$category_index"/;
             $c->log->error($error);

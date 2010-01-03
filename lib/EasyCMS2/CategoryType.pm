@@ -15,6 +15,9 @@ use Moose;
 has 'id' => (is => 'rw', isa => 'Str');
 has 'row' => (is => 'rw', isa => 'Ref');
 
+sub textile_index {
+    return 0;
+}
 our $default_cache = {};
 
 sub BUILD {
@@ -35,6 +38,7 @@ sub toString {
 sub index {
     
 }
+
 sub ID {
     my $self = shift;
     if (ref($self)) {
