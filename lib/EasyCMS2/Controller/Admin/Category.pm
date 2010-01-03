@@ -58,9 +58,22 @@ sub edit : Chained('load') Args(0) : FormConfig {
 }
 sub doit : Private {
     my ($self, $c) = @_;
+    
     my $object : Stashed;
+
+    my $onload : Stashed;
+
+
     if ($object) {
         $c->log->debug('we have object: ' . $object->id) if $c->debug;
+        
+        if ($object->type->textile_index) {
+            if (ref($onload)) {
+                push @$onload, 'category_onload()';
+            } else {
+                $onload = ['category_onload()'];
+            }
+        }
     }
 
     my $form : Stashed;

@@ -164,3 +164,19 @@ function page_onload() {
     
     TE.render();
 }
+
+function category_onload() {
+    /* Init the TextEditor for the body-field */
+    var TE = new TextEditor.TextEditor('edit_category_index_page', { 
+        iconbase: imgbase + '/icons/',
+        apibase: urlbase + 'api/json/',
+        staticbase: urlbase + 'static/upload/',
+    });
+    // need to add some panels:
+    // enabled: ['img', 'a', 'format'], 
+    TE.addPanel(new TextEditor.FormatPanel());
+    TE.addPanel(new LinkPanel());
+    TE.addPanel(new ImagePanel());
+    
+    TE.render();
+}
